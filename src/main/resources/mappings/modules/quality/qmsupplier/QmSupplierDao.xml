@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.quality.dao.qmsupplier.QmSupplierDao">
+    
+	<sql id="qmSupplierColumns">
+		a.id AS "id",
+		a.state AS "state",
+		a.processinstid AS "processinstid",
+		a.supplier_type AS "supplierType",
+		a.supplier_name AS "supplierName",
+		a.supplier_name_simple AS "supplierNameSimple",
+		a.supplier_nature AS "supplierNature",
+		a.registered_capital AS "registeredCapital",
+		a.contacts AS "contacts",
+		a.contact_number AS "contactNumber",
+		a.mobile_phone AS "mobilePhone",
+		a.fax AS "fax",
+		a.mailbox AS "mailbox",
+		a.address AS "address",
+		a.is_important AS "isImportant",
+		a.product AS "product",
+		a.assist AS "assist",
+		a.expansion AS "expansion",
+		a.reasons AS "reasons",
+		a.applicant_id AS "applicantId",
+		a.applicant_name AS "applicantName",
+		a.legal_name AS "legalName",
+		a.legal_tel AS "legalTel",
+		a.legal_phone AS "legalPhone",
+		a.employees AS "employees",
+		a.registration_time AS "registrationTime",
+		a.registration_capital AS "registrationCapital",
+		a.mailing_address AS "mailingAddress",
+		a.postal_code AS "postalCode",
+		a.customer AS "customer",
+		a.wb_type AS "wbType",
+		a.wb_name AS "wbName",
+		a.product_scope AS "productScope",
+		a.bank_name AS "bankName",
+		a.bank_number AS "bankNumber",
+		a.bank_local AS "bankLocal",
+		a.dutyno AS "dutyno",
+		a.file AS "file",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.field6 AS "field6",
+		a.field7 AS "field7",
+		a.field8 AS "field8",
+		a.field9 AS "field9",
+		a.field10 AS "field10",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.model AS "model",
+	    a.importance AS "importance",
+	    a.evaluation_level AS "evaluationLevel",
+	    a.scope AS "scope",
+	    a.product_type AS "productType" ,
+	    a.product_type_name AS "productTypeName"
+	</sql>
+	
+	<sql id="qmSupplierJoins">
+	</sql>
+	
+	
+	<select id="getByProcessInstID" resultType="QmSupplier">
+		SELECT 
+			<include refid="qmSupplierColumns"/>
+		FROM qm_supplier a
+		<include refid="qmSupplierJoins"/>
+		WHERE a.PROCESSINSTID = #{processInstID}
+	</select>
+    
+	<select id="get" resultType="QmSupplier">
+		SELECT 
+			<include refid="qmSupplierColumns"/>
+		FROM qm_supplier a
+		<include refid="qmSupplierJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QmSupplier">
+		SELECT 
+			<include refid="qmSupplierColumns"/>
+		FROM qm_supplier a
+		<include refid="qmSupplierJoins"/>
+		<where>
+			
+			<if test="supplierNature != null and supplierNature != ''">
+				AND a.supplier_nature = #{supplierNature}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			   ORDER BY a.field2
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QmSupplier">
+		SELECT 
+			<include refid="qmSupplierColumns"/>
+		FROM qm_supplier a
+		<include refid="qmSupplierJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO qm_supplier(
+			id,
+			state,
+			processinstid,
+			supplier_type,
+			supplier_name,
+			supplier_name_simple,
+			supplier_nature,
+			registered_capital,
+			contacts,
+			contact_number,
+			mobile_phone,
+			fax,
+			mailbox,
+			address,
+			is_important,
+			product,
+			assist,
+			expansion,
+			reasons,
+			applicant_id,
+			applicant_name,
+			legal_name,
+			legal_tel,
+			legal_phone,
+			employees,
+			registration_time,
+			registration_capital,
+			mailing_address,
+			postal_code,
+			customer,
+			wb_type,
+			wb_name,
+			product_scope,
+			bank_name,
+			bank_number,
+			bank_local,
+			dutyno,
+			file,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			field6,
+			field7,
+			field8,
+			field9,
+			field10,
+			create_by,
+			create_date,
+			model ,
+	        importance ,
+	        evaluation_level ,
+	        scope ,
+	        product_type,
+	        product_type_name 
+		) VALUES (
+			#{id},
+			#{state},
+			#{processinstid},
+			#{supplierType},
+			#{supplierName},
+			#{supplierNameSimple},
+			#{supplierNature},
+			#{registeredCapital},
+			#{contacts},
+			#{contactNumber},
+			#{mobilePhone},
+			#{fax},
+			#{mailbox},
+			#{address},
+			#{isImportant},
+			#{product},
+			#{assist},
+			#{expansion},
+			#{reasons},
+			#{applicantId},
+			#{applicantName},
+			#{legalName},
+			#{legalTel},
+			#{legalPhone},
+			#{employees},
+			#{registrationTime},
+			#{registrationCapital},
+			#{mailingAddress},
+			#{postalCode},
+			#{customer},
+			#{wbType},
+			#{wbName},
+			#{productScope},
+			#{bankName},
+			#{bankNumber},
+			#{bankLocal},
+			#{dutyno},
+			#{file},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{field6},
+			#{field7},
+			#{field8},
+			#{field9},
+			#{field10},
+			#{createBy.id},
+			#{createDate},
+			#{model},
+	        #{importance},
+	        #{evaluationLevel},
+	        #{scope},
+	        #{productType},
+	        #{productTypeName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qm_supplier SET 	
+			state = #{state},
+			processinstid = #{processinstid},
+			supplier_type = #{supplierType},
+			supplier_name = #{supplierName},
+			supplier_name_simple = #{supplierNameSimple},
+			supplier_nature = #{supplierNature},
+			registered_capital = #{registeredCapital},
+			contacts = #{contacts},
+			contact_number = #{contactNumber},
+			mobile_phone = #{mobilePhone},
+			fax = #{fax},
+			mailbox = #{mailbox},
+			address = #{address},
+			is_important = #{isImportant},
+			product = #{product},
+			assist = #{assist},
+			expansion = #{expansion},
+			reasons = #{reasons},
+			applicant_id = #{applicantId},
+			applicant_name = #{applicantName},
+			legal_name = #{legalName},
+			legal_tel = #{legalTel},
+			legal_phone = #{legalPhone},
+			employees = #{employees},
+			registration_time = #{registrationTime},
+			registration_capital = #{registrationCapital},
+			mailing_address = #{mailingAddress},
+			postal_code = #{postalCode},
+			customer = #{customer},
+			wb_type = #{wbType},
+			wb_name = #{wbName},
+			product_scope = #{productScope},
+			bank_name = #{bankName},
+			bank_number = #{bankNumber},
+			bank_local = #{bankLocal},
+			dutyno = #{dutyno},
+			file = #{file},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			field6 = #{field6},
+			field7 = #{field7},
+			field8 = #{field8},
+			field9 = #{field9},
+			field10 = #{field10},
+			model = #{model},
+	        importance = #{importance},
+	        evaluation_level = #{evaluationLevel},
+	        scope = #{scope},
+	        product_type = #{productType},
+	        product_type_name = #{productTypeName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM qm_supplier
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

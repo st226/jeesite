@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.negotiate.SwNegotiateDao">
+    
+	<sql id="swNegotiateColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.state AS "state",
+		a.negotiate_time AS "negotiateTime",
+		a.negotiate_local AS "negotiateLocal",
+		a.project_name AS "projectName",
+		a.procedures AS "procedures",
+		a.supplier AS "supplier",
+		a.project_content AS "projectContent",
+		a.quoted_price AS "quotedPrice",
+		a.negotiate_notes AS "negotiateNotes",
+		a.negotiate_user AS "negotiateUser",
+		a.total_price AS "totalPrice",
+		a.negotiate_price AS "negotiatePrice",
+		a.balance_price AS "balancePrice",
+		a.negotiate_users AS "negotiateUsers",
+		a.tenders_user AS "tendersUser",
+		a.appendix AS "appendix",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="swNegotiateJoins">
+	</sql>
+    
+	<select id="get" resultType="SwNegotiate">
+		SELECT 
+			<include refid="swNegotiateColumns"/>
+		FROM sw_negotiate a
+		<include refid="swNegotiateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwNegotiate">
+		SELECT 
+			<include refid="swNegotiateColumns"/>
+		FROM sw_negotiate a
+		<include refid="swNegotiateJoins"/>
+		<where>
+			
+			<if test="negotiateTime != null and negotiateTime != ''">
+				AND a.negotiate_time = #{negotiateTime}
+			</if>
+			<if test="negotiateLocal != null and negotiateLocal != ''">
+				AND a.negotiate_local = #{negotiateLocal}
+			</if>
+			<if test="projectName != null and projectName != ''">
+				AND a.project_name = #{projectName}
+			</if>
+			<if test="procedures != null and procedures != ''">
+				AND a.procedures = #{procedures}
+			</if>
+			<if test="supplier != null and supplier != ''">
+				AND a.supplier = #{supplier}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwNegotiate">
+		SELECT 
+			<include refid="swNegotiateColumns"/>
+		FROM sw_negotiate a
+		<include refid="swNegotiateJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_negotiate(
+			id,
+			order_id,
+			state,
+			negotiate_time,
+			negotiate_local,
+			project_name,
+			procedures,
+			supplier,
+			project_content,
+			quoted_price,
+			negotiate_notes,
+			negotiate_user,
+			total_price,
+			negotiate_price,
+			balance_price,
+			negotiate_users,
+			tenders_user,
+			appendix,
+			create_by,
+			create_date,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{orderId},
+			#{state},
+			#{negotiateTime},
+			#{negotiateLocal},
+			#{projectName},
+			#{procedures},
+			#{supplier},
+			#{projectContent},
+			#{quotedPrice},
+			#{negotiateNotes},
+			#{negotiateUser},
+			#{totalPrice},
+			#{negotiatePrice},
+			#{balancePrice},
+			#{negotiateUsers},
+			#{tendersUser},
+			#{appendix},
+			#{createBy.id},
+			#{createDate},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_negotiate SET 	
+		    order_id = #{orderId},
+		    state = #{state},
+			negotiate_time = #{negotiateTime},
+			negotiate_local = #{negotiateLocal},
+			project_name = #{projectName},
+			procedures = #{procedures},
+			supplier = #{supplier},
+			project_content = #{projectContent},
+			quoted_price = #{quotedPrice},
+			negotiate_notes = #{negotiateNotes},
+			negotiate_user = #{negotiateUser},
+			total_price = #{totalPrice},
+			negotiate_price = #{negotiatePrice},
+			balance_price = #{balancePrice},
+			negotiate_users = #{negotiateUsers},
+			tenders_user = #{tendersUser},
+			appendix = #{appendix},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_negotiate
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.examine.dao.ExamineDao">
+    
+	<sql id="examineColumns">
+		a.id AS "id",
+		a.examine_explain AS "examineExplain",
+		a.examine_examineisagree AS "examineExamineisagree",
+		a.examine_person AS "examinePerson",
+		a.examine_date AS "examineDate",
+		a.examine_jd AS "examineJd",
+		a.examine_syzs AS "examineSyzs",
+		a.examine_dtzcs AS "examineDtzcs",
+		a.examine_dtzzs AS "examineDtzzs",
+		a.examine_ltzfs AS "examineLtzfs",
+		a.examine_ltzzs AS "examineLtzzs",
+		a.processinstid AS "processinstid",
+		a.examine_version AS "examineVersion"
+	</sql>
+	
+	<sql id="examineJoins">
+	</sql>
+    
+	<select id="getByProcessInstID" resultType="Examine">
+		SELECT 
+			<include refid="examineColumns"/>
+		FROM sy_examine a
+		WHERE a.PROCESSINSTID = #{processInstID} order by examine_version
+	</select>
+	
+	
+	
+	<select id="findList" resultType="Examine">
+		SELECT 
+			<include refid="examineColumns"/>
+		FROM sy_examine a
+		<include refid="examineJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Examine">
+		SELECT 
+			<include refid="examineColumns"/>
+		FROM sy_examine a
+		<include refid="examineJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sy_examine(
+			id,
+			examine_explain,
+			examine_examineisagree,
+			examine_person,
+			examine_date,
+			examine_jd,
+			examine_syzs,
+			examine_dtzcs,
+			examine_dtzzs,
+			examine_ltzfs,
+			examine_ltzzs,
+			processinstid,
+			examine_version
+		) VALUES (
+			#{id},
+			#{examineExplain},
+			#{examineExamineisagree},
+			#{examinePerson},
+			#{examineDate},
+			#{examineJd},
+			#{examineSyzs},
+			#{examineDtzcs},
+			#{examineDtzzs},
+			#{examineLtzfs},
+			#{examineLtzzs},
+			#{processinstid},
+			#{examineVersion}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sy_examine SET 	
+			examine_explain = #{examineExplain},
+			examine_examineisagree = #{examineExamineisagree},
+			examine_person = #{examinePerson},
+			examine_date = #{examineDate},
+			examine_jd = #{examineJd},
+			examine_syzs = #{examineSyzs},
+			examine_dtzcs = #{examineDtzcs},
+			examine_dtzzs = #{examineDtzzs},
+			examine_ltzfs = #{examineLtzfs},
+			examine_ltzzs = #{examineLtzzs},
+			processinstid = #{processinstid},
+			examine_version = #{examineVersion}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sy_examine
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

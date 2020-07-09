@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.agreement.SwAgreementProductDao">
+    
+	<sql id="swAgreementProductColumns">
+		a.id AS "id",
+		a.agreement_id AS "agreementId.id",
+		a.product_no AS "productNo",
+		a.product_name AS "productName",
+		a.product_type AS "productType",
+		a.product_made AS "productMade",
+		a.product_amount AS "productAmount",
+		a.product_shipment AS "productShipment",
+		a.product_company AS "productCompany",
+		a.unit_price AS "unitPrice",
+		a.total_price AS "totalPrice"
+	</sql>
+	
+	<sql id="swAgreementProductJoins">
+		LEFT JOIN sw_agreement b ON b.id = a.agreement_id
+	</sql>
+    
+	<select id="get" resultType="SwAgreementProduct">
+		SELECT 
+			<include refid="swAgreementProductColumns"/>
+		FROM sw_agreement_product a
+		<include refid="swAgreementProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwAgreementProduct">
+		SELECT 
+			<include refid="swAgreementProductColumns"/>
+		FROM sw_agreement_product a
+		<include refid="swAgreementProductJoins"/>
+		<where>
+			
+			<if test="agreementId.id != null and agreementId.id != ''">
+				AND a.agreement_id = #{agreementId.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwAgreementProduct">
+		SELECT 
+			<include refid="swAgreementProductColumns"/>
+		FROM sw_agreement_product a
+		<include refid="swAgreementProductJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_agreement_product(
+			id,
+			agreement_id,
+			product_no,
+			product_name,
+			product_type,
+			product_made,
+			product_amount,
+			product_shipment,
+			product_company,
+			unit_price,
+			total_price
+		) VALUES (
+			#{id},
+			#{agreementId.id},
+			#{productNo},
+			#{productName},
+			#{productType},
+			#{productMade},
+			#{productAmount},
+			#{productShipment},
+			#{productCompany},
+			#{unitPrice},
+			#{totalPrice}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_agreement_product SET 	
+			agreement_id = #{agreementId.id},
+			product_no = #{productNo},
+			product_name = #{productName},
+			product_type = #{productType},
+			product_made = #{productMade},
+			product_amount = #{productAmount},
+			product_shipment = #{productShipment},
+			product_company = #{productCompany},
+			unit_price = #{unitPrice},
+			total_price = #{totalPrice}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_agreement_product
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE agreement_id = #{agreementId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

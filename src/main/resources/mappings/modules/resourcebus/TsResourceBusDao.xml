@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.resourcebus.dao.TsResourceBusDao">
+    
+	<sql id="tsResourceBusColumns">
+		a.id AS "id",
+		a.bus_type AS "busType",
+		a.column_id AS "columnId",
+		a.table_id AS "tableId",
+		a.sort AS "sort",
+		a.column_name AS "columnName",
+		a.column_comments AS "columnComments",
+		a.column_jdbc_type AS "columnJdbcType",
+		a.table_comments AS "tableComments"
+	</sql>
+	
+	<sql id="tsResourceColumns">
+		a.id AS "id",
+		a.bus_type AS "busType",
+		a.local AS "local",
+		a.modelid AS "modelid",
+		a.name AS "name",
+		a.format AS "format",
+		a.personnel AS "personnel",
+		a.entrytime AS "entrytime",
+		a.personcharge AS "personcharge",
+		a.state AS "state",
+		a.inspection AS "inspection",
+		a.power AS "power",
+		a.number AS "number",
+		a.weight AS "weight",
+		a.length AS "length",
+		a.width AS "width",
+		a.department AS "department",
+		a.files AS "files",
+		a.create_date AS "createDate",
+		a.user_id AS "user.id",
+		a.office_id AS "office.id",
+		a.area_id AS "area.id",
+		a.user_name AS "userName",
+		a.office_name AS "officeName",
+		a.area_name AS "areaName",
+		a.create_by AS "createBy.id",
+		a.remark1 AS "remark1",
+		a.remark2 AS "remark2",
+		a.remark3 AS "remark3",
+		a.remark4 AS "remark4",
+		a.remark5 AS "remark5",
+		a.remark6 AS "remark6",
+		a.remark7 AS "remark7",
+		a.remark8 AS "remark8",
+		a.remark9 AS "remark9",
+		a.remark10 AS "remark10",
+		a.remark11 AS "remark11",
+		a.remark12 AS "remark12",
+		a.remark13 AS "remark13",
+		a.remark14 AS "remark14",
+		a.remark15 AS "remark15",
+		a.remark16 AS "remark16",
+		a.remark17 AS "remark17",
+		a.remark18 AS "remark18",
+		a.remark19 AS "remark19",
+		a.remark20 AS "remark20",
+		a.remark21 AS "remark21",
+		a.remark22 AS "remark22",
+		a.remark23 AS "remark23",
+		a.remark24 AS "remark24",
+		a.remark25 AS "remark25",
+		a.remark26 AS "remark26",
+		a.remark27 AS "remark27",
+		a.remark28 AS "remark28",
+		a.remark29 AS "remark29",
+		a.remark30 AS "remark30",
+		a.remark31 AS "remark31",
+		a.remark32 AS "remark32",
+		a.remark33 AS "remark33",
+		a.remark34 AS "remark34",
+		a.remark35 AS "remark35",
+		a.remark36 AS "remark36",
+		a.remark37 AS "remark37",
+		a.remark38 AS "remark38",
+		a.remark39 AS "remark39",
+		a.remark40 AS "remark40",
+		a.remark41 AS "remark41",
+		a.remark42 AS "remark42",
+		a.remark43 AS "remark43",
+		a.remark44 AS "remark44",
+		a.remark45 AS "remark45",
+		a.remark46 AS "remark46",
+		a.remark47 AS "remark47",
+		a.remark48 AS "remark48",
+		a.remark49 AS "remark49",
+		a.remark50 AS "remark50"
+	</sql>
+	
+	<sql id="tsResourceJoins">
+		LEFT JOIN sys_user u20 ON u20.id = a.user_id
+		LEFT JOIN sys_office o21 ON o21.id = a.office_id
+	</sql>
+	
+	<sql id="tsResourceBusJoins">
+	</sql>
+    
+	<select id="get" resultType="TsResourceBus">
+		SELECT 
+			<include refid="tsResourceBusColumns"/>
+		FROM ts_resource_bus a
+		<include refid="tsResourceBusJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getBus" resultType="TsResourceBus">
+		  select b.id,b.bus_type,c.comments as column_comments,b.column_id,
+         c.jdbc_type as column_jdbc_type,c.`name` as column_name,c.dict_type as dict_type,c.is_null as is_null,
+         c.is_edit as is_edit, c.is_insert as is_insert,c.is_list as is_list,c.is_query as is_query,
+         c.query_type as query_type,c.show_type as show_type,c.sort as sort,b.table_comments,b.table_id,c.java_field  as table_name  ,c.remarks as width
+         from gen_table_column c ,ts_resource_bus b where 
+         c.id = b.column_id and b.bus_type =  #{busType} 
+          
+           <if test="isList != null and isList != ''">
+				AND c.is_list = #{isList}
+			</if>
+			<if test="isEdit != null and isEdit != ''">
+				AND c.is_edit = #{isEdit}
+			</if>
+			<if test="isInsert != null and isInsert != ''">
+				AND c.is_insert = #{isInsert}
+			</if>
+			<if test="isQuery != null and isQuery != ''">
+				AND c.is_query = #{isQuery}
+			</if>
+             order by c.sort
+     </select>
+     
+     <select id="getBusst" resultType="TsResourceBus">
+		  select b.id,b.bus_type,c.comments as column_comments,b.column_id,
+         c.jdbc_type as column_jdbc_type,c.`java_field` as column_name,c.dict_type as dict_type,
+         c.is_edit as is_edit, c.is_insert as is_insert,c.is_list as is_list,c.is_query as is_query,
+         c.query_type as query_type,c.show_type as show_type,c.sort as sort,b.table_comments,b.table_id,c.java_field  as table_name  ,c.remarks as width
+         from gen_table_column c ,ts_resource_bus b where 
+         c.id = b.column_id and b.bus_type =  #{busType} 
+          
+           <if test="isList != null and isList != ''">
+				AND c.is_list = #{isList}
+			</if>
+			<if test="isEdit != null and isEdit != ''">
+				AND c.is_edit = #{isEdit}
+			</if>
+			<if test="isInsert != null and isInsert != ''">
+				AND c.is_insert = #{isInsert}
+			</if>
+			<if test="isQuery != null and isQuery != ''">
+				AND c.is_query = #{isQuery}
+			</if>
+             order by c.sort
+     </select>
+     
+     
+     <select id="getBuszd" resultType="TsResourceBus">
+		  select b.id,b.bus_type,c.comments as column_comments,b.column_id,
+         c.jdbc_type as column_jdbc_type,c.`name` as column_name,c.dict_type as dict_type,
+         c.is_edit as is_edit, c.is_insert as is_insert,c.is_list as is_list,c.is_query as is_query,
+         c.query_type as query_type,c.show_type as show_type,c.sort as sort,b.table_comments,b.table_id,c.java_field as table_name ,c.remarks as width
+         from gen_table_column c ,ts_resource_bus b where 
+         c.id = b.column_id and c.gen_table_id='5ae0a5b723ae40aba15b8ccbc80d6891' and b.bus_type =  #{busType} 
+          
+           <if test="isList != null and isList != ''">
+				AND c.is_list = #{isList}
+			</if>
+			<if test="isEdit != null and isEdit != ''">
+				AND c.is_edit = #{isEdit}
+			</if>
+			<if test="isInsert != null and isInsert != ''">
+				AND c.is_insert = #{isInsert}
+			</if>
+			<if test="isQuery != null and isQuery != ''">
+				AND c.is_query = #{isQuery}
+			</if>
+         
+     </select>
+     
+     <select id="getBusById" resultType="TsResourceBus">
+		  select b.id,b.bus_type,c.comments as column_comments,b.column_id,
+         c.jdbc_type as column_jdbc_type,c.`name` as column_name,c.dict_type as dict_type,c.is_null as is_null,
+         c.is_edit as is_edit, c.is_insert as is_insert,c.is_list as is_list,c.is_query as is_query,
+         c.query_type as query_type,c.show_type as show_type,c.sort as sort,b.table_comments,b.table_id,c.java_field  as table_name  ,c.remarks as width
+         from gen_table_column c ,ts_resource_bus b where 
+         c.id = b.column_id and b.id in 
+         <foreach collection="ids" item="e" open="(" close=")" separator=",">
+				#{e}
+			</foreach>
+          
+             order by c.sort
+     </select>
+     
+     <select id="getTsResourceList" resultType="TsResource">
+		  select * from ts_resource t where t.bus_type = #{busType}  
+          
+           <if test="bmState != null and bmState != ''">
+				AND t.bm_state = #{bmState}
+			</if>
+			
+         
+     </select>
+     
+     
+     <select id="getGenTableColumn" resultType="GenTableColumn">
+		 select g.id,g.jdbc_type,g.`name`,g.comments,g.gen_table_id as java_type from gen_table_column g where g.gen_table_id=(select t.id from gen_table t where t.name='ts_resource' and t.del_flag=0) and g.is_null=0 and g.del_flag=0 
+		 
+         
+     </select>
+	
+	<select id="findList" resultType="TsResourceBus">
+		SELECT 
+			<include refid="tsResourceBusColumns"/>
+		FROM ts_resource_bus a
+		<include refid="tsResourceBusJoins"/>
+		<where>
+		<if test="busType != null and busType != ''">
+				AND a.bus_type = #{busType}
+			</if>
+			
+			<if test="tableId != null and tableId != ''">
+				AND a.table_id = #{tableId}
+			</if>
+			<if test="columnName != null and columnName != ''">
+				AND a.column_name = #{columnName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="queryCensus" resultType="java.util.Map" >
+	   SELECT 	o.id,o.`name`,o.sort ,
+          (SELECT 
+			count(id) sum
+		FROM ts_resource a where a.bus_type in (select id from ts_resource_type t where t.id= o.id
+             or t.parent_ids like concat('%',o.id,'%')))  count
+           FROM ts_resource_type o where  o.del_flag=0 and o.remarks=1 ORDER BY o.sort
+	</select>
+	
+	<select id="queryCensus2" resultType="java.util.Map" >
+	   SELECT 
+			a.office_name,COUNT(office_name) count,
+          sum(CASE a.state 
+             WHEN '1' THEN 1
+            ELSE 0 END)  count1 ,
+          sum(CASE a.state 
+            WHEN '2' THEN 1
+           ELSE 0 END)  count2,
+           sum(CASE a.state 
+            WHEN '3' THEN 1
+          ELSE 0 END)  count3
+           FROM ts_resource a  group by a.office_name
+	</select>
+	
+	<select id="gesbData" resultType="java.util.Map" >
+	   select e.sb_type,count(e.sb_type) value,(select t.`name` from sb_equipment_type t where t.id=e.sb_type)  `name` 
+	   from sb_equipment e GROUP BY e.sb_type 
+
+	</select>
+	
+	
+	<select id="queryCensusa" resultType="java.util.Map" >
+	   select count(id) count,(select count(id) from ts_resource where state=1 ) as count2 ,
+     (select count(id) from ts_resource where state=2 ) as count3 ,
+     (select count(id) from ts_resource where state=3 ) as count4 ,
+     (select count(id) from ts_resource where to_days(create_date) = to_days(now()) ) as count5
+      from ts_resource
+	</select>
+	
+	
+	<select id="queryCensusb" resultType="java.util.Map" >
+	   select DATE_FORMAT(t.time,'%m-%d')time , count(t.time) as count from (
+SELECT 	DATE_FORMAT(create_date,'%Y-%m-%d')time FROM ts_resource where date(create_date) >=DATE_SUB(CURDATE(), INTERVAL 30 DAY)) t GROUP BY t.time
+	</select>
+	
+	
+	<select id="queryCensusc" resultType="java.util.Map" >
+	   select t.time , count(t.time) as count from (
+           select 	DATE_FORMAT(create_date,'%Y-%m')time FROM ts_resource where date(create_date)>= DATE_SUB(CURDATE(), INTERVAL 183 DAY) ) t 
+           GROUP BY t.time
+	</select>
+	
+	<select id="findListMap" resultType="java.util.Map" >
+		SELECT 
+			<include refid="tsResourceColumns"/>
+		FROM ts_resource a
+		<where>
+			<if test="busType != null and busType != ''">
+				AND a.bus_type in (select id from ts_resource_type t where t.id= #{busType} or t.parent_ids like concat('%',#{busType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND  ( a.name LIKE concat('%',#{name},'%') or
+				       a.remark1 LIKE concat('%',#{name},'%') or
+				       a.remark2 LIKE concat('%',#{name},'%') or
+				       a.remark3 LIKE concat('%',#{name},'%') or
+				       a.power LIKE concat('%',#{name},'%') or
+				       a.user_name LIKE concat('%',#{name},'%') or
+				       a.office_name LIKE concat('%',#{name},'%'))
+			</if>
+			<if test="user_id != null and user_id != ''">
+				AND (a.user_id   = #{user_id} or a.user_name   = #{user_name})
+			</if>
+			<if test="office_id != null and office_id != ''">
+				AND a.office_id = #{office_id} 
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state} 
+			</if>
+			<if test="weight != null and weight != ''">
+				AND a.weight = #{weight} 
+			</if>
+			<if test="personnel != null and personnel != ''">
+				AND a.personnel = #{personnel} 
+			</if>
+			<if test="format != null and format != ''">
+				AND a.format = #{format} 
+			</if>
+			<if test="power != null and power != ''">
+				AND a.power = #{power} 
+			</if>
+			<if test="department != null and department != ''">
+				AND a.department = #{department} 
+			</if>
+		</where>
+		
+				<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="findListMapzd" resultType="java.util.Map" >
+		SELECT 
+			 ${code} 
+		FROM ts_equipment a
+		<where>
+			<if test="busType != null and busType != ''">
+				AND a.bus_type in (select id from ts_resource_type t where t.id= #{busType} or t.parent_ids like concat('%',#{busType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE concat('%',#{name},'%')
+			</if>
+			<if test="taskid != null and taskid != ''">
+				AND a.taskId= #{taskid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="findLocalListMap" resultType="java.util.Map" >
+		select b.id , y.`name` as bus_type,b.key_code,t.`name`,t.author,t.isbn,t.press ,t.keyword,t.bm_state,
+        b.resource_code,b.borrow_state,b.`local`   from  ts_resource t , ts_resource_book b ,ts_resource_type y 
+        where t.id=b.resource_id  and t.bus_type=y.id 
+		
+		<if test="name != null and name != ''">
+				AND t.name LIKE concat('%',#{name},'%')
+		</if>
+		<if test="local != null and local != ''">
+				AND  b.local =  #{local}
+		</if>
+		<if test="borrow_state != null and borrow_state != ''">
+				AND  b.borrow_state = #{borrow_state}
+		</if>
+		<if test="busType != null and busType != ''">
+				AND  t.bus_type = #{busType}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsResourceBus">
+		SELECT 
+			<include refid="tsResourceBusColumns"/>
+		FROM ts_resource_bus a
+		<include refid="tsResourceBusJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_resource_bus(
+			id,
+			bus_type,
+			column_id,
+			table_id,
+			sort,
+			column_name,
+			column_comments,
+			column_jdbc_type,
+			table_comments
+		) VALUES (
+			#{id},
+			#{busType},
+			#{columnId},
+			#{tableId},
+			#{sort},
+			#{columnName},
+			#{columnComments},
+			#{columnJdbcType},
+			#{tableComments}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_resource_bus SET 	
+			bus_type = #{busType},
+			column_id = #{columnId},
+			table_id = #{tableId},
+			sort = #{sort},
+			column_name = #{columnName},
+			column_comments = #{columnComments},
+			column_jdbc_type = #{columnJdbcType},
+			table_comments = #{tableComments}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateState">
+		UPDATE ts_resource SET 	 state = #{state}   where id = #{id}
+	</update>
+
+	
+	<update id="delete">
+		delete from ts_resource_bus where bus_type =  #{busType} and table_id= #{tableId}  ;
+	</update>
+	
+</mapper>

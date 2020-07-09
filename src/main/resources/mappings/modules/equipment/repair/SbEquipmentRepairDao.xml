@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.repair.SbEquipmentRepairDao">
+    
+	<sql id="sbEquipmentRepairColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.state AS "state",
+		a.order_id AS "orderId",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.equipment_id AS "equipmentId",
+		a.equipment_name AS "equipmentName",
+		a.equipment_amount AS "equipmentAmount",
+		a.equipment_type AS "equipmentType",
+		a.equipment_made AS "equipmentMade",
+		a.equipment_budgt AS "equipmentBudgt",
+		a.equipment_fault AS "equipmentFault",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.user_phone AS "userPhone",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		o4.name AS "office.name",
+		u13.name AS "user.name"
+	</sql>
+	
+	<sql id="sbEquipmentRepairJoins">
+		LEFT JOIN sys_office o4 ON o4.id = a.office_id
+		LEFT JOIN sys_user u13 ON u13.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SbEquipmentRepair">
+		SELECT 
+			<include refid="sbEquipmentRepairColumns"/>
+		FROM sb_equipment_repair a
+		<include refid="sbEquipmentRepairJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SbEquipmentRepair">
+		SELECT 
+			<include refid="sbEquipmentRepairColumns"/>
+		FROM sb_equipment_repair a
+		<include refid="sbEquipmentRepairJoins"/>
+		<where>
+			
+			<if test="equipmentName != null and equipmentName != ''">
+				AND a.equipment_name = #{equipmentName}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND a.order_id = #{orderId}
+			</if>
+			<if test="equipmentAmount != null and equipmentAmount != ''">
+				AND a.equipment_amount = #{equipmentAmount}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name = #{userName}
+			</if>
+			<if test="userPhone != null and userPhone != ''">
+				AND a.user_phone = #{userPhone}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbEquipmentRepair">
+		SELECT 
+			<include refid="sbEquipmentRepairColumns"/>
+		FROM sb_equipment_repair a
+		<include refid="sbEquipmentRepairJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_equipment_repair(
+			id,
+			processinstid,
+			state,
+			order_id,
+			office_id,
+			office_name,
+			equipment_id,
+			equipment_name,
+			equipment_amount,
+			equipment_type,
+			equipment_made,
+			equipment_budgt,
+			equipment_fault,
+			user_id,
+			user_name,
+			user_phone,
+			create_by,
+			create_date,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{processinstid},
+			#{state},
+			#{orderId},
+			#{office.id},
+			#{officeName},
+			#{equipmentId},
+			#{equipmentName},
+			#{equipmentAmount},
+			#{equipmentType},
+			#{equipmentMade},
+			#{equipmentBudgt},
+			#{equipmentFault},
+			#{user.id},
+			#{userName},
+			#{userPhone},
+			#{createBy.id},
+			#{createDate},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_equipment_repair SET 	
+			processinstid = #{processinstid},
+			state = #{state},
+			order_id = #{orderId},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			equipment_id = #{equipmentId},
+			equipment_name = #{equipmentName},
+			equipment_amount = #{equipmentAmount},
+			equipment_type = #{equipmentType},
+			equipment_made = #{equipmentMade},
+			equipment_budgt = #{equipmentBudgt},
+			equipment_fault = #{equipmentFault},
+			user_id = #{user.id},
+			user_name = #{userName},
+			user_phone = #{userPhone},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_equipment_repair
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

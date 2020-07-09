@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.quality.dao.qmsuppliertemp.QmSupplierAdmittanceTemplateDao">
+    
+	<sql id="qmSupplierAdmittanceTemplateColumns">
+		a.id AS "id",
+		a.qm_index AS "qmIndex",
+		a.name AS "name",
+		a.remarks AS "remarks",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="qmSupplierAdmittanceTemplateJoins">
+	</sql>
+    
+	<select id="get" resultType="QmSupplierAdmittanceTemplate">
+		SELECT 
+			<include refid="qmSupplierAdmittanceTemplateColumns"/>
+		FROM qm_supplier_admittance_template a
+		<include refid="qmSupplierAdmittanceTemplateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QmSupplierAdmittanceTemplate">
+		SELECT 
+			<include refid="qmSupplierAdmittanceTemplateColumns"/>
+		FROM qm_supplier_admittance_template a
+		<include refid="qmSupplierAdmittanceTemplateJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			   order by qm_index+1 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QmSupplierAdmittanceTemplate">
+		SELECT 
+			<include refid="qmSupplierAdmittanceTemplateColumns"/>
+		FROM qm_supplier_admittance_template a
+		<include refid="qmSupplierAdmittanceTemplateJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO qm_supplier_admittance_template(
+			id,
+			qm_index,
+			name,
+			remarks,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{qmIndex},
+			#{name},
+			#{remarks},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qm_supplier_admittance_template SET 	
+			qm_index = #{qmIndex},
+			name = #{name},
+			remarks = #{remarks},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM qm_supplier_admittance_template
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

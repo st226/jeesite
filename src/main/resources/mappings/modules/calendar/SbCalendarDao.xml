@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.calendar.dao.SbCalendarDao">
+    
+	<sql id="sbCalendarColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.start AS "start",
+		a.end AS "end",
+		a.type AS "type",
+		a.matter AS "matter",
+		a.remark AS "remark",
+		a.title AS "title",
+		a.allday AS "allday",
+		a.url AS "url",
+		u2.name AS "user.name"
+		
+	</sql>
+	
+	<sql id="sbCalendarJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SbCalendar">
+		SELECT 
+			<include refid="sbCalendarColumns"/>
+		FROM sb_calendar a
+		<include refid="sbCalendarJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SbCalendar">
+		SELECT 
+			<include refid="sbCalendarColumns"/>
+		FROM sb_calendar a
+		<include refid="sbCalendarJoins"/>
+		<where>
+			
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="matter != null and matter != ''">
+				AND a.matter LIKE 
+					<if test="dbName == 'oracle'">'%'||#{matter}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{matter}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{matter},'%')</if>
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbCalendar">
+		SELECT 
+			<include refid="sbCalendarColumns"/>
+		FROM sb_calendar a
+		<include refid="sbCalendarJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_calendar(
+			id,
+			user_id,
+			user_name,
+			start,
+			end,
+			type,
+			matter,
+			remark,
+			title,
+			allday,
+			url
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{userName},
+			#{start},
+			#{end},
+			#{type},
+			#{matter},
+			#{remark},
+			#{title},
+			#{allday},
+			#{url}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_calendar SET 	
+			user_id = #{user.id},
+			user_name = #{userName},
+			start = #{start},
+			end = #{end},
+			type = #{type},
+			matter = #{matter},
+			remark = #{remark},
+			title = #{title},
+			allday = #{allday},
+			url = #{url}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_calendar
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

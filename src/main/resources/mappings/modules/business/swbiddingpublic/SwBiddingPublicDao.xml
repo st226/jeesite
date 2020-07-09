@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.swbiddingpublic.SwBiddingPublicDao">
+    
+	<sql id="swBiddingPublicColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.bidding_no AS "biddingNo",
+		a.goods_name AS "goodsName",
+		a.goods_amount AS "goodsAmount",
+		a.currency AS "currency",
+		a.model AS "model",
+		a.delivery_date AS "deliveryDate",
+		a.puse AS "puse",
+		a.parameter AS "parameter",
+		a.parts AS "parts",
+		a.technical AS "technical",
+		a.pcheck AS "pcheck",
+		a.packaging AS "packaging",
+		a.port AS "port",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.state AS "state",
+		a.complete_date AS "completeDate",
+		a.complete_by AS "completeBy",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.file AS "file",
+		a.technicalFile AS "technicalFile",
+		a.reviewDate AS "reviewDate",
+		a.signIn AS "signIn",
+		a.bidOpening AS "bidOpening",
+		a.bidWinning AS "bidWinning",
+		a.agency AS "agency",
+		a.notice AS "notice",
+		a.special AS "special",
+		a.specialFile AS "specialFile",
+		a.bid AS "bid"
+	</sql>
+	
+	<sql id="swBiddingPublicJoins">
+	</sql>
+    
+	<select id="get" resultType="SwBiddingPublic">
+		SELECT 
+			<include refid="swBiddingPublicColumns"/>
+		FROM sw_bidding_public a
+		<include refid="swBiddingPublicJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwBiddingPublic">
+		SELECT 
+			<include refid="swBiddingPublicColumns"/>
+		FROM sw_bidding_public a
+		<include refid="swBiddingPublicJoins"/>
+		<where>
+			
+			<if test="biddingNo != null and biddingNo != ''">
+				AND a.bidding_no = #{biddingNo}
+			</if>
+			<if test="goodsName != null and goodsName != ''">
+				AND a.goods_name = #{goodsName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwBiddingPublic">
+		SELECT 
+			<include refid="swBiddingPublicColumns"/>
+		FROM sw_bidding_public a
+		<include refid="swBiddingPublicJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_bidding_public(
+			id,
+			order_id,
+			bidding_no,
+			goods_name,
+			goods_amount,
+			currency,
+			model,
+			delivery_date,
+			puse,
+			parameter,
+			parts,
+			technical,
+			pcheck,
+			packaging,
+			port,
+			create_by,
+			create_date,
+			state,
+			complete_date,
+			complete_by,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			file,
+			technicalFile ,
+		reviewDate ,
+		signIn ,
+		bidOpening ,
+		bidWinning ,
+		agency ,
+		notice ,
+		special ,
+		specialFile,
+		bid 
+		) VALUES (
+			#{id},
+			#{orderId},
+			#{biddingNo},
+			#{goodsName},
+			#{goodsAmount},
+			#{currency},
+			#{model},
+			#{deliveryDate},
+			#{puse},
+			#{parameter},
+			#{parts},
+			#{technical},
+			#{pcheck},
+			#{packaging},
+			#{port},
+			#{createBy.id},
+			#{createDate},
+			#{state},
+			#{completeDate},
+			#{completeBy},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{file},
+			#{technicalFile},
+		#{reviewDate},
+		#{signIn},
+		#{bidOpening},
+		#{bidWinning},
+		#{agency},
+		#{notice},
+		#{special},
+		#{specialFile},
+		#{bid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_bidding_public SET 	
+			order_id = #{orderId},
+			bidding_no = #{biddingNo},
+			goods_name = #{goodsName},
+			goods_amount = #{goodsAmount},
+			currency = #{currency},
+			model = #{model},
+			delivery_date = #{deliveryDate},
+			puse = #{puse},
+			parameter = #{parameter},
+			parts = #{parts},
+			technical = #{technical},
+			pcheck = #{pcheck},
+			packaging = #{packaging},
+			port = #{port},
+			state = #{state},
+			complete_date = #{completeDate},
+			complete_by = #{completeBy},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			file = #{file},
+			technicalFile = #{technicalFile},
+		reviewDate = #{reviewDate},
+		signIn = #{signIn},
+		bidOpening= #{bidOpening},
+		bidWinning =#{bidWinning},
+		agency = #{agency},
+		notice = #{notice},
+		special = #{special},
+		specialFile = #{specialFile},
+		bid = #{bid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_bidding_public
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

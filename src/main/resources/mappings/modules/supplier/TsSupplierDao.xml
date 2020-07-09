@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.supplier.dao.TsSupplierDao">
+    
+	<sql id="tsSupplierColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.code AS "code",
+		a.contact_man AS "contactMan",
+		a.contact_add AS "contactAdd",
+		a.contact_number AS "contactNumber",
+		a.gys_state AS "gysState",
+		a.mailbox AS "mailbox",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tsSupplierJoins">
+	</sql>
+    
+	<select id="get" resultType="TsSupplier">
+		SELECT 
+			<include refid="tsSupplierColumns"/>
+		FROM ts_supplier a
+		<include refid="tsSupplierJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsSupplier">
+		SELECT a.* from (SELECT b.id AS "id",
+		b.name AS "name",
+		b.code AS "code",
+		b.contact_man AS "contactMan",
+		b.contact_add AS "contactAdd",
+		b.contact_number AS "contactNumber",
+		b.gys_state AS "gysState",
+		b.mailbox AS "mailbox",
+		u.`name` AS "createBy.id",
+		b.create_date AS "createDate",
+		b.remarks AS "remarks",
+		b.del_flag AS "delFlag" from ts_supplier b , sys_user u where b.create_by=u.id )a
+		<include refid="tsSupplierJoins"/>
+		<where>
+			a.delFlag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{code}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{code}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{code},'%')</if>
+			</if>
+			<if test="contactMan != null and contactMan != ''">
+				AND a.contactMan LIKE 
+					<if test="dbName == 'oracle'">'%'||#{contactMan}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{contactMan}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{contactMan},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsSupplier">
+		SELECT 
+			<include refid="tsSupplierColumns"/>
+		FROM ts_supplier a
+		<include refid="tsSupplierJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_supplier(
+			id,
+			name,
+			code,
+			contact_man,
+			contact_add,
+			contact_number,
+			gys_state,
+			mailbox,
+			create_by,
+			create_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{code},
+			#{contactMan},
+			#{contactAdd},
+			#{contactNumber},
+			#{gysState},
+			#{mailbox},
+			#{createBy.id},
+			#{createDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_supplier SET 	
+			name = #{name},
+			code = #{code},
+			contact_man = #{contactMan},
+			contact_add = #{contactAdd},
+			contact_number = #{contactNumber},
+			gys_state = #{gysState},
+			mailbox = #{mailbox},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ts_supplier SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.negotiate.SwNegotiateSupplierDao">
+    
+	<sql id="swNegotiateSupplierColumns">
+		a.id AS "id",
+		a.negotiate_id AS "negotiateId.id",
+		a.supplier_id AS "supplierId",
+		a.supplier_name AS "supplierName",
+		a.supplier_user AS "supplierUser",
+		a.phone AS "phone",
+		a.tel AS "tel",
+		a.total_price AS "totalPrice",
+		a.negotiate_price AS "negotiatePrice",
+		a.balance_price AS "balancePrice",
+		a.appendix AS "appendix",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="swNegotiateSupplierJoins">
+		LEFT JOIN sw_negotiate b ON b.id = a.negotiate_id
+	</sql>
+    
+	<select id="get" resultType="SwNegotiateSupplier">
+		SELECT 
+			<include refid="swNegotiateSupplierColumns"/>
+		FROM sw_negotiate_supplier a
+		<include refid="swNegotiateSupplierJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwNegotiateSupplier">
+		SELECT 
+			<include refid="swNegotiateSupplierColumns"/>
+		FROM sw_negotiate_supplier a
+		<include refid="swNegotiateSupplierJoins"/>
+		<where>
+			
+			<if test="negotiateId != null and negotiateId != ''">
+				AND a.negotiate_id = #{negotiateId.id}
+			</if>
+			<if test="supplierName != null and supplierName != ''">
+				AND a.supplier_name = #{supplierName}
+			</if>
+			<if test="supplierUser != null and supplierUser != ''">
+				AND a.supplier_user = #{supplierUser}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="totalPrice != null and totalPrice != ''">
+				AND a.total_price = #{totalPrice}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwNegotiateSupplier">
+		SELECT 
+			<include refid="swNegotiateSupplierColumns"/>
+		FROM sw_negotiate_supplier a
+		<include refid="swNegotiateSupplierJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_negotiate_supplier(
+			id,
+			negotiate_id,
+			supplier_id,
+			supplier_name,
+			supplier_user,
+			phone,
+			tel,
+			total_price,
+			negotiate_price,
+			balance_price,
+			appendix,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{negotiateId.id},
+			#{supplierId},
+			#{supplierName},
+			#{supplierUser},
+			#{phone},
+			#{tel},
+			#{totalPrice},
+			#{negotiatePrice},
+			#{balancePrice},
+			#{appendix},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_negotiate_supplier SET 	
+			negotiate_id = #{negotiateId.id},
+			supplier_id = #{supplierId},
+			supplier_name = #{supplierName},
+			supplier_user = #{supplierUser},
+			phone = #{phone},
+			tel = #{tel},
+			total_price = #{totalPrice},
+			negotiate_price = #{negotiatePrice},
+			balance_price = #{balancePrice},
+			appendix = #{appendix},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_negotiate_supplier
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE negotiate_id = #{negotiateId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

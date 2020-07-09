@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.quality.dao.supplierupdate.QmSupplierUpdateDao">
+    
+	<sql id="qmSupplierUpdateColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.state AS "state",
+		a.type AS "type",
+		a.supplierId AS "supplierId",
+		a.name AS "name",
+		a.product_name AS "productName",
+		a.help_army AS "helpArmy",
+		a.reason AS "reason",
+		a.applicant AS "applicant",
+		a.original AS "original",
+		a.now AS "now",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="qmSupplierUpdateJoins">
+	</sql>
+	
+	<select id="getByProcessInstID" resultType="QmSupplierUpdate">
+		SELECT 
+			<include refid="qmSupplierUpdateColumns"/>
+		FROM qm_supplier_update a
+		<include refid="qmSupplierUpdateJoins"/>
+		WHERE a.processInstID = #{processInstID}
+	</select>
+    
+	<select id="get" resultType="QmSupplierUpdate">
+		SELECT 
+			<include refid="qmSupplierUpdateColumns"/>
+		FROM qm_supplier_update a
+		<include refid="qmSupplierUpdateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QmSupplierUpdate">
+		SELECT 
+			<include refid="qmSupplierUpdateColumns"/>
+		FROM qm_supplier_update a
+		<include refid="qmSupplierUpdateJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="applicant != null and applicant != ''">
+				AND a.applicant = #{applicant}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QmSupplierUpdate">
+		SELECT 
+			<include refid="qmSupplierUpdateColumns"/>
+		FROM qm_supplier_update a
+		<include refid="qmSupplierUpdateJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO qm_supplier_update(
+			id,
+			processinstid,
+			state,
+			type,
+			supplierId,
+			name,
+			product_name,
+			help_army,
+			reason,
+			applicant,
+			original,
+			now,
+			create_by,
+			create_date,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{processinstid},
+			#{state},
+			#{type},
+			#{supplierId},
+			#{name},
+			#{productName},
+			#{helpArmy},
+			#{reason},
+			#{applicant},
+			#{original},
+			#{now},
+			#{createBy.id},
+			#{createDate},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qm_supplier_update SET 	
+			processinstid = #{processinstid},
+			state = #{state},
+			type = #{type},
+			supplierId = #{supplierId},
+			name = #{name},
+			product_name = #{productName},
+			help_army = #{helpArmy},
+			reason = #{reason},
+			applicant = #{applicant},
+			original = #{original},
+			now = #{now},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM qm_supplier_update
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

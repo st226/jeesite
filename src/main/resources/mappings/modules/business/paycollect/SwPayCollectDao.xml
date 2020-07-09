@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.paycollect.SwPayCollectDao">
+    
+	<sql id="swPayCollectColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.contract_id AS "contractId",
+		a.purchase_id AS "purchaseId",
+		a.pay_id AS "payId",
+		a.order_id AS "orderId",
+		a.state AS "state",
+		a.contract_code AS "contractCode",
+		a.contrate_name AS "contrateName",
+		a.pay_type AS "payType",
+		a.supplier_id AS "supplierId",
+		a.supplier_name AS "supplierName",
+		a.supplier_tel AS "supplierTel",
+		a.contrate_price AS "contratePrice",
+		a.contrate_paid AS "contratePaid",
+		a.contrate_treat AS "contrateTreat",
+		a.supplier_bank AS "supplierBank",
+		a.supplier_bank_name AS "supplierBankName",
+		a.supplier_bank_number AS "supplierBankNumber",
+		a.supplier_account AS "supplierAccount",
+		a.appendix AS "appendix",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.phone AS "phone",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.completion_time AS "completionTime",
+		a.expected_completion_time AS "expectedCompletionTime"
+	</sql>
+	
+	<sql id="swPayCollectJoins">
+	</sql>
+    
+	<select id="get" resultType="SwPayCollect">
+		SELECT 
+			<include refid="swPayCollectColumns"/>
+		FROM sw_pay_collect a
+		<include refid="swPayCollectJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwPayCollect">
+		SELECT 
+			<include refid="swPayCollectColumns"/>
+		FROM sw_pay_collect a
+		<include refid="swPayCollectJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwPayCollect">
+		SELECT 
+			<include refid="swPayCollectColumns"/>
+		FROM sw_pay_collect a
+		<include refid="swPayCollectJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_pay_collect(
+			id,
+			processinstid,
+			contract_id,
+			purchase_id,
+			pay_id,
+			order_id,
+			state,
+			contract_code,
+			contrate_name,
+			pay_type,
+			supplier_id,
+			supplier_name,
+			supplier_tel,
+			contrate_price,
+			contrate_paid,
+			contrate_treat,
+			supplier_bank,
+			supplier_bank_name,
+			supplier_bank_number,
+			supplier_account,
+			appendix,
+			create_by,
+			create_date,
+			phone,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			completion_time,
+			expected_completion_time
+		) VALUES (
+			#{id},
+			#{processinstid},
+			#{contractId},
+			#{purchaseId},
+			#{payId},
+			#{orderId},
+			#{state},
+			#{contractCode},
+			#{contrateName},
+			#{payType},
+			#{supplierId},
+			#{supplierName},
+			#{supplierTel},
+			#{contratePrice},
+			#{contratePaid},
+			#{contrateTreat},
+			#{supplierBank},
+			#{supplierBankName},
+			#{supplierBankNumber},
+			#{supplierAccount},
+			#{appendix},
+			#{createBy.id},
+			#{createDate},
+			#{phone},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{completionTime},
+			#{expectedCompletionTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_pay_collect SET 	
+			processinstid = #{processinstid},
+			contract_id = #{contractId},
+			purchase_id = #{purchaseId},
+			pay_id = #{payId},
+			order_id = #{orderId},
+			state = #{state},
+			contract_code = #{contractCode},
+			contrate_name = #{contrateName},
+			pay_type = #{payType},
+			supplier_id = #{supplierId},
+			supplier_name = #{supplierName},
+			supplier_tel = #{supplierTel},
+			contrate_price = #{contratePrice},
+			contrate_paid = #{contratePaid},
+			contrate_treat = #{contrateTreat},
+			supplier_bank = #{supplierBank},
+			supplier_bank_name = #{supplierBankName},
+			supplier_bank_number = #{supplierBankNumber},
+			supplier_account = #{supplierAccount},
+			appendix = #{appendix},
+			phone = #{phone},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			completion_time = #{completionTime},
+			expected_completion_time = #{expectedCompletionTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_pay_collect
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

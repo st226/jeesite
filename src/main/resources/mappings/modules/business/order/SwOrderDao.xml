@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.order.SwOrderDao">
+    
+	<sql id="swOrderColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.name AS "name",
+		a.state AS "state",
+		a.type AS "type",
+		a.type_order AS "typeOrder",
+		a.project_type AS "projectType",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.dyuser_id AS "dyuserId",
+		a.gm_date AS "gmDate",
+		a.field1 AS "field1",
+		a.dyuser_name AS "dyuserName",
+		a.field2 AS "field2",
+		(select GROUP_CONCAT(product_name) product_name from sw_product t where t.order_id=a.id) AS "field3",
+		(select sum(t.product_amount) from sw_product t where t.order_id=a.id) AS "field4",
+		a.amount_ys AS "amountYs",
+		a.amount AS "amount",
+		a.field5 AS "field5",
+		a.field1_state AS "field1State",
+		a.field1_id AS "field1Id",
+		a.field1_text AS "field1Text",
+		a.field1_date AS "field1Date",
+		a.field2_state AS "field2State",
+		a.field2_id AS "field2Id",
+		a.field2_text AS "field2Text",
+		a.field2_date AS "field2Date",
+		a.field3_state AS "field3State",
+		a.field3_id AS "field3Id",
+		a.field3_text AS "field3Text",
+		a.field3_date AS "field3Date",
+		a.field4_state AS "field4State",
+		a.field4_id AS "field4Id",
+		a.field4_text AS "field4Text",
+		a.field4_date AS "field4Date",
+		a.field5_state AS "field5State",
+		a.field5_id AS "field5Id",
+		a.field5_text AS "field5Text",
+		a.field5_date AS "field5Date",
+		a.field6_state AS "field6State",
+		a.field6_id AS "field6Id",
+		a.field6_text AS "field6Text",
+		a.field6_date AS "field6Date",
+		a.field7_state AS "field7State",
+		a.field7_id AS "field7Id",
+		a.field7_text AS "field7Text",
+		a.field7_date AS "field7Date",
+		a.field8_state AS "field8State",
+		a.field8_id AS "field8Id",
+		a.field8_text AS "field8Text",
+		a.field8_date AS "field8Date",
+		a.field9_state AS "field9State",
+		a.field9_id AS "field9Id",
+		a.field9_text AS "field9Text",
+		a.field9_date AS "field9Date",
+		a.field10_state AS "field10State",
+		a.field10_id AS "field10Id",
+		a.field10_text AS "field10Text",
+		a.field10_date AS "field10Date",
+		a.field11_state AS "field11State",
+		a.field11_id AS "field11Id",
+		a.field11_text AS "field11Text",
+		a.field11_date AS "field11Date",
+		a.field1_date_end AS "field1DateEnd",
+		a.field2_date_end AS "field2DateEnd",
+		a.field3_date_end AS "field3DateEnd",
+		a.field4_date_end AS "field4DateEnd",
+		a.field5_date_end AS "field5DateEnd",
+		a.field6_date_end AS "field6DateEnd",
+		a.field7_date_end AS "field7DateEnd",
+		a.field8_date_end AS "field8DateEnd",
+		a.field9_date_end AS "field9DateEnd",
+		a.field10_date_end AS "field10DateEnd",
+		a.field11_date_end AS "field11DateEnd",
+		a.count AS "count",
+		a.countYj AS "countYj",
+		u6.name AS "user.name",
+		a.project_class  AS "projectClass",
+		a.identification  AS "identification"
+	</sql>
+	
+	<sql id="swOrderJoins">
+		LEFT JOIN sys_user u6 ON u6.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SwOrder">
+		SELECT 
+			<include refid="swOrderColumns"/>
+		FROM sw_order a
+		<include refid="swOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getOrderByCode" resultType="SwOrder">
+		SELECT 
+			<include refid="swOrderColumns"/>
+		FROM sw_order a
+		<include refid="swOrderJoins"/>
+		WHERE a.code = #{code}
+	</select>
+	
+	<select id="getCode" resultType="String">
+		select MAX(a.`code`) as code from sw_order a  where a.`CODE` like CONCAT('%', #{code}, '%')
+	</select>
+	
+	<select id="findList" resultType="SwOrder">
+		SELECT 
+			<include refid="swOrderColumns"/>
+		FROM sw_order a
+		<include refid="swOrderJoins"/>
+		<where>
+			
+	
+			<if test="name != null and name != ''">
+				( a.name LIKE concat('%',#{name},'%') or
+				     a.user_name  LIKE  concat('%',#{name},'%') or
+				     a.dyuser_name  LIKE  concat('%',#{name},'%') or
+				     a.project_type  LIKE  concat('%',#{name},'%') )
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+	
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="identification != null and identification != ''">
+				AND a.identification = #{identification}
+			</if>
+			<if test="dyuserId != null and dyuserId != ''">
+				AND (a.dyuser_id = #{dyuserId} or a.user_id = #{dyuserId} )
+			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{userName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{userName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{userName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY 
+				<if test="field1 != null and field1 != ''"> 
+				        a.user_id=${field1} desc , 
+				   </if>
+				${page.orderBy}
+			</when>
+			<otherwise>
+			   ORDER BY 
+			   <if test="field1 != null and field1 != ''"> 
+				        a.user_id=${field1} desc , 
+				   </if>
+			   a.code
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="findListYear" resultType="SwOrder">
+			select o.`code` , o.id AS id,
+		o.name AS "name",
+		o.state AS "state",
+		o.type AS "type",
+		o.user_id AS "user.id",
+		o.user_name AS "userName",
+		(select GROUP_CONCAT(product_name) product_name from sw_product t where t.order_id=o.id) AS "field3",
+CONCAT(if(substring(o.field1_date,1,7)='2020-01',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-01',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-01',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-01',o.field5_text,'')) as 'field1Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-02',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-02',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-02',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-02',o.field5_text,'')) as 'field2Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-03',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-03',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-03',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-03',o.field5_text,'')) as 'field3Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-04',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-04',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-04',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-04',o.field5_text,'')) as 'field4Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-05',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-05',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-05',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-05',o.field5_text,'')) as 'field5Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-06',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-06',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-06',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-06',o.field5_text,'')) as 'field6Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-07',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-07',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-07',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-07',o.field5_text,'')) as 'field7Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-08',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-08',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-08',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-08',o.field5_text,'')) as 'field8Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-09',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-09',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-09',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-09',o.field5_text,'')) as 'field9Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-10',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-10',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-10',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-10',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-10',o.field5_text,'')) as 'field10Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-11',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-11',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-11',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-11',o.field5_text,'')) as 'field11Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-12',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-12',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-12',o.field3_text,''),if(substring(o.field5_date,1,7)='2020-12',o.field5_text,'')) as 'field2'
+
+from sw_order o 
+		<where>
+			
+			<if test="name != null and name != ''">
+				( o.name LIKE concat('%',#{name},'%') or
+				     o.user_name  LIKE  concat('%',#{name},'%') or
+				     o.dyuser_name  LIKE  concat('%',#{name},'%') )
+			</if>
+			<if test="state != null and state != ''">
+				AND o.state = #{state}
+			</if>
+			<if test="type != null and type != ''">
+				AND o.type = #{type}
+			</if>
+	
+			<if test="dyuserId != null and dyuserId != ''">
+				AND (o.dyuser_id = #{dyuserId} or o.user_id = #{dyuserId} )
+			</if>
+			<if test="userName != null and userName != ''">
+				AND o.user_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{userName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{userName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{userName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY 
+				 <if test="field1 != null and field1 != ''"> 
+				        o.user_id=${field1} desc , 
+				   </if>
+				
+				${page.orderBy}
+			</when>
+			<otherwise>
+			   ORDER BY
+			    <if test="field1 != null and field1 != ''"> 
+				        o.user_id=${field1} desc , 
+				   </if>
+			    o.code
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findProductListYear" resultType="SwOrder">
+	
+	select p.product_name as field1,l.* from sw_product p LEFT JOIN
+(select o.`code` , o.id AS id,
+		o.name AS "name",
+		o.state AS "state",
+		o.type AS "type",
+		o.user_id AS "user_id",
+		o.user_name AS "userName",
+		(select GROUP_CONCAT(product_name) product_name from sw_product t where t.order_id=o.id) AS "field3",
+CONCAT(if(substring(o.field1_date,1,7)='2020-01',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-01',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-01',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-01',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-01',o.field5_text,'')) as 'field1Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-02',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-02',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-02',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-02',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-02',o.field5_text,'')) as 'field2Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-03',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-03',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-03',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-03',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-03',o.field5_text,'')) as 'field3Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-04',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-04',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-04',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-04',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-04',o.field5_text,'')) as 'field4Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-05',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-05',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-05',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-05',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-05',o.field5_text,'')) as 'field5Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-06',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-06',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-06',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-06',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-06',o.field5_text,'')) as 'field6Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-07',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-07',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-07',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-07',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-07',o.field5_text,'')) as 'field7Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-08',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-08',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-08',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-08',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-08',o.field5_text,'')) as 'field8Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-09',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-09',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-09',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-09',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-09',o.field5_text,'')) as 'field9Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-10',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-10',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-10',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-10',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-10',o.field5_text,'')) as 'field10Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-11',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-11',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-11',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-11',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-11',o.field5_text,'')) as 'field11Text',
+CONCAT(if(substring(o.field1_date,1,7)='2020-12',o.field1_text,''),if(substring(o.field2_date,1,7)='2020-12',o.field2_text,''),if(substring(o.field3_date,1,7)='2020-12',o.field3_text,''),if(substring(o.field4_date,1,7)='2020-12',o.field4_text,''),if(substring(o.field5_date,1,7)='2020-12',o.field5_text,'')) as 'field2'
+
+from sw_order o ) l on p.order_id=l.id
+	
+	
+	
+	
+	
+	      <where>
+			
+			<if test="name != null and name != ''">
+				( l.name LIKE concat('%',#{name},'%') or
+				     l.user_name  LIKE  concat('%',#{name},'%') or
+				     l.dyuser_name  LIKE  concat('%',#{name},'%') )
+			</if>
+		
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY 
+				 <if test="field1 != null and field1 != ''"> 
+				        l.user_id=${field1} desc , 
+				   </if>
+				
+				${page.orderBy}
+			</when>
+			<otherwise>
+			   ORDER BY
+			    <if test="field1 != null and field1 != ''"> 
+				        l.user_id=${field1} desc , 
+				   </if>
+			   l.code
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwOrder">
+		SELECT 
+			<include refid="swOrderColumns"/>
+		FROM sw_order a
+		<include refid="swOrderJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_order(
+			id,
+			code,
+			name,
+			state,
+			type,
+			type_order,
+			project_type,
+			user_id,
+			user_name,
+			dyuser_id,
+			field1,
+			dyuser_name,
+			field2,
+			field3,
+			amount_ys,
+			amount,
+			gm_date,
+			field4,
+			field5,
+			field1_state,
+			field1_id,
+			field1_text,
+			field1_date,
+			field2_state,
+			field2_id,
+			field2_text,
+			field2_date,
+			field3_state,
+			field3_id,
+			field3_text,
+			field3_date,
+			field4_state,
+			field4_id,
+			field4_text,
+			field4_date,
+			field5_state,
+			field5_id,
+			field5_text,
+			field5_date,
+			field6_state,
+			field6_id,
+			field6_text,
+			field6_date,
+			field7_state,
+			field7_id,
+			field7_text,
+			field7_date,
+			field8_state,
+			field8_id,
+			field8_text,
+			field8_date,
+			field9_state,
+			field9_id,
+			field9_text,
+			field9_date,
+			field10_state,
+			field10_id,
+			field10_text,
+			field10_date,
+			field11_state,
+			field11_id,
+			field11_text,
+			field11_date,
+			field1_date_end,
+		    field2_date_end,
+		    field3_date_end,
+		    field4_date_end,
+		    field5_date_end,
+		    field6_date_end,
+		    field7_date_end,
+		    field8_date_end,
+		    field9_date_end,
+		    field10_date_end,
+		    field11_date_end,
+		    count,
+		    countYj,
+		    project_class,
+		    identification
+		) VALUES (
+			#{id},
+			#{code},
+			#{name},
+			#{state},
+			#{type},
+			#{typeOrder},
+			#{projectType},
+			#{user.id},
+			#{userName},
+			#{dyuserId},
+			#{field1},
+			#{dyuserName},
+			#{field2},
+			#{field3},
+			#{amountYs},
+			#{amount},
+			#{gmDate},
+			#{field4},
+			#{field5},
+			#{field1State},
+			#{field1Id},
+			#{field1Text},
+			#{field1Date},
+			#{field2State},
+			#{field2Id},
+			#{field2Text},
+			#{field2Date},
+			#{field3State},
+			#{field3Id},
+			#{field3Text},
+			#{field3Date},
+			#{field4State},
+			#{field4Id},
+			#{field4Text},
+			#{field4Date},
+			#{field5State},
+			#{field5Id},
+			#{field5Text},
+			#{field5Date},
+			#{field6State},
+			#{field6Id},
+			#{field6Text},
+			#{field6Date},
+			#{field7State},
+			#{field7Id},
+			#{field7Text},
+			#{field7Date},
+			#{field8State},
+			#{field8Id},
+			#{field8Text},
+			#{field8Date},
+			#{field9State},
+			#{field9Id},
+			#{field9Text},
+			#{field9Date},
+			#{field10State},
+			#{field10Id},
+			#{field10Text},
+			#{field10Date},
+			#{field11State},
+			#{field11Id},
+			#{field11Text},
+			#{field11Date},
+			#{field1DateEnd},
+		#{field2DateEnd},
+		#{field3DateEnd},
+		#{field4DateEnd},
+		#{field5DateEnd},
+		#{field6DateEnd},
+		#{field7DateEnd},
+		#{field8DateEnd},
+		#{field9DateEnd},
+		#{field10DateEnd},
+		#{field11DateEnd},
+		#{count},
+		#{countYj},
+		#{projectClass},
+		#{identification}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_order SET 	
+			code = #{code},
+			name = #{name},
+			state = #{state},
+			type = #{type},
+			type_order = #{typeOrder},
+			project_type = #{projectType},
+			user_id = #{user.id},
+			user_name = #{userName},
+			dyuser_id = #{dyuserId},
+			field1 = #{field1},
+			dyuser_name = #{dyuserName},
+			field2 = #{field2},
+			field3 = #{field3},
+			amount_ys = #{amountYs},
+			amount = #{amount},
+			gm_date = #{gmDate},
+			field4 = #{field4},
+			field5 = #{field5},
+			field1_state = #{field1State},
+			field1_id = #{field1Id},
+			field1_text = #{field1Text},
+			field1_date = #{field1Date},
+			field2_state = #{field2State},
+			field2_id = #{field2Id},
+			field2_text = #{field2Text},
+			field2_date = #{field2Date},
+			field3_state = #{field3State},
+			field3_id = #{field3Id},
+			field3_text = #{field3Text},
+			field3_date = #{field3Date},
+			field4_state = #{field4State},
+			field4_id = #{field4Id},
+			field4_text = #{field4Text},
+			field4_date = #{field4Date},
+			field5_state = #{field5State},
+			field5_id = #{field5Id},
+			field5_text = #{field5Text},
+			field5_date = #{field5Date},
+			field6_state = #{field6State},
+			field6_id = #{field6Id},
+			field6_text = #{field6Text},
+			field6_date = #{field6Date},
+			field7_state = #{field7State},
+			field7_id = #{field7Id},
+			field7_text = #{field7Text},
+			field7_date = #{field7Date},
+			field8_state = #{field8State},
+			field8_id = #{field8Id},
+			field8_text = #{field8Text},
+			field8_date = #{field8Date},
+			field9_state = #{field9State},
+			field9_id = #{field9Id},
+			field9_text = #{field9Text},
+			field9_date = #{field9Date},
+			field10_state = #{field10State},
+			field10_id = #{field10Id},
+			field10_text = #{field10Text},
+			field10_date = #{field10Date},
+			field11_state = #{field11State},
+			field11_id = #{field11Id},
+			field11_text = #{field11Text},
+			field11_date = #{field11Date},
+			field1_date_end = #{field1DateEnd},
+		field2_date_end = #{field2DateEnd},
+		field3_date_end = #{field3DateEnd},
+		field4_date_end = #{field4DateEnd},
+		field5_date_end = #{field5DateEnd},
+		field6_date_end = #{field6DateEnd},
+		field7_date_end = #{field7DateEnd},
+		field8_date_end = #{field8DateEnd},
+		field9_date_end = #{field9DateEnd},
+		field10_date_end = #{field10DateEnd},
+		field11_date_end = #{field11DateEnd},
+		count = #{count},
+		countYj = #{countYj},
+		project_class = #{projectClass},
+		identification = #{identification}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_order
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getGyCode" resultType="String">
+		SELECT MAX(${formsn}) AS CODE FROM ${tablename}  A WHERE ${formsn} LIKE concat('%',#{code},'%')
+	</select>
+	
+</mapper>

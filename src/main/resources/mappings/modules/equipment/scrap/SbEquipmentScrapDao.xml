@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.scrap.SbEquipmentScrapDao">
+    
+	<sql id="sbEquipmentScrapColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.state AS "state",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.equipment_id AS "equipmentId",
+		a.equipment_name AS "equipmentName",
+		a.equipment_made AS "equipmentMade",
+		a.equipment_code AS "equipmentCode",
+		a.equipment_outtime AS "equipmentOuttime",
+		a.equipment_buytime AS "equipmentBuytime",
+		a.equipment_yprice AS "equipmentYprice",
+		a.equipment_jprice AS "equipmentJprice",
+		a.equipment_type AS "equipmentType",
+		a.equipment_team AS "equipmentTeam",
+		a.equipment_team_name AS "equipmentTeamName",
+		a.equipment_norms AS "equipmentNorms",
+		a.equipment_starttime AS "equipmentStarttime",
+		a.equipment_years AS "equipmentYears",
+		a.reason AS "reason",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		o4.name AS "office.name"
+	</sql>
+	
+	<sql id="sbEquipmentScrapJoins">
+		LEFT JOIN sys_office o4 ON o4.id = a.office_id
+	</sql>
+    
+	<select id="get" resultType="SbEquipmentScrap">
+		SELECT 
+			<include refid="sbEquipmentScrapColumns"/>
+		FROM sb_equipment_scrap a
+		<include refid="sbEquipmentScrapJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SbEquipmentScrap">
+		SELECT 
+			<include refid="sbEquipmentScrapColumns"/>
+		FROM sb_equipment_scrap a
+		<include refid="sbEquipmentScrapJoins"/>
+		<where>
+			
+			<if test="officeName != null and officeName != ''">
+				AND a.office_name = #{officeName}
+			</if>
+			<if test="equipmentName != null and equipmentName != ''">
+				AND a.equipment_name = #{equipmentName}
+			</if>
+			<if test="equipmentCode != null and equipmentCode != ''">
+				AND a.equipment_code = #{equipmentCode}
+			</if>
+			<if test="equipmentTeamName != null and equipmentTeamName != ''">
+				AND a.equipment_team_name = #{equipmentTeamName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbEquipmentScrap">
+		SELECT 
+			<include refid="sbEquipmentScrapColumns"/>
+		FROM sb_equipment_scrap a
+		<include refid="sbEquipmentScrapJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_equipment_scrap(
+			id,
+			processinstid,
+			state,
+			office_id,
+			office_name,
+			equipment_id,
+			equipment_name,
+			equipment_made,
+			equipment_code,
+			equipment_outtime,
+			equipment_buytime,
+			equipment_yprice,
+			equipment_jprice,
+			equipment_type,
+			equipment_team,
+			equipment_team_name,
+			equipment_norms,
+			equipment_starttime,
+			equipment_years,
+			reason,
+			create_by,
+			create_date,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{processinstid},
+			#{state},
+			#{office.id},
+			#{officeName},
+			#{equipmentId},
+			#{equipmentName},
+			#{equipmentMade},
+			#{equipmentCode},
+			#{equipmentOuttime},
+			#{equipmentBuytime},
+			#{equipmentYprice},
+			#{equipmentJprice},
+			#{equipmentType},
+			#{equipmentTeam},
+			#{equipmentTeamName},
+			#{equipmentNorms},
+			#{equipmentStarttime},
+			#{equipmentYears},
+			#{reason},
+			#{createBy.id},
+			#{createDate},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_equipment_scrap SET 	
+			processinstid = #{processinstid},
+			state = #{state},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			equipment_id = #{equipmentId},
+			equipment_name = #{equipmentName},
+			equipment_made = #{equipmentMade},
+			equipment_code = #{equipmentCode},
+			equipment_outtime = #{equipmentOuttime},
+			equipment_buytime = #{equipmentBuytime},
+			equipment_yprice = #{equipmentYprice},
+			equipment_jprice = #{equipmentJprice},
+			equipment_type = #{equipmentType},
+			equipment_team = #{equipmentTeam},
+			equipment_team_name = #{equipmentTeamName},
+			equipment_norms = #{equipmentNorms},
+			equipment_starttime = #{equipmentStarttime},
+			equipment_years = #{equipmentYears},
+			reason = #{reason},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_equipment_scrap
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

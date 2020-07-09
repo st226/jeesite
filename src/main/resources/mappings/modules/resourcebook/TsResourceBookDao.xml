@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.resourcebook.dao.TsResourceBookDao">
+    
+	<sql id="tsResourceBookColumns">
+		a.id AS "id",
+		a.resource_id AS "resourceId",
+		a.key_code AS "keyCode",
+		a.resource_code AS "resourceCode",
+		a.book_code AS "bookCode",
+		a.book_state AS "bookState",
+		a.staff AS "staff",
+		a.local AS "local",
+		a.borrow_state AS "borrowState"
+	</sql>
+	
+	<sql id="tsResourceBookJoins">
+	</sql>
+    
+	<select id="get" resultType="TsResourceBook">
+		SELECT 
+			<include refid="tsResourceBookColumns"/>
+		FROM ts_resource_book a
+		<include refid="tsResourceBookJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsResourceBook">
+		SELECT 
+			<include refid="tsResourceBookColumns"/>
+		FROM ts_resource_book a
+		<include refid="tsResourceBookJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsResourceBook">
+		SELECT 
+			<include refid="tsResourceBookColumns"/>
+		FROM ts_resource_book a
+		<include refid="tsResourceBookJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_resource_book(
+			id,
+			resource_id,
+			key_code,
+			resource_code,
+			book_code,
+			book_state,
+			staff,
+			local,
+			borrow_state
+		) VALUES (
+			#{id},
+			#{resourceId},
+			#{keyCode},
+			#{resourceCode},
+			#{bookCode},
+			#{bookState},
+			#{staff},
+			#{local},
+			#{borrowState}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_resource_book SET 	
+			resource_id = #{resourceId},
+			key_code = #{keyCode},
+			resource_code = #{resourceCode},
+			book_code = #{bookCode},
+			book_state = #{bookState},
+			staff = #{staff},
+			local = #{local},
+			borrow_state = #{borrowState}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_resource_book
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

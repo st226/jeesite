@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.reimbursement.SwReimbursementDao">
+    
+	<sql id="swReimbursementColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.state AS "state",
+		a.supplier_id AS "supplierId",
+		a.supplier_name AS "supplierName",
+		a.mark AS "mark",
+		a.project_code AS "projectCode",
+		a.project_name AS "projectName",
+		a.is_quality AS "isQuality",
+		a.quality AS "quality",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.file AS "file",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.user_id AS "user.id",
+		a.amount AS "amount",
+		o19.name AS "office.name",
+		u21.name AS "user.name"
+	</sql>
+	
+	<sql id="swReimbursementJoins">
+		LEFT JOIN sys_office o19 ON o19.id = a.office_id
+		LEFT JOIN sys_user u21 ON u21.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SwReimbursement">
+		SELECT 
+			<include refid="swReimbursementColumns"/>
+		FROM sw_reimbursement a
+		<include refid="swReimbursementJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwReimbursement">
+		SELECT 
+			<include refid="swReimbursementColumns"/>
+		FROM sw_reimbursement a
+		<include refid="swReimbursementJoins"/>
+	
+		<where>
+			
+			<if test="supplierName != null and supplierName != ''">
+				AND a.supplier_name = #{supplierName}
+			</if>
+		
+		</where>
+			
+	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwReimbursement">
+		SELECT 
+			<include refid="swReimbursementColumns"/>
+		FROM sw_reimbursement a
+		<include refid="swReimbursementJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_reimbursement(
+			id,
+			order_id,
+			state,
+			supplier_id,
+			supplier_name,
+			mark,
+			project_code,
+			project_name,
+			is_quality,
+			quality,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			file,
+			create_date,
+			create_by,
+			office_id,
+			office_name,
+			user_id,
+			amount
+		) VALUES (
+			#{id},
+			#{orderId},
+			#{state},
+			#{supplierId},
+			#{supplierName},
+			#{mark},
+			#{projectCode},
+			#{projectName},
+			#{isQuality},
+			#{quality},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{file},
+			#{createDate},
+			#{createBy.id},
+			#{office.id},
+			#{officeName},
+			#{user.id},
+			#{amount}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_reimbursement SET 	
+			order_id = #{orderId},
+			state = #{state},
+			supplier_id = #{supplierId},
+			supplier_name = #{supplierName},
+			mark = #{mark},
+			project_code = #{projectCode},
+			project_name = #{projectName},
+			is_quality = #{isQuality},
+			quality = #{quality},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			file = #{file},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			user_id = #{user.id},
+			amount = #{amount}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_reimbursement
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

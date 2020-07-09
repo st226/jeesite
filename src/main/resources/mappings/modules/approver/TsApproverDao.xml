@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.approver.dao.TsApproverDao">
+    
+	<sql id="tsApproverColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.file AS "file",
+		a.username AS "username",
+		a.userid AS "userid",
+		a.officename AS "officename",
+		a.officeid AS "officeid",
+		a.type_name AS "typeName",
+		a.applicant_id AS "applicantId",
+		a.applicant_name AS "applicantName",
+		a.applicant_dept_id AS "applicantDeptId",
+		a.applicant_dept_name AS "applicantDeptName",
+		a.applicant_date AS "applicantDate",
+		a.state AS "state",
+		a.approver_id AS "approverId",
+		a.approver_name AS "approverName",
+		a.resource_id AS "resourceId"
+	</sql>
+	
+	<sql id="tsApproverJoins">
+	</sql>
+    
+	<select id="get" resultType="TsApprover">
+		SELECT 
+			<include refid="tsApproverColumns"/>
+		FROM ts_approver a
+		<include refid="tsApproverJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	<select id="getByProcessInstID" resultType="TsApprover">
+		SELECT 
+			<include refid="tsApproverColumns"/>
+		FROM ts_approver a
+		<include refid="tsApproverJoins"/>
+		WHERE a.PROCESSINSTID = #{processInstID}
+	</select>
+	
+	<select id="findList" resultType="TsApprover">
+		SELECT 
+			<include refid="tsApproverColumns"/>
+		FROM ts_approver a
+		<include refid="tsApproverJoins"/>
+		<where>
+			a.state = '1' 
+			<if test="approverId != null and approverId != ''">
+			      AND a.approver_id = #{approverId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsApprover">
+		SELECT 
+			<include refid="tsApproverColumns"/>
+		FROM ts_approver a
+		<include refid="tsApproverJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_approver(
+			id,
+			name,
+			file,
+			username,
+			userid,
+			officename,
+			officeid,
+			type_name,
+			applicant_id,
+			applicant_name,
+			applicant_dept_id,
+			applicant_dept_name,
+			applicant_date,
+			state,
+			approver_id,
+			approver_name,
+			resource_id,
+			processinstid
+		) VALUES (
+			#{id},
+			#{name},
+			#{file},
+			#{username},
+			#{userid},
+			#{officename},
+			#{officeid},
+			#{typeName},
+			#{applicantId},
+			#{applicantName},
+			#{applicantDeptId},
+			#{applicantDeptName},
+			#{applicantDate},
+			#{state},
+			#{approverId},
+			#{approverName},
+			#{resourceId},
+			#{processinstid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_approver SET 	
+			name = #{name},
+			file = #{file},
+			username = #{username},
+			userid = #{userid},
+			officename = #{officename},
+			officeid = #{officeid},
+			type_name = #{typeName},
+			applicant_id = #{applicantId},
+			applicant_name = #{applicantName},
+			applicant_dept_id = #{applicantDeptId},
+			applicant_dept_name = #{applicantDeptName},
+			applicant_date = #{applicantDate},
+			state = #{state},
+			approver_id = #{approverId},
+			approver_name = #{approverName},
+			resource_id = #{resourceId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_approver
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

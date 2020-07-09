@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.quality.dao.purchase.QmSupplierPurchaseDao">
+    
+	<sql id="qmSupplierPurchaseColumns">
+		a.id AS "id",
+		a.state AS "state",
+		a.processinstid AS "processinstid",
+		a.product_name AS "productName",
+		a.product_type AS "productType",
+		a.product_class AS "productClass",
+		a.enterprise_name AS "enterpriseName",
+		a.enterprise_nature AS "enterpriseNature",
+		a.project_model AS "projectModel",
+		a.stand_name AS "standName",
+		a.stand_dosage AS "standDosage",
+		a.stand_amount AS "standAmount",
+		a.reason AS "reason",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.applicant AS "applicant",
+		a.statement AS "statement",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="qmSupplierPurchaseJoins">
+	</sql>
+	
+	<select id="getByProcessInstID" resultType="qmSupplierPurchase">
+		SELECT 
+			<include refid="qmSupplierPurchaseColumns"/>
+		FROM qm_supplier_purchase a
+		<include refid="qmSupplierPurchaseJoins"/>
+		WHERE a.processInstID = #{processInstID}
+	</select>
+    
+	<select id="get" resultType="QmSupplierPurchase">
+		SELECT 
+			<include refid="qmSupplierPurchaseColumns"/>
+		FROM qm_supplier_purchase a
+		<include refid="qmSupplierPurchaseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QmSupplierPurchase">
+		SELECT 
+			<include refid="qmSupplierPurchaseColumns"/>
+		FROM qm_supplier_purchase a
+		<include refid="qmSupplierPurchaseJoins"/>
+		<where>
+			
+			<if test="productName != null and productName != ''">
+				AND a.product_name = #{productName}
+			</if>
+			<if test="enterpriseName != null and enterpriseName != ''">
+				AND a.enterprise_name = #{enterpriseName}
+			</if>
+			<if test="enterpriseNature != null and enterpriseNature != ''">
+				AND a.enterprise_nature = #{enterpriseNature}
+			</if>
+			<if test="projectModel != null and projectModel != ''">
+				AND a.project_model = #{projectModel}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QmSupplierPurchase">
+		SELECT 
+			<include refid="qmSupplierPurchaseColumns"/>
+		FROM qm_supplier_purchase a
+		<include refid="qmSupplierPurchaseJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO qm_supplier_purchase(
+			id,
+			state,
+			processinstid,
+			product_name,
+			product_type,
+			product_class,
+			enterprise_name,
+			enterprise_nature,
+			project_model,
+			stand_name,
+			stand_dosage,
+			stand_amount,
+			reason,
+			create_by,
+			create_date,
+			applicant,
+			statement,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{state},
+			#{processinstid},
+			#{productName},
+			#{productType},
+			#{productClass},
+			#{enterpriseName},
+			#{enterpriseNature},
+			#{projectModel},
+			#{standName},
+			#{standDosage},
+			#{standAmount},
+			#{reason},
+			#{createBy.id},
+			#{createDate},
+			#{applicant},
+			#{statement},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qm_supplier_purchase SET 	
+			state = #{state},
+			processinstid = #{processinstid},
+			product_name = #{productName},
+			product_type = #{productType},
+			product_class = #{productClass},
+			enterprise_name = #{enterpriseName},
+			enterprise_nature = #{enterpriseNature},
+			project_model = #{projectModel},
+			stand_name = #{standName},
+			stand_dosage = #{standDosage},
+			stand_amount = #{standAmount},
+			reason = #{reason},
+			applicant = #{applicant},
+			statement = #{statement},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM qm_supplier_purchase
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

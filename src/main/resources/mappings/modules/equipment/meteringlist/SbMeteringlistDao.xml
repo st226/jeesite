@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.meteringlist.SbMeteringlistDao">
+    
+	<sql id="sbMeteringlistColumns">
+		a.id AS "id",
+		a.sbname AS "sbname",
+		a.yycode AS "yycode",
+		a.sbode AS "sbode",
+		a.type AS "type",
+		a.cccode AS "cccode",
+		a.djdate AS "djdate",
+		a.amount AS "amount",
+		a.dept AS "dept",
+		a.emp AS "emp",
+		a.local AS "local",
+		a.isjl AS "isjl",
+		a.jlfs AS "jlfs",
+		a.jdzq AS "jdzq",
+		a.sndyxq AS "sndyxq",
+		a.jcrq AS "jcrq",
+		a.zxyxq AS "zxyxq",
+		a.sbstate AS "sbstate",
+		a.sbtype AS "sbtype"
+	</sql>
+	
+	<sql id="sbMeteringlistJoins">
+	</sql>
+    
+	<select id="get" resultType="SbMeteringlist">
+		SELECT 
+			<include refid="sbMeteringlistColumns"/>
+		FROM sb_meteringlist a
+		<include refid="sbMeteringlistJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SbMeteringlist">
+		SELECT 
+			<include refid="sbMeteringlistColumns"/>
+		FROM sb_meteringlist a
+		<include refid="sbMeteringlistJoins"/>
+		<where>
+			
+			<if test="sbname != null and sbname != ''">
+				AND a.sbname = #{sbname}
+			</if>
+			<if test="emp != null">
+				AND a.sbode = '' 
+			</if>
+			<if test="yycode != null and yycode != ''">
+				AND a.yycode = #{yycode}
+			</if>
+			<if test="sbode != null and sbode != ''">
+				AND a.sbode = #{sbode}
+			</if>
+			<if test="cccode != null and cccode != ''">
+				AND a.cccode = #{cccode}
+			</if>
+			<if test="sbtype != null and sbtype != ''">
+				AND a.sbtype = #{sbtype}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbMeteringlist">
+		SELECT 
+			<include refid="sbMeteringlistColumns"/>
+		FROM sb_meteringlist a
+		<include refid="sbMeteringlistJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_meteringlist(
+			id,
+			sbname,
+			yycode,
+			sbode,
+			type,
+			cccode,
+			djdate,
+			amount,
+			dept,
+			emp,
+			local,
+			isjl,
+			jlfs,
+			jdzq,
+			sndyxq,
+			jcrq,
+			zxyxq,
+			sbstate,
+			sbtype
+		) VALUES (
+			#{id},
+			#{sbname},
+			#{yycode},
+			#{sbode},
+			#{type},
+			#{cccode},
+			#{djdate},
+			#{amount},
+			#{dept},
+			#{emp},
+			#{local},
+			#{isjl},
+			#{jlfs},
+			#{jdzq},
+			#{sndyxq},
+			#{jcrq},
+			#{zxyxq},
+			#{sbstate},
+			#{sbtype}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_meteringlist SET 	
+			sbname = #{sbname},
+			yycode = #{yycode},
+			sbode = #{sbode},
+			type = #{type},
+			cccode = #{cccode},
+			djdate = #{djdate},
+			amount = #{amount},
+			dept = #{dept},
+			emp = #{emp},
+			local = #{local},
+			isjl = #{isjl},
+			jlfs = #{jlfs},
+			jdzq = #{jdzq},
+			sndyxq = #{sndyxq},
+			jcrq = #{jcrq},
+			zxyxq = #{zxyxq},
+			sbstate = #{sbstate},
+			sbtype = #{sbtype}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_meteringlist
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

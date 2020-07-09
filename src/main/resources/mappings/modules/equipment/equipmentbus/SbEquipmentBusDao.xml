@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.equipmentbus.SbEquipmentBusDao">
+    
+	<sql id="sbEquipmentBusColumns">
+		a.id AS "id",
+		a.bus_type AS "busType",
+		a.column_id AS "columnId",
+		a.column_name AS "columnName",
+		a.column_comments AS "columnComments",
+		a.table_id AS "tableId",
+		a.column_jdbc_type AS "columnJdbcType",
+		a.table_comments AS "tableComments",
+		a.sort AS "sort",
+		a.is_insert AS "isInsert",
+		a.is_edit AS "isEdit",
+		a.is_list AS "isList",
+		a.is_query AS "isQuery",
+		a.query_type AS "queryType",
+		a.show_type AS "showType",
+		a.dict_type AS "dictType",
+		a.table_name AS "tableName"
+	</sql>
+	
+	<sql id="sbEquipmentBusJoins">
+	</sql>
+    
+	<select id="get" resultType="SbEquipmentBus">
+		SELECT 
+			<include refid="sbEquipmentBusColumns"/>
+		FROM sb_equipment_bus a
+		<include refid="sbEquipmentBusJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SbEquipmentBus">
+		SELECT 
+			<include refid="sbEquipmentBusColumns"/>
+		FROM sb_equipment_bus a
+		<include refid="sbEquipmentBusJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getMap" resultType="java.util.Map" >
+	            SELECT 
+			sum(field2) field2 ,
+			ROUND(sum(unitprice*field2)/10000,2) price
+		FROM sb_equipment a
+		<where>
+			<if test="fsType != null and fsType != ''">
+				AND a.fs_type in (select id from sb_equipment_type t where t.id= #{fsType} or t.parent_ids like concat('%',#{fsType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND ( a.name LIKE concat('%',#{name},'%') or
+				       a.zccode LIKE concat('%',#{name},'%') or
+				       a.field4 LIKE concat('%',#{name},'%') or
+				      a.cccode LIKE concat('%',#{name},'%') or
+				      a.sbcode LIKE concat('%',#{name},'%') or
+				      a.field1 LIKE concat('%',#{name},'%') or
+				       a.type LIKE concat('%',#{name},'%') or
+				       a.teamname LIKE concat('%',#{name},'%') or
+				       a.usepeoplename LIKE concat('%',#{name},'%') )
+				      
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state =#{state}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename =#{usepeoplename}
+			</if>
+			<if test="field5 != null and field5 != ''">
+				AND a.field5 =#{field5}
+			</if>
+			<if test="field20 != null and field20 != ''">
+				AND a.field20 =#{field20}
+			</if>
+			<if test="teamname != null and teamname != ''">
+				AND a.teamname   LIKE concat('%',#{teamname},'%')
+			</if>
+			<if test="bstate != null and bstate != ''">
+				AND a.bstate =#{bstate}
+			</if>
+			
+			<if test="sbcode != null and sbcode != ''">
+				AND a.sbcode   LIKE concat('%',#{sbcode},'%')
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type   LIKE concat('%',#{type},'%')
+			</if>
+			<if test="field1 != null and field1 != ''">
+				AND a.field1   LIKE concat('%',#{field1},'%')
+			</if>
+			<if test="team != null and team != ''">
+				AND a.team  = #{team}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename   LIKE concat('%',#{usepeoplename},'%')
+			</if>
+			<if test="sbType != null and sbType != ''">
+				AND a.sb_type   =#{sbType}
+			</if>
+			<if test="price != null ">
+				AND a.price  >#{price}
+			</if>
+			
+			
+		</where>
+	</select>
+	
+	<select id="findListMap" resultType="java.util.Map" >
+		SELECT 
+			*
+		FROM sb_equipment a
+		<where>
+			<if test="fsType != null and fsType != ''">
+				AND a.fs_type in (select id from sb_equipment_type t where t.id= #{fsType} or t.parent_ids like concat('%',#{fsType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND ( a.name LIKE concat('%',#{name},'%') or
+				      a.zccode LIKE concat('%',#{name},'%') or
+				      a.cccode LIKE concat('%',#{name},'%') or
+				      a.sbcode LIKE concat('%',#{name},'%') or
+				      a.field1 LIKE concat('%',#{name},'%') or
+				      a.field4 LIKE concat('%',#{name},'%') or
+				       a.type LIKE concat('%',#{name},'%') or
+				       a.teamname LIKE concat('%',#{name},'%') or
+				       a.usepeoplename LIKE concat('%',#{name},'%') )
+				      
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state =#{state}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename =#{usepeoplename}
+			</if>
+			<if test="field5 != null and field5 != ''">
+				AND a.field5 =#{field5}
+			</if>
+			<if test="field4 != null and field4 != ''">
+				AND a.field4 =#{field4}
+			</if>
+			<if test="field15 != null and field15 != ''">
+				AND a.field15 =#{field15}
+			</if>
+			<if test="field20 != null and field20 != ''">
+				AND a.field20 =#{field20}
+			</if>
+			
+			<if test="teamname != null and teamname != ''">
+				AND a.teamname LIKE concat('%',#{teamname},'%')
+			</if>
+			<if test="bstate != null and bstate != ''">
+				AND a.bstate =#{bstate}
+			</if>
+			
+			<if test="sbcode != null and sbcode != ''">
+				AND a.sbcode   LIKE concat('%',#{sbcode},'%')
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type   LIKE concat('%',#{type},'%')
+			</if>
+			<if test="field1 != null and field1 != ''">
+				AND a.field1   LIKE concat('%',#{field1},'%')
+			</if>
+			<if test="team != null and team != ''">
+				AND a.team  = #{team}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename   LIKE concat('%',#{usepeoplename},'%')
+			</if>
+			<if test="sbType != null and sbType != ''">
+				AND a.sb_type   =#{sbType}
+			</if>
+			
+			<if test="price != null ">
+				AND a.price  >#{price}
+			</if>
+		
+		</where>
+		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="findMeteringListMap" resultType="java.util.Map" >
+		SELECT 
+			*
+		FROM sb_equipment a
+		<where>
+			<if test="fsType != null and fsType != ''">
+				AND a.fs_type in (select id from sb_equipment_type t where t.id= #{fsType} or t.parent_ids like concat('%',#{fsType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND ( a.name LIKE concat('%',#{name},'%') or
+				      a.zccode LIKE concat('%',#{name},'%') or
+				      a.cccode LIKE concat('%',#{name},'%') or
+				      a.sbcode LIKE concat('%',#{name},'%') or
+				      a.field1 LIKE concat('%',#{name},'%') or
+				      a.field4 LIKE concat('%',#{name},'%') or
+				       a.type LIKE concat('%',#{name},'%') or
+				       a.teamname LIKE concat('%',#{name},'%') or
+				       a.usepeoplename LIKE concat('%',#{name},'%') )
+				      
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state =#{state}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename =#{usepeoplename}
+			</if>
+			<if test="field5 != null and field5 != ''">
+				AND a.field5 =#{field5}
+			</if>
+			<if test="field4 != null and field4 != ''">
+				AND a.field4 LIKE concat('%',#{field4},'%')   
+			</if>
+			<if test="field15 != null and field15 != ''">
+				AND a.field15 =#{field15}
+			</if>
+			<if test="field15 == null or field15 == ''">
+				AND (a.field15 is null or a.field15='')
+			</if>
+			<if test="field20 != null and field20 != ''">
+				AND a.field20 =#{field20}
+			</if>
+			<if test="teamname != null and teamname != ''">
+				AND a.teamname LIKE concat('%',#{teamname},'%')
+			</if>
+			<if test="bstate != null and bstate != ''">
+				AND a.bstate =#{bstate}
+			</if>
+			
+			<if test="sbcode != null and sbcode != ''">
+				AND a.sbcode   LIKE concat('%',#{sbcode},'%')
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type   LIKE concat('%',#{type},'%')
+			</if>
+			<if test="field1 != null and field1 != ''">
+				AND a.field1   LIKE concat('%',#{field1},'%')
+			</if>
+			<if test="team != null and team != ''">
+				AND a.team  = #{team}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename   LIKE concat('%',#{usepeoplename},'%')
+			</if>
+			<if test="sbType != null and sbType != ''">
+				AND a.sb_type   =#{sbType}
+			</if>
+			
+			<if test="price != null ">
+				AND a.price  >#{price}
+			</if>
+		
+		</where>
+		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="findMeteringYMListMap" resultType="java.util.Map" >
+		SELECT 
+			*
+		FROM sb_equipment a
+		<where>
+			<if test="fsType != null and fsType != ''">
+				AND a.fs_type in (select id from sb_equipment_type t where t.id= #{fsType} or t.parent_ids like concat('%',#{fsType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND ( a.name LIKE concat('%',#{name},'%') or
+				      a.zccode LIKE concat('%',#{name},'%') or
+				      a.cccode LIKE concat('%',#{name},'%') or
+				      a.sbcode LIKE concat('%',#{name},'%') or
+				      a.field1 LIKE concat('%',#{name},'%') or
+				      a.field4 LIKE concat('%',#{name},'%') or
+				       a.type LIKE concat('%',#{name},'%') or
+				       a.teamname LIKE concat('%',#{name},'%') or
+				       a.usepeoplename LIKE concat('%',#{name},'%') )
+				      
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state =#{state}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename =#{usepeoplename}
+			</if>
+			<if test="field5 != null and field5 != ''">
+				AND a.field5 =#{field5}
+			</if>
+			<if test="field15 != null and field15 != ''">
+				AND a.field15 =#{field15}
+			</if>
+			<if test="field20 != null and field20 != ''">
+				AND a.field20 =#{field20}
+			</if>
+			
+			<if test="teamname != null and teamname != ''">
+				AND a.teamname LIKE concat('%',#{teamname},'%')
+			</if>
+			<if test="bstate != null and bstate != ''">
+				AND a.bstate =#{bstate}
+			</if>
+			
+			<if test="sbcode != null and sbcode != ''">
+				AND a.sbcode   LIKE concat('%',#{sbcode},'%')
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type   LIKE concat('%',#{type},'%')
+			</if>
+			<if test="field1 != null and field1 != ''">
+				AND a.field1   LIKE concat('%',#{field1},'%')
+			</if>
+			<if test="team != null and team != ''">
+				AND a.team  = #{team}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename   LIKE concat('%',#{usepeoplename},'%')
+			</if>
+			<if test="sbType != null and sbType != ''">
+				AND a.sb_type   =#{sbType}
+			</if>
+			
+			<if test="price != null ">
+				AND a.price  >#{price}
+			</if>
+			
+			<if test="beginInDate != null  and beginInDate != '' ">
+				AND (a.field6 >= #{beginInDate} )
+			</if>
+			<if test="endInDate != null and endInDate != ''">
+				AND ( #{endInDate} > a.field6)
+			</if>
+		
+		</where>
+		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="findAllList" resultType="SbEquipmentBus">
+		SELECT 
+			<include refid="sbEquipmentBusColumns"/>
+		FROM sb_equipment_bus a
+		<include refid="sbEquipmentBusJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_equipment_bus(
+			id,
+			bus_type,
+			column_id,
+			column_name,
+			column_comments,
+			table_id,
+			column_jdbc_type,
+			table_comments,
+			sort,
+			is_insert,
+			is_edit,
+			is_list,
+			is_query,
+			query_type,
+			show_type,
+			dict_type,
+			table_name
+		) VALUES (
+			#{id},
+			#{busType},
+			#{columnId},
+			#{columnName},
+			#{columnComments},
+			#{tableId},
+			#{columnJdbcType},
+			#{tableComments},
+			#{sort},
+			#{isInsert},
+			#{isEdit},
+			#{isList},
+			#{isQuery},
+			#{queryType},
+			#{showType},
+			#{dictType},
+			#{tableName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_equipment_bus SET 	
+			bus_type = #{busType},
+			column_id = #{columnId},
+			column_name = #{columnName},
+			column_comments = #{columnComments},
+			table_id = #{tableId},
+			column_jdbc_type = #{columnJdbcType},
+			table_comments = #{tableComments},
+			sort = #{sort},
+			is_insert = #{isInsert},
+			is_edit = #{isEdit},
+			is_list = #{isList},
+			is_query = #{isQuery},
+			query_type = #{queryType},
+			show_type = #{showType},
+			dict_type = #{dictType},
+			table_name = #{tableName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateBstate">
+	 UPDATE sb_equipment SET
+	       bstate = #{bstate}
+	WHERE id = #{id}
+	</update>
+	<update id="delete">
+		DELETE FROM sb_equipment_bus
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateEquipment">
+		UPDATE sb_equipment SET 	 sb_type = #{sbType} ,sb_type_name=#{sbTypeName}  where id = #{id}
+	</update>
+	
+
+	
+	<select id="queryEquipmentInfo" resultType="java.util.Map" >
+	   select sum(field2) count,
+         ROUND((select sum(unitprice*field2) from sb_equipment)/10000,2) as price,
+          (select count(*) from sb_equipment where name='电子经纬仪') as jwy,
+         (select count(*) from sb_equipment where field5='1') as jl,
+         ROUND((select count(id) from sb_equipment where field7 is not null and field7!='')/count(id)*100,2) as syl,
+            (select count(*) from sb_equipment where unitprice>500000) as czh
+         from sb_equipment
+	</select>
+	
+	<select id="queryStateInfo" resultType="java.util.Map" >
+	     select (select d.label from sys_dict d where d.`value`=t.state and d.type='sb_state') as name,
+             count(id) value from sb_equipment t GROUP BY t.state
+	</select>
+	
+	<select id="queryOfficeInfo" resultType="java.util.Map" >
+	     select t.teamname as `name`,
+           count(id) as value from sb_equipment t GROUP BY t.teamname
+	</select>
+	
+	<select id="queryFsTypeInfo" resultType="java.util.Map" >
+	     SELECT 	o.`name`,
+          (SELECT 
+			count(id) sum
+		FROM sb_equipment a where a.fs_type in (select id from sb_equipment_type t where t.id= o.id
+             or t.parent_ids like concat('%',o.id,'%')))  value
+           FROM sb_equipment_type o where  o.del_flag=0 and o.parent_id='0' 
+	</select>
+	
+	<select id="querySbTypeInfo" resultType="java.util.Map" >
+	      SELECT 	o.`name`,
+          (SELECT 
+			count(id) sum
+		FROM sb_equipment a where a.sb_type in (select id from sb_function_type t where t.id= o.id
+             or t.parent_ids like concat('%',o.id,'%')))  value
+           FROM sb_function_type o where  o.del_flag=0 and o.parent_id='0' 
+	</select>
+	
+	<select id="queryRateInfo" resultType="java.util.Map" >
+	      select y.field8 as name,count(y.field8) value from
+(select * from sb_equipment t where t.`name`='通用激光惯组测试台') y GROUP BY y.field8
+	    </select>
+	
+	<select id="getCode" resultType="String">
+	     SELECT MAX( ${formsn} ) AS CODE FROM ${tableName}  WHERE ${formsn}  like CONCAT('%', #{name}, '%')
+	</select>
+	
+	<select id="queryIndexInfo" resultType="java.util.Map" >
+	     select sum(field2) count,(select count(*) xxwj from ts_resource) xxwj,
+ (select count(id) from ts_resource where to_days(create_date) = to_days(now()) ) as xxjr,
+(select count(*) xxwj from jgsy_model) sysq ,
+(select count(*) xxwj from jgsd_model) sdsq,
+(select count(*) xxh from sb_information) xxh from sb_equipment t 
+	</select>
+	
+</mapper>

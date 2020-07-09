@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.TsEquipmentDao">
+    
+	<sql id="tsEquipmentColumns">
+		a.id AS "id",
+		a.local AS "local",
+		a.number AS "number",
+		a.name AS "name",
+		a.bus_type AS "busType",
+		a.equipmentid AS "equipmentid",
+		a.taskid AS "taskid",
+		a.classification AS "classification",
+		a.key_code AS "keyCode",
+		a.resource_code AS "resourceCode",
+		a.author AS "author",
+		a.press AS "press",
+		a.isbn AS "isbn",
+		a.price AS "price",
+		a.publication_date AS "publicationDate",
+		a.keyword AS "keyword",
+		a.zy_abstract AS "zyAbstract",
+		a.bm_state AS "bmState",
+		a.storage_time AS "storageTime",
+		a.sort AS "sort",
+		a.roll_code AS "rollCode",
+		a.files AS "files"
+	</sql>
+	
+	<sql id="tsEquipmentJoins">
+	</sql>
+    
+	<select id="get" resultType="TsEquipment">
+		SELECT 
+			<include refid="tsEquipmentColumns"/>
+		FROM ts_equipment a
+		<include refid="tsEquipmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsEquipment">
+		SELECT 
+			<include refid="tsEquipmentColumns"/>
+		FROM ts_equipment a
+		<include refid="tsEquipmentJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsEquipment">
+		SELECT 
+			<include refid="tsEquipmentColumns"/>
+		FROM ts_equipment a
+		<include refid="tsEquipmentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_equipment(
+			id,
+			local,
+			number,
+			name,
+			equipmentid,
+			bus_type,
+			taskid,
+			classification,
+			key_code,
+			resource_code,
+			author,
+			press,
+			isbn,
+			price,
+			publication_date,
+			keyword,
+			zy_abstract,
+			bm_state,
+			storage_time,
+			sort,
+			roll_code,
+			files
+		) VALUES (
+			#{id},
+			#{local},
+			#{number},
+			#{name},
+			#{equipmentid},
+			#{busType},
+			#{taskid},
+			#{classification},
+			#{keyCode},
+			#{resourceCode},
+			#{author},
+			#{press},
+			#{isbn},
+			#{price},
+			#{publicationDate},
+			#{keyword},
+			#{zyAbstract},
+			#{bmState},
+			#{storageTime},
+			#{sort},
+			#{rollCode},
+			#{files}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_equipment SET 	
+			local = #{local},
+			number = #{number},
+			name = #{name},
+			equipmentid = #{equipmentid},
+			taskid = #{taskid},
+			classification = #{classification},
+			key_code = #{keyCode},
+			resource_code = #{resourceCode},
+			author = #{author},
+			press = #{press},
+			isbn = #{isbn},
+			price = #{price},
+			publication_date = #{publicationDate},
+			keyword = #{keyword},
+			zy_abstract = #{zyAbstract},
+			bm_state = #{bmState},
+			storage_time = #{storageTime},
+			sort = #{sort},
+			roll_code = #{rollCode},
+			files = #{files}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_equipment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

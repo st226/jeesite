@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.agreement.SwAgreementDao">
+    
+	<sql id="swAgreementColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.state AS "state",
+		a.file AS "file",
+		a.order_id AS "orderId",
+		a.agreement_no AS "agreementNo",
+		a.agreement_name AS agreementName,	
+	    a.agreement_type AS agreementType,		
+	    a.handled_by AS handledBy,		
+	    a.handled_date AS handledDate,		
+		a.agreement_first AS "agreementFirst",
+		a.agreement_second AS "agreementSecond",
+		a.signing_time AS "signingTime",
+		a.signing_place AS "signingPlace",
+		a.amount AS "amount",
+		a.amountup AS "amountup",
+		a.solve_day AS "solveDay",
+		a.warranty AS "warranty",
+		a.delivery_time AS "deliveryTime",
+		a.delivery_method AS "deliveryMethod",
+		a.objection_day AS "objectionDay",
+		a.objection_day_hf AS "objectionDayHf",
+		a.invoice_day AS "invoiceDay",
+		a.falsify AS "falsify",
+		a.first_name AS "firstName",
+		a.first_place AS "firstPlace",
+		a.first_legal AS "firstLegal",
+		a.first_agent AS "firstAgent",
+		a.first_name_liaison AS "firstNameLiaison",
+		a.first_name_phone AS "firstNamePhone",
+		a.first_bank AS "firstBank",
+		a.first_bank_no AS "firstBankNo",
+		a.first_duty AS "firstDuty",
+		a.first_zip AS "firstZip",
+		a.first_tel AS "firstTel",
+		a.first_fax AS "firstFax",
+		a.second_name AS "secondName",
+		a.second_place AS "secondPlace",
+		a.second_legal AS "secondLegal",
+		a.second_agent AS "secondAgent",
+		a.second_name_liaison AS "secondNameLiaison",
+		a.second_name_phone AS "secondNamePhone",
+		a.second_bank AS "secondBank",
+		a.second_bank_no AS "secondBankNo",
+		a.second_duty AS "secondDuty",
+		a.second_zip AS "secondZip",
+		a.second_tel AS "secondTel",
+		a.second_fax AS "secondFax",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.field6 AS "field6",
+		a.field7 AS "field7",
+		a.field8 AS "field8",
+		a.field9 AS "field9",
+		a.field10 AS "field10"
+	</sql>
+	
+	<sql id="swAgreementJoins">
+	</sql>
+    
+	<select id="get" resultType="SwAgreement">
+		SELECT 
+			<include refid="swAgreementColumns"/>
+		FROM sw_agreement a
+		<include refid="swAgreementJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwAgreement">
+		SELECT 
+			<include refid="swAgreementColumns"/>
+		FROM sw_agreement a
+		<include refid="swAgreementJoins"/>
+		<where>
+			
+			<if test="agreementNo != null and agreementNo != ''">
+				AND a.agreement_no = #{agreementNo}
+			</if>
+			<if test="signingTime != null and signingTime != ''">
+				AND a.signing_time = #{signingTime}
+			</if>
+			<if test="signingPlace != null and signingPlace != ''">
+				AND a.signing_place = #{signingPlace}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwAgreement">
+		SELECT 
+			<include refid="swAgreementColumns"/>
+		FROM sw_agreement a
+		<include refid="swAgreementJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_agreement(
+			id,
+			processinstid,
+			state,
+			file,
+			order_id,
+			agreement_no,
+			agreement_name,	
+	        agreement_type,		
+	        handled_by,		
+	        handled_date,	
+			agreement_first,
+			agreement_second,
+			signing_time,
+			signing_place,
+			amount,
+			amountup,
+			solve_day,
+			warranty,
+			delivery_time,
+			delivery_method,
+			objection_day,
+			objection_day_hf,
+			invoice_day,
+			falsify,
+			first_name,
+			first_place,
+			first_legal,
+			first_agent,
+			first_name_liaison,
+			first_name_phone,
+			first_bank,
+			first_bank_no,
+			first_duty,
+			first_zip,
+			first_tel,
+			first_fax,
+			second_name,
+			second_place,
+			second_legal,
+			second_agent,
+			second_name_liaison,
+			second_name_phone,
+			second_bank,
+			second_bank_no,
+			second_duty,
+			second_zip,
+			second_tel,
+			second_fax,
+			create_by,
+			create_date,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			field6,
+			field7,
+			field8,
+			field9,
+			field10
+		) VALUES (
+			#{id},
+			#{processinstid},
+			#{state},
+			#{file},
+			#{orderId},
+			#{agreementNo},
+			#{agreementName},	
+	    #{agreementType},		
+	    #{handledBy},		
+	    #{handledDate},	
+			#{agreementFirst},
+			#{agreementSecond},
+			#{signingTime},
+			#{signingPlace},
+			#{amount},
+			#{amountup},
+			#{solveDay},
+			#{warranty},
+			#{deliveryTime},
+			#{deliveryMethod},
+			#{objectionDay},
+			#{objectionDayHf},
+			#{invoiceDay},
+			#{falsify},
+			#{firstName},
+			#{firstPlace},
+			#{firstLegal},
+			#{firstAgent},
+			#{firstNameLiaison},
+			#{firstNamePhone},
+			#{firstBank},
+			#{firstBankNo},
+			#{firstDuty},
+			#{firstZip},
+			#{firstTel},
+			#{firstFax},
+			#{secondName},
+			#{secondPlace},
+			#{secondLegal},
+			#{secondAgent},
+			#{secondNameLiaison},
+			#{secondNamePhone},
+			#{secondBank},
+			#{secondBankNo},
+			#{secondDuty},
+			#{secondZip},
+			#{secondTel},
+			#{secondFax},
+			#{createBy.id},
+			#{createDate},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{field6},
+			#{field7},
+			#{field8},
+			#{field9},
+			#{field10}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_agreement SET 	
+			processinstid = #{processinstid},
+			state = #{state},
+			file = #{file},
+			order_id = #{orderId},
+			agreement_no = #{agreementNo},
+			agreement_name = #{agreementName},	
+	        agreement_type = #{agreementType},		
+	        handled_by  =   #{handledBy},		
+	        handled_date =   #{handledDate},	
+			agreement_first = #{agreementFirst},
+			agreement_second = #{agreementSecond},
+			signing_time = #{signingTime},
+			signing_place = #{signingPlace},
+			amount = #{amount},
+			amountup = #{amountup},
+			solve_day = #{solveDay},
+			warranty = #{warranty},
+			delivery_time = #{deliveryTime},
+			delivery_method = #{deliveryMethod},
+			objection_day = #{objectionDay},
+			objection_day_hf = #{objectionDayHf},
+			invoice_day = #{invoiceDay},
+			falsify = #{falsify},
+			first_name = #{firstName},
+			first_place = #{firstPlace},
+			first_legal = #{firstLegal},
+			first_agent = #{firstAgent},
+			first_name_liaison = #{firstNameLiaison},
+			first_name_phone = #{firstNamePhone},
+			first_bank = #{firstBank},
+			first_bank_no = #{firstBankNo},
+			first_duty = #{firstDuty},
+			first_zip = #{firstZip},
+			first_tel = #{firstTel},
+			first_fax = #{firstFax},
+			second_name = #{secondName},
+			second_place = #{secondPlace},
+			second_legal = #{secondLegal},
+			second_agent = #{secondAgent},
+			second_name_liaison = #{secondNameLiaison},
+			second_name_phone = #{secondNamePhone},
+			second_bank = #{secondBank},
+			second_bank_no = #{secondBankNo},
+			second_duty = #{secondDuty},
+			second_zip = #{secondZip},
+			second_tel = #{secondTel},
+			second_fax = #{secondFax},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			field6 = #{field6},
+			field7 = #{field7},
+			field8 = #{field8},
+			field9 = #{field9},
+			field10 = #{field10}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_agreement
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

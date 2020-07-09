@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.workitem.dao.WfworkitemDao">
+    
+	<sql id="wfworkitemColumns">
+		a.workitemid AS "workitemid",
+		a.workitemname AS "workitemname",
+		a.workitemtype AS "workitemtype",
+		a.workitemdesc AS "workitemdesc",
+		a.currentstate AS "currentstate",
+		a.participant AS "participant",
+		a.partiname AS "partiname",
+		a.priority AS "priority",
+		a.istimeout AS "istimeout",
+		a.limitnum AS "limitnum",
+		a.limitnumdesc AS "limitnumdesc",
+		a.createtime AS "createtime",
+		a.starttime AS "starttime",
+		a.endtime AS "endtime",
+		a.finaltime AS "finaltime",
+		a.remindtime AS "remindtime",
+		a.actionurl AS "actionurl",
+		a.processinstid AS "processinstid",
+		a.activityinstid AS "activityinstid",
+		a.stateslist AS "stateslist",
+		a.timeoutnum AS "timeoutnum",
+		a.timeoutnumdesc AS "timeoutnumdesc",
+		a.processinstname AS "processinstname",
+		a.activityinstname AS "activityinstname",
+		a.processdefid AS "processdefid",
+		a.processdefname AS "processdefname",
+		a.processchname AS "processchname",
+		a.activitydefid AS "activitydefid",
+		a.assistant AS "assistant",
+		a.assistantname AS "assistantname",
+		a.bizstate AS "bizstate",
+		a.allowagent AS "allowagent",
+		a.rootprocinstid AS "rootprocinstid",
+		a.actionmask AS "actionmask",
+		a.urltype AS "urltype",
+		a.dealresult AS "dealresult",
+		a.dealopinion AS "dealopinion",
+		a.extend1 AS "extend1",
+		a.extend2 AS "extend2",
+		a.extend3 AS "extend3",
+		a.extend4 AS "extend4",
+		a.extend5 AS "extend5",
+		a.extend6 AS "extend6",
+		a.extend7 AS "extend7",
+		a.cataloguuid AS "cataloguuid",
+		a.catalogname AS "catalogname",
+		a.tenant_id AS "tenantId",
+		a.pressnum AS "pressnum"
+	</sql>
+	
+	<sql id="wfworkitemJoins">
+	</sql>
+    
+	<select id="get" resultType="Wfworkitem">
+		SELECT 
+			<include refid="wfworkitemColumns"/>
+		FROM wfworkitem a
+		<include refid="wfworkitemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByProcessInstID" resultType="com.eos.workflow.data.WFWorkItem">
+		SELECT 
+			*
+		FROM wfworkitem a
+		WHERE a.PROCESSINSTID = #{processInstID} and (a.CURRENTSTATE=10 or a.CURRENTSTATE=4)
+	</select>
+	
+	<select id="findList" resultType="Wfworkitem">
+		SELECT 
+			<include refid="wfworkitemColumns"/>
+		FROM wfworkitem a
+		<include refid="wfworkitemJoins"/>
+		<where>
+		   a.currentstate = '12'
+		   <if test="starttime != null and starttime != ''">
+				AND a.starttime > #{starttime}
+			</if>
+			<if test="endtime != null and endtime != ''">
+				AND  #{endtime} > a.starttime 
+			</if>
+			<if test="participant != null and participant != ''">
+				AND a.participant = #{participant}
+			</if>
+			
+	
+			
+			
+		</where>
+		
+				ORDER BY a.CREATETIME  desc
+			
+	</select>
+	
+	<select id="findAllList" resultType="Wfworkitem">
+		SELECT 
+			<include refid="wfworkitemColumns"/>
+		FROM wfworkitem a
+		<include refid="wfworkitemJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO wfworkitem(
+			workitemid,
+			workitemname,
+			workitemtype,
+			workitemdesc,
+			currentstate,
+			participant,
+			partiname,
+			priority,
+			istimeout,
+			limitnum,
+			limitnumdesc,
+			createtime,
+			starttime,
+			endtime,
+			finaltime,
+			remindtime,
+			actionurl,
+			processinstid,
+			activityinstid,
+			stateslist,
+			timeoutnum,
+			timeoutnumdesc,
+			processinstname,
+			activityinstname,
+			processdefid,
+			processdefname,
+			processchname,
+			activitydefid,
+			assistant,
+			assistantname,
+			bizstate,
+			allowagent,
+			rootprocinstid,
+			actionmask,
+			urltype,
+			dealresult,
+			dealopinion,
+			extend1,
+			extend2,
+			extend3,
+			extend4,
+			extend5,
+			extend6,
+			extend7,
+			cataloguuid,
+			catalogname,
+			tenant_id,
+			pressnum
+		) VALUES (
+			#{workitemid},
+			#{workitemname},
+			#{workitemtype},
+			#{workitemdesc},
+			#{currentstate},
+			#{participant},
+			#{partiname},
+			#{priority},
+			#{istimeout},
+			#{limitnum},
+			#{limitnumdesc},
+			#{createtime},
+			#{starttime},
+			#{endtime},
+			#{finaltime},
+			#{remindtime},
+			#{actionurl},
+			#{processinstid},
+			#{activityinstid},
+			#{stateslist},
+			#{timeoutnum},
+			#{timeoutnumdesc},
+			#{processinstname},
+			#{activityinstname},
+			#{processdefid},
+			#{processdefname},
+			#{processchname},
+			#{activitydefid},
+			#{assistant},
+			#{assistantname},
+			#{bizstate},
+			#{allowagent},
+			#{rootprocinstid},
+			#{actionmask},
+			#{urltype},
+			#{dealresult},
+			#{dealopinion},
+			#{extend1},
+			#{extend2},
+			#{extend3},
+			#{extend4},
+			#{extend5},
+			#{extend6},
+			#{extend7},
+			#{cataloguuid},
+			#{catalogname},
+			#{tenantId},
+			#{pressnum}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE wfworkitem SET 	
+			workitemid = #{workitemid},
+			workitemname = #{workitemname},
+			workitemtype = #{workitemtype},
+			workitemdesc = #{workitemdesc},
+			currentstate = #{currentstate},
+			participant = #{participant},
+			partiname = #{partiname},
+			priority = #{priority},
+			istimeout = #{istimeout},
+			limitnum = #{limitnum},
+			limitnumdesc = #{limitnumdesc},
+			createtime = #{createtime},
+			starttime = #{starttime},
+			endtime = #{endtime},
+			finaltime = #{finaltime},
+			remindtime = #{remindtime},
+			actionurl = #{actionurl},
+			processinstid = #{processinstid},
+			activityinstid = #{activityinstid},
+			stateslist = #{stateslist},
+			timeoutnum = #{timeoutnum},
+			timeoutnumdesc = #{timeoutnumdesc},
+			processinstname = #{processinstname},
+			activityinstname = #{activityinstname},
+			processdefid = #{processdefid},
+			processdefname = #{processdefname},
+			processchname = #{processchname},
+			activitydefid = #{activitydefid},
+			assistant = #{assistant},
+			assistantname = #{assistantname},
+			bizstate = #{bizstate},
+			allowagent = #{allowagent},
+			rootprocinstid = #{rootprocinstid},
+			actionmask = #{actionmask},
+			urltype = #{urltype},
+			dealresult = #{dealresult},
+			dealopinion = #{dealopinion},
+			extend1 = #{extend1},
+			extend2 = #{extend2},
+			extend3 = #{extend3},
+			extend4 = #{extend4},
+			extend5 = #{extend5},
+			extend6 = #{extend6},
+			extend7 = #{extend7},
+			cataloguuid = #{cataloguuid},
+			catalogname = #{catalogname},
+			tenant_id = #{tenantId},
+			pressnum = #{pressnum}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM wfworkitem
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

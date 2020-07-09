@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.special.SwSpecialDao">
+    
+	<sql id="swSpecialColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.state AS "state",
+		a.processinstid AS "processinstid",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.application_date AS "applicationDate",
+		a.project_name AS "projectName",
+		a.budget AS "budget",
+		a.special_type AS "specialType",
+		a.context AS "context",
+		a.reason AS "reason",
+		a.supplier_id AS "supplierId",
+		a.supplier_name AS "supplierName",
+		a.supplier_user AS "supplierUser",
+		a.supplier_tel AS "supplierTel",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.order_id AS "orderId",
+		a.file AS "file",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		o5.name AS "office.name",
+		u7.name AS "user.name",
+		a.resolutionOther AS "resolutionOther",
+		a.resolutionFile AS "resolutionFile",
+		a.resolution AS "resolution",
+		a.resolutionResult AS "resolutionResult",
+		a.resolutionDate AS "resolutionDate"
+	</sql>
+	
+	<sql id="swSpecialJoins">
+		LEFT JOIN sys_office o5 ON o5.id = a.office_id
+		LEFT JOIN sys_user u7 ON u7.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SwSpecial">
+		SELECT 
+			<include refid="swSpecialColumns"/>
+		FROM sw_special a
+		<include refid="swSpecialJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwSpecial">
+		SELECT 
+			<include refid="swSpecialColumns"/>
+		FROM sw_special a
+		<include refid="swSpecialJoins"/>
+		<where>
+			
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+			<if test="applicationDate != null and applicationDate != ''">
+				AND a.application_date = #{applicationDate}
+			</if>
+			<if test="projectName != null and projectName != ''">
+				AND a.project_name = #{projectName}
+			</if>
+			<if test="specialType != null and specialType != ''">
+				AND a.special_type = #{specialType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwSpecial">
+		SELECT 
+			<include refid="swSpecialColumns"/>
+		FROM sw_special a
+		<include refid="swSpecialJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_special(
+			id,
+			code,
+			state,
+			processinstid,
+			office_id,
+			office_name,
+			user_id,
+			user_name,
+			application_date,
+			project_name,
+			budget,
+			special_type,
+			context,
+			reason,
+			supplier_id,
+			supplier_name,
+			supplier_user,
+			supplier_tel,
+			create_by,
+			create_date,
+			order_id,
+			file,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			resolutionOther ,
+		resolutionFile ,
+		resolution,
+		resolutionResult ,
+		resolutionDate 
+		) VALUES (
+			#{id},
+			#{code},
+			#{state},
+			#{processinstid},
+			#{office.id},
+			#{officeName},
+			#{user.id},
+			#{userName},
+			#{applicationDate},
+			#{projectName},
+			#{budget},
+			#{specialType},
+			#{context},
+			#{reason},
+			#{supplierId},
+			#{supplierName},
+			#{supplierUser},
+			#{supplierTel},
+			#{createBy.id},
+			#{createDate},
+			#{orderId},
+			#{file},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{resolutionOther},
+		#{resolutionFile},
+		#{resolution},
+		#{resolutionResult},
+		#{resolutionDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_special SET 	
+			code = #{code},
+			state = #{state},
+			processinstid = #{processinstid},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			user_id = #{user.id},
+			user_name = #{userName},
+			application_date = #{applicationDate},
+			project_name = #{projectName},
+			budget = #{budget},
+			special_type = #{specialType},
+			context = #{context},
+			reason = #{reason},
+			supplier_id = #{supplierId},
+			supplier_name = #{supplierName},
+			supplier_user = #{supplierUser},
+			supplier_tel = #{supplierTel},
+			order_id = #{orderId},
+			file = #{file},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			resolutionOther =#{resolutionOther},
+		resolutionFile = #{resolutionFile},
+		resolution = #{resolution},
+		resolutionResult = #{resolutionResult},
+		resolutionDate = #{resolutionDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_special
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

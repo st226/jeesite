@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.survey.SwSurveyCompanyDao">
+    
+	<sql id="swSurveyCompanyColumns">
+		a.id AS "id",
+		a.survey_id AS "surveyId.id",
+		a.name AS "name",
+		a.region AS "region",
+		a.price AS "price",
+		a.mode AS "mode",
+		a.contacts AS "contacts",
+		a.telephone AS "telephone",
+		a.remarks AS "remarks",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="swSurveyCompanyJoins">
+		LEFT JOIN sw_survey b ON b.id = a.survey_id
+	</sql>
+    
+	<select id="get" resultType="SwSurveyCompany">
+		SELECT 
+			<include refid="swSurveyCompanyColumns"/>
+		FROM sw_survey_company a
+		<include refid="swSurveyCompanyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwSurveyCompany">
+		SELECT 
+			<include refid="swSurveyCompanyColumns"/>
+		FROM sw_survey_company a
+		<include refid="swSurveyCompanyJoins"/>
+		<where>
+			
+			<if test="surveyId.id != null and surveyId.id != ''">
+				AND a.survey_id = #{surveyId.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="mode != null and mode != ''">
+				AND a.mode = #{mode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwSurveyCompany">
+		SELECT 
+			<include refid="swSurveyCompanyColumns"/>
+		FROM sw_survey_company a
+		<include refid="swSurveyCompanyJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_survey_company(
+			id,
+			survey_id,
+			name,
+			region,
+			price,
+			mode,
+			contacts,
+			telephone,
+			remarks,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{surveyId.id},
+			#{name},
+			#{region},
+			#{price},
+			#{mode},
+			#{contacts},
+			#{telephone},
+			#{remarks},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_survey_company SET 	
+			survey_id = #{surveyId.id},
+			name = #{name},
+			region = #{region},
+			price = #{price},
+			mode = #{mode},
+			contacts = #{contacts},
+			telephone = #{telephone},
+			remarks = #{remarks},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_survey_company
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE survey_id = #{surveyId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

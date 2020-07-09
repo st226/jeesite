@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sdarchives.dao.SdModelDao">
+    
+	<sql id="sdModelColumns">
+		a.id AS "id",
+		a.application_id AS "applicationId.id",
+		a.sd_number AS "sdNumber",
+		a.wj_number AS "wjNumber",
+		a.sd_type AS "sdType",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.plyy AS "plyy",
+		a.bjjd AS "bjjd",
+		a.yxfw AS "yxfw",
+		a.sjr AS "sjr",
+		a.sjrname AS "sjrname",
+		a.yxqx AS "yxqx",
+		a.cbz AS "cbz",
+		a.syffyj AS "syffyj",
+		a.model_class AS "modelClass",
+		a.ggbj AS "ggbj",
+		a.syx AS "syx",
+		a.ggyy AS "ggyy",
+		a.clyj AS "clyj",
+		a.gdr AS "gdr",
+		a.gdrname AS "gdrname",
+		a.gdrq AS "gdrq",
+		a.pzrq AS "pzrq",
+		a.ssrq AS "ssrq",
+		a.image_type AS "imageType",
+		a.image_no AS "imageNo",
+		a.image_pageno AS "imagePageno",
+		a.image_number AS "imageNumber",
+		a.image_page_number AS "imagePageNumber",
+		a.image_typename AS "imageTypename",
+		a.atlas_status AS "atlasStatus",
+		a.files AS "files",
+		a.model_id AS "modelId",
+		a.model_name AS "modelName",
+		o7.name AS "office.name",
+		u9.name AS "user.name"
+	</sql>
+	
+	<sql id="sdModelJoins">
+		LEFT JOIN jgsd_application b ON b.id = a.application_id
+		LEFT JOIN sys_office o7 ON o7.id = a.office_id
+		LEFT JOIN sys_user u9 ON u9.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SdModel">
+		SELECT 
+			<include refid="sdModelColumns"/>
+		FROM jgsd_model a
+		<include refid="sdModelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	<select id="getModelList" resultType="SdModel">
+		SELECT 
+			<include refid="sdModelColumns"/>
+		FROM jgsd_model a
+		<include refid="sdModelJoins"/>
+		<where>
+			<if test="sdType != null and sdType != ''">
+				AND a.sd_type =#{sdType} 
+			</if>
+			<if test="modelName != null and modelName != ''">
+				AND a.model_name LIKE concat('%',#{modelName},'%') 
+			</if>
+			<if test="imageNo != null and imageNo != ''">
+				AND a.image_no = #{imageNo}
+			</if>
+			<if test="sdNumber != null and sdNumber != ''">
+				AND a.SD_NUMBER = #{sdNumber}
+			</if>
+			<if test="atlasStatus != null and atlasStatus != ''">
+				AND a.atlas_status = #{atlasStatus}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findList" resultType="SdModel">
+		SELECT 
+			<include refid="sdModelColumns"/>
+		FROM jgsd_model a
+		<include refid="sdModelJoins"/>
+		<where>
+			
+			<if test="applicationId != null and applicationId != ''">
+				AND a.application_id = #{applicationId.id}
+			</if>
+			<if test="sdNumber != null and sdNumber != ''">
+				AND a.sd_number = #{sdNumber}
+			</if>
+			<if test="wjNumber != null and wjNumber != ''">
+				AND a.wj_number = #{wjNumber}
+			</if>
+			<if test="gdr != null and gdr != ''">
+				AND a.gdr = #{gdr}
+			</if>
+			<if test="gdrq != null and gdrq != ''">
+				AND a.gdrq = #{gdrq}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SdModel">
+		SELECT 
+			<include refid="sdModelColumns"/>
+		FROM jgsd_model a
+		<include refid="sdModelJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jgsd_model(
+			id,
+			application_id,
+			sd_number,
+			wj_number,
+			sd_type,
+			office_id,
+			office_name,
+			user_id,
+			plyy,
+			bjjd,
+			yxfw,
+			sjr,
+			sjrname,
+			yxqx,
+			cbz,
+			syffyj,
+			model_class,
+			ggbj,
+			syx,
+			ggyy,
+			clyj,
+			gdr,
+			gdrname,
+			gdrq,
+			pzrq,
+			ssrq,
+			image_no,
+			image_pageno,
+			image_number,
+			atlas_status,
+			files,
+			model_id ,
+		    model_name
+		) VALUES (
+			#{id},
+			#{applicationId.id},
+			#{sdNumber},
+			#{wjNumber},
+			#{sdType},
+			#{office.id},
+			#{officeName},
+			#{user.id},
+			#{plyy},
+			#{bjjd},
+			#{yxfw},
+			#{sjr},
+			#{sjrname},
+			#{yxqx},
+			#{cbz},
+			#{syffyj},
+			#{modelClass},
+			#{ggbj},
+			#{syx},
+			#{ggyy},
+			#{clyj},
+			#{gdr},
+			#{gdrname},
+			#{gdrq},
+			#{pzrq},
+			#{ssrq},
+			#{imageNo},
+			#{imagePageno},
+			#{imageNumber},
+			#{atlasStatus},
+			#{files},
+			#{modelId},
+			#{modelName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jgsd_model SET 	
+			application_id = #{applicationId.id},
+			sd_number = #{sdNumber},
+			wj_number = #{wjNumber},
+			sd_type = #{sdType},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			user_id = #{user.id},
+			plyy = #{plyy},
+			bjjd = #{bjjd},
+			yxfw = #{yxfw},
+			sjr = #{sjr},
+			sjrname = #{sjrname},
+			yxqx = #{yxqx},
+			cbz = #{cbz},
+			syffyj = #{syffyj},
+			model_class = #{modelClass},
+			ggbj = #{ggbj},
+			syx = #{syx},
+			ggyy = #{ggyy},
+			clyj = #{clyj},
+			gdr = #{gdr},
+			gdrname = #{gdrname},
+			gdrq = #{gdrq},
+			pzrq = #{pzrq},
+			ssrq = #{ssrq},
+			image_no = #{imageNo},
+			image_number = #{imageNumber},
+			atlas_status = #{atlasStatus},
+			files = #{files},
+			model_id = #{modelId},
+			model_name = #{modelName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jgsd_model
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE application_id = #{applicationId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.agreement.SwAgreementPayDao">
+    
+	<sql id="swAgreementPayColumns">
+		a.pay_index AS "payIndex",
+		a.id AS "id",
+		a.agreement_id AS "agreementId.id",
+		a.pay_rate AS "payRate",
+		a.pay_amount AS "payAmount",
+		a.pay_this AS "payThis",
+		a.pay_surplus AS "paySurplus",
+		a.pay_condition AS "payCondition",
+		a.pay_date AS "payDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.state AS "state"
+	</sql>
+	
+	<sql id="swAgreementPayJoins">
+		LEFT JOIN sw_agreement b ON b.id = a.agreement_id
+	</sql>
+    
+	<select id="get" resultType="SwAgreementPay">
+		SELECT 
+			<include refid="swAgreementPayColumns"/>
+		FROM sw_agreement_pay a
+		<include refid="swAgreementPayJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwAgreementPay">
+		SELECT 
+			<include refid="swAgreementPayColumns"/>
+		FROM sw_agreement_pay a
+		<include refid="swAgreementPayJoins"/>
+		<where>
+			
+			<if test="agreementId.id != null and agreementId.id != ''">
+				AND a.agreement_id = #{agreementId.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.pay_index  ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwAgreementPay">
+		SELECT 
+			<include refid="swAgreementPayColumns"/>
+		FROM sw_agreement_pay a
+		<include refid="swAgreementPayJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getSwAgreementPay" resultType="SwAgreementPay">
+		SELECT 
+			<include refid="swAgreementPayColumns"/>
+		FROM sw_agreement_pay a
+		<include refid="swAgreementPayJoins"/>
+		<where>
+	         a.agreement_id = #{agreementId.id} and (a.state is null or a.state = '')
+		</where>		
+		
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_agreement_pay(
+			pay_index,
+			id,
+			agreement_id,
+			pay_rate,
+			pay_amount,
+			pay_this,
+			pay_surplus,
+			pay_condition,
+			pay_date,
+			create_by,
+			create_date,
+			state
+		) VALUES (
+			#{payIndex},
+			#{id},
+			#{agreementId.id},
+			#{payRate},
+			#{payAmount},
+			#{payThis},
+			#{paySurplus},
+			#{payCondition},
+			#{payDate},
+			#{createBy.id},
+			#{createDate},
+			#{state}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_agreement_pay SET 	
+			pay_index = #{payIndex},
+			agreement_id = #{agreementId.id},
+			pay_rate = #{payRate},
+			pay_amount = #{payAmount},
+			pay_this = #{payThis},
+			pay_surplus = #{paySurplus},
+			pay_condition = #{payCondition},
+			pay_date = #{payDate},
+			state = #{state}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_agreement_pay
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE agreement_id = #{agreementId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.resource.dao.TsResourceDao">
+    
+	<sql id="tsResourceColumns">
+		a.id AS "id",
+		a.bus_type AS "busType",
+		a.local AS "local",
+		a.modelid AS "modelid",
+		a.name AS "name",
+		a.format AS "format",
+		a.personnel AS "personnel",
+		a.entrytime AS "entrytime",
+		a.personcharge AS "personcharge",
+		a.state AS "state",
+		a.inspection AS "inspection",
+		a.power AS "power",
+		a.number AS "number",
+		a.weight AS "weight",
+		a.length AS "length",
+		a.width AS "width",
+		a.department AS "department",
+		a.files AS "files",
+		a.create_date AS "createDate",
+		a.user_id AS "user.id",
+		a.office_id AS "office.id",
+		a.area_id AS "area.id",
+		a.user_name AS "userName",
+		a.office_name AS "officeName",
+		a.area_name AS "areaName",
+		a.create_by AS "createBy.id",
+		a.remark1 AS "remark1",
+		a.remark2 AS "remark2",
+		a.remark3 AS "remark3",
+		a.remark4 AS "remark4",
+		a.remark5 AS "remark5",
+		a.remark6 AS "remark6",
+		a.remark7 AS "remark7",
+		a.remark8 AS "remark8",
+		a.remark9 AS "remark9",
+		a.remark10 AS "remark10",
+		a.remark11 AS "remark11",
+		a.remark12 AS "remark12",
+		a.remark13 AS "remark13",
+		a.remark14 AS "remark14",
+		a.remark15 AS "remark15",
+		a.remark16 AS "remark16",
+		a.remark17 AS "remark17",
+		a.remark18 AS "remark18",
+		a.remark19 AS "remark19",
+		a.remark20 AS "remark20",
+		t20.name AS "remark21",
+		a.remark22 AS "remark22",
+		a.remark23 AS "remark23",
+		a.remark24 AS "remark24",
+		a.remark25 AS "remark25",
+		a.remark26 AS "remark26",
+		a.remark27 AS "remark27",
+		a.remark28 AS "remark28",
+		a.remark29 AS "remark29",
+		a.remark30 AS "remark30",
+		a.remark31 AS "remark31",
+		a.remark32 AS "remark32",
+		a.remark33 AS "remark33",
+		a.remark34 AS "remark34",
+		a.remark35 AS "remark35",
+		a.remark36 AS "remark36",
+		a.remark37 AS "remark37",
+		a.remark38 AS "remark38",
+		a.remark39 AS "remark39",
+		a.remark40 AS "remark40",
+		a.remark41 AS "remark41",
+		a.remark42 AS "remark42",
+		a.remark43 AS "remark43",
+		a.remark44 AS "remark44",
+		a.remark45 AS "remark45",
+		a.remark46 AS "remark46",
+		a.remark47 AS "remark47",
+		a.remark48 AS "remark48",
+		a.remark49 AS "remark49",
+		a.remark50 AS "remark50",
+		u20.name AS "user.name",
+		o21.name AS "office.name",
+		a22.name AS "area.name"
+	</sql>
+	
+	<sql id="tsResourceJoins">
+		LEFT JOIN sys_office o17 ON o17.id = a.department
+		LEFT JOIN sys_user u20 ON u20.id = a.user_id
+		LEFT JOIN sys_office o21 ON o21.id = a.office_id
+		LEFT JOIN sys_area a22 ON a22.id = a.area_id
+		LEFT JOIN test_tree t20 ON t20.id = a.department
+	</sql>
+    
+	<select id="get" resultType="TsResource">
+		SELECT 
+			<include refid="tsResourceColumns"/>
+		FROM ts_resource a
+		<include refid="tsResourceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsResource">
+		SELECT 
+			<include refid="tsResourceColumns"/>
+		FROM ts_resource a
+		<include refid="tsResourceJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsResource">
+		SELECT 
+			<include refid="tsResourceColumns"/>
+		FROM ts_resource a
+		<include refid="tsResourceJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllListNoParam" resultType="TsResource">
+		SELECT * FROM ts_resource tsrs WHERE 1=1 AND tsrs.remark50 IS NULL
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_resource(
+		   bus_type, 
+			name,
+			format,
+			personnel,
+			entrytime,
+			state,
+			inspection,
+			power,
+			number,
+			weight,
+			length,
+			width,
+			department,
+			files,
+			create_date,
+			user_id,
+			office_id,
+			area_id,
+			user_name,
+			office_name,
+			area_name,
+			create_by,
+			remark1,
+			remark2,
+			remark3,
+			remark4,
+			remark5,
+			remark6,
+			remark7,
+			remark8,
+			remark9,
+			remark10,
+			remark11,
+			remark12,
+			remark13,
+			remark14,
+			remark15,
+			remark16,
+			remark17,
+			remark18,
+			remark19,
+			remark20,
+			remark21,
+			remark22,
+			remark23,
+			remark24,
+			remark25,
+			remark26,
+			remark27,
+			remark28,
+			remark29,
+			remark30,
+			remark31,
+			remark32,
+			remark33,
+			remark34,
+			remark35,
+			remark36,
+			remark37,
+			remark38,
+			remark39,
+			remark40,
+			remark41,
+			remark42,
+			remark43,
+			remark44,
+			remark45,
+			remark46,
+			remark47,
+			remark48,
+			remark49,
+			remark50
+		) VALUES (
+		    #{busType}, 
+			#{name},
+			#{format},
+			#{personnel},
+			#{entrytime},
+			#{state},
+			#{inspection},
+			#{power},
+			#{number},
+			#{weight},
+			#{length},
+			#{width},
+			#{department},
+			#{files},
+			#{createDate},
+			#{user.id},
+			#{office.id},
+			#{area.id},
+			#{userName},
+			#{officeName},
+			#{areaName},
+			#{createBy.id},
+			#{remark1},
+			#{remark2},
+			#{remark3},
+			#{remark4},
+			#{remark5},
+			#{remark6},
+			#{remark7},
+			#{remark8},
+			#{remark9},
+			#{remark10},
+			#{remark11},
+			#{remark12},
+			#{remark13},
+			#{remark14},
+			#{remark15},
+			#{remark16},
+			#{remark17},
+			#{remark18},
+			#{remark19},
+			#{remark20},
+			#{remark21},
+			#{remark22},
+			#{remark23},
+			#{remark24},
+			#{remark25},
+			#{remark26},
+			#{remark27},
+			#{remark28},
+			#{remark29},
+			#{remark30},
+			#{remark31},
+			#{remark32},
+			#{remark33},
+			#{remark34},
+			#{remark35},
+			#{remark36},
+			#{remark37},
+			#{remark38},
+			#{remark39},
+			#{remark40},
+			#{remark41},
+			#{remark42},
+			#{remark43},
+			#{remark44},
+			#{remark45},
+			#{remark46},
+			#{remark47},
+			#{remark48},
+			#{remark49},
+			#{remark50}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_resource SET 	
+			name = #{name},
+			format = #{format},
+			personnel = #{personnel},
+			entrytime = #{entrytime},
+			state = #{state},
+			inspection = #{inspection},
+			power = #{power},
+			number = #{number},
+			weight = #{weight},
+			length = #{length},
+			width = #{width},
+			department = #{department},
+			files = #{files},
+			user_id = #{user.id},
+			office_id = #{office.id},
+			area_id = #{area.id},
+			user_name = #{userName},
+			office_name = #{officeName},
+			area_name = #{areaName},
+			bus_type = #{busType},
+			remark1 = #{remark1},
+			remark2 = #{remark2},
+			remark3 = #{remark3},
+			remark4 = #{remark4},
+			remark5 = #{remark5},
+			remark6 = #{remark6},
+			remark7 = #{remark7},
+			remark8 = #{remark8},
+			remark9 = #{remark9},
+			remark10 = #{remark10},
+			remark11 = #{remark11},
+			remark12 = #{remark12},
+			remark13 = #{remark13},
+			remark14 = #{remark14},
+			remark15 = #{remark15},
+			remark16 = #{remark16},
+			remark17 = #{remark17},
+			remark18 = #{remark18},
+			remark19 = #{remark19},
+			remark20 = #{remark20},
+			remark21 = #{remark21},
+			remark22 = #{remark22},
+			remark23 = #{remark23},
+			remark24 = #{remark24},
+			remark25 = #{remark25},
+			remark26 = #{remark26},
+			remark27 = #{remark27},
+			remark28 = #{remark28},
+			remark29 = #{remark29},
+			remark30 = #{remark30},
+			remark31 = #{remark31},
+			remark32 = #{remark32},
+			remark33 = #{remark33},
+			remark34 = #{remark34},
+			remark35 = #{remark35},
+			remark36 = #{remark36},
+			remark37 = #{remark37},
+			remark38 = #{remark38},
+			remark39 = #{remark39},
+			remark40 = #{remark40},
+			remark41 = #{remark41},
+			remark42 = #{remark42},
+			remark43 = #{remark43},
+			remark44 = #{remark44},
+			remark45 = #{remark45},
+			remark46 = #{remark46},
+			remark47 = #{remark47},
+			remark48 = #{remark48},
+			remark49 = #{remark49},
+			remark50 = #{remark50}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_resource
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

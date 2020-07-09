@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.contract.SwContractDao">
+    
+	<sql id="swContractColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.state AS "state",
+		a.contract_code AS "contractCode",
+		a.contract_id AS "contractId",
+		a.contract_name AS "contractName",
+		a.contract_type AS "contractType",
+		a.contract_price AS "contractPrice",
+		a.supplier_id AS "supplierId",
+		a.supplier_name AS "supplierName",
+		a.supplier_user AS "supplierUser",
+		a.supplier_phone AS "supplierPhone",
+		a.contract_user AS "contractUser",
+		a.contract_phone AS "contractPhone",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.appendix AS "appendix",
+		a.appendix_length AS "appendixLength",
+		a.negotiate_id AS "negotiateId",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="swContractJoins">
+	</sql>
+    
+	<select id="get" resultType="SwContract">
+		SELECT 
+			<include refid="swContractColumns"/>
+		FROM sw_contract a
+		<include refid="swContractJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwContract">
+		SELECT 
+			<include refid="swContractColumns"/>
+		FROM sw_contract a
+		<include refid="swContractJoins"/>
+		<where>
+			
+			<if test="contractCode != null and contractCode != ''">
+				AND a.contract_code = #{contractCode}
+			</if>
+			<if test="contractName != null and contractName != ''">
+				AND a.contract_name = #{contractName}
+			</if>
+			<if test="contractType != null and contractType != ''">
+				AND a.contract_type = #{contractType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwContract">
+		SELECT 
+			<include refid="swContractColumns"/>
+		FROM sw_contract a
+		<include refid="swContractJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_contract(
+			id,
+			order_id,
+			state,
+			contract_id,
+			contract_code,
+			contract_name,
+			contract_type,
+			contract_price,
+			supplier_id,
+			supplier_name,
+			supplier_user,
+			supplier_phone,
+			contract_user,
+			contract_phone,
+			create_by,
+			create_date,
+			appendix,
+			appendix_length,
+			negotiate_id,
+			field1,
+			field2
+		) VALUES (
+			#{id},
+			#{orderId},
+			#{state},
+			#{contractId},
+			#{contractCode},
+			#{contractName},
+			#{contractType},
+			#{contractPrice},
+			#{supplierId},
+			#{supplierName},
+			#{supplierUser},
+			#{supplierPhone},
+			#{contractUser},
+			#{contractPhone},
+			#{createBy.id},
+			#{createDate},
+			#{appendix},
+			#{appendixLength},
+			#{negotiateId},
+			#{field1},
+			#{field2}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_contract SET 	
+		 order_id = #{orderId},
+		  state = #{state},
+		    contract_id = #{contractId},
+			contract_code = #{contractCode},
+			contract_name = #{contractName},
+			contract_type = #{contractType},
+			contract_price = #{contractPrice},
+			supplier_id = #{supplierId},
+			supplier_name = #{supplierName},
+			supplier_user = #{supplierUser},
+			supplier_phone = #{supplierPhone},
+			contract_user = #{contractUser},
+			contract_phone = #{contractPhone},
+			appendix = #{appendix},
+			appendix_length = #{appendixLength},
+			negotiate_id = #{negotiateId},
+			field1 = #{field1},
+			field2 = #{field2}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_contract
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

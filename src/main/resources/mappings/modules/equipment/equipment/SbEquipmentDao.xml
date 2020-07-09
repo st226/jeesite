@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.equipment.SbEquipmentDao">
+    
+	<sql id="sbEquipmentColumns">
+		a.id AS "id",
+		a.sb_type AS "sbType",
+		a.fs_type AS "fsType",
+		a.name AS "name",
+		a.fundingsource AS "fundingsource",
+		a.cccode AS "cccode",
+		a.sbcode AS "sbcode",
+		a.zccode AS "zccode",
+		a.kind AS "kind",
+		a.type AS "type",
+		a.state AS "state",
+		a.buyteam AS "buyteam",
+		a.buyteamname AS "buyteamname",
+		a.team AS "team",
+		a.teamname AS "teamname",
+		a.usepeople AS "usepeople",
+		a.usepeoplename AS "usepeoplename",
+		a.made AS "made",
+		a.outtime AS "outtime",
+		a.buytime AS "buytime",
+		a.price AS "price",
+		a.unitprice AS "unitprice",
+		a.starttime AS "starttime",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.field6 AS "field6",
+		a.field7 AS "field7",
+		a.field8 AS "field8",
+		a.field9 AS "field9",
+		a.field10 AS "field10",
+		a.field11 AS "field11",
+		a.field12 AS "field12",
+		a.field13 AS "field13",
+		a.field14 AS "field14",
+		a.field15 AS "field15",
+		a.field16 AS "field16",
+		a.field17 AS "field17",
+		a.field18 AS "field18",
+		a.field19 AS "field19",
+		a.field20 AS "field20",
+		a.sb_type_name AS "sbTypeName",
+		a.fs_type_name AS "fsTypeName",
+		a.bstate AS "bstate"
+	</sql>
+	
+	<sql id="sbEquipmentJoins">
+	</sql>
+    
+	<select id="get" resultType="SbEquipment">
+		SELECT 
+			<include refid="sbEquipmentColumns"/>
+		FROM sb_equipment a
+		<include refid="sbEquipmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+     <select id="exportList" resultType="SbEquipment">
+	 select t.`name`,t.sbcode,t.teamname,t.usepeoplename,t.starttime from sb_equipment t where
+	  t.id in (select e.sb_id from sb_cache e where e.type='4'  and userId=#{userId})
+	 </select>
+	 
+	 
+	 
+	<select id="findList" resultType="SbEquipment">
+		SELECT 
+			<include refid="sbEquipmentColumns"/>
+		FROM sb_equipment a
+		<include refid="sbEquipmentJoins"/>
+		<where>
+			
+			<if test="fsType != null and fsType != ''">
+				AND a.fs_type in (select id from sb_equipment_type t where t.id= #{fsType} or t.parent_ids like concat('%',#{fsType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND ( a.name LIKE concat('%',#{name},'%') or
+				      a.zccode LIKE concat('%',#{name},'%') or
+				      a.cccode LIKE concat('%',#{name},'%') or
+				       a.sbcode LIKE concat('%',#{name},'%') or
+				       a.type LIKE concat('%',#{name},'%') or
+				       a.teamname LIKE concat('%',#{name},'%') or
+				       a.usepeoplename LIKE concat('%',#{name},'%') )
+				      
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state =#{state}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename =#{usepeoplename}
+			</if>
+			<if test="field5 != null and field5 != ''">
+				AND a.field5 =#{field5}
+			</if>
+			<if test="teamname != null and teamname != ''">
+				AND a.teamname LIKE concat('%',#{teamname},'%')
+			</if>
+			<if test="bstate != null and bstate != ''">
+				AND a.bstate =#{bstate}
+			</if>
+			<if test="field5 != null and field5 != ''">
+				AND a.field5 =#{field5}
+			</if>
+			
+			<if test="sbcode != null and sbcode != ''">
+				AND a.sbcode   LIKE concat('%',#{sbcode},'%')
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type   LIKE concat('%',#{type},'%')
+			</if>
+			<if test="field1 != null and field1 != ''">
+				AND a.field1   LIKE concat('%',#{field1},'%')
+			</if>
+			<if test="team != null and team != ''">
+				AND a.team  = #{team}
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename   LIKE concat('%',#{usepeoplename},'%')
+			</if>
+			<if test="sbType != null and sbType != ''">
+				AND a.sb_type   =#{sbType}
+			</if>
+			<if test="field6 != null and field6 != ''">
+				AND ( #{field6} > a.field6)
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbEquipment">
+		SELECT 
+			<include refid="sbEquipmentColumns"/>
+		FROM sb_equipment a
+		<include refid="sbEquipmentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_equipment(
+			id,
+			sb_type,
+			fs_type,
+			name,
+			fundingsource,
+			cccode,
+			sbcode,
+			zccode,
+			kind,
+			type,
+			state,
+			buyteam,
+			buyteamname,
+			team,
+			teamname,
+			usepeople,
+			usepeoplename,
+			made,
+			outtime,
+			buytime,
+			price,
+			unitprice,
+			starttime,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			field6,
+			field7,
+			field8,
+			field9,
+			field10,
+			field11,
+			field12,
+			field13,
+			field14,
+			field15,
+			field16,
+			field17,
+			field18,
+			field19,
+			field20,
+			sb_type_name,
+			fs_type_name,
+			bstate
+		) VALUES (
+			#{id},
+			#{sbType},
+			#{fsType},
+			#{name},
+			#{fundingsource},
+			#{cccode},
+			#{sbcode},
+			#{zccode},
+			#{kind},
+			#{type},
+			#{state},
+			#{buyteam},
+			#{buyteamname},
+			#{team},
+			#{teamname},
+			#{usepeople},
+			#{usepeoplename},
+			#{made},
+			#{outtime},
+			#{buytime},
+			#{price},
+			#{unitprice},
+			#{starttime},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{field6},
+			#{field7},
+			#{field8},
+			#{field9},
+			#{field10},
+			#{field11},
+			#{field12},
+			#{field13},
+			#{field14},
+			#{field15},
+			#{field16},
+			#{field17},
+			#{field18},
+			#{field19},
+			#{field20},
+			#{sbTypeName},
+			#{fsTypeName},
+			#{bstate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_equipment SET 	
+			sb_type = #{sbType},
+			fs_type = #{fsType},
+			name = #{name},
+			fundingsource = #{fundingsource},
+			cccode = #{cccode},
+			sbcode = #{sbcode},
+			zccode = #{zccode},
+			kind = #{kind},
+			type = #{type},
+			state = #{state},
+			buyteam = #{buyteam},
+			buyteamname = #{buyteamname},
+			team = #{team},
+			teamname = #{teamname},
+			usepeople = #{usepeople},
+			usepeoplename = #{usepeoplename},
+			made = #{made},
+			outtime = #{outtime},
+			buytime = #{buytime},
+			price = #{price},
+			unitprice = #{unitprice},
+			starttime = #{starttime},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			field6 = #{field6},
+			field7 = #{field7},
+			field8 = #{field8},
+			field9 = #{field9},
+			field10 = #{field10},
+			field11 = #{field11},
+			field12 = #{field12},
+			field13 = #{field13},
+			field14 = #{field14},
+			field15 = #{field15},
+			field16 = #{field16},
+			field17 = #{field17},
+			field18 = #{field18},
+			field19 = #{field19},
+			field20 = #{field20},
+			sb_type_name = #{sbTypeName},
+			fs_type_name = #{fsTypeName},
+			bstate = #{bstate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_equipment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

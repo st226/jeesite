@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.order.dao.TsOrderDao">
+    
+	<sql id="tsOrderColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.order_number AS "orderNumber",
+		a.gys_id AS "gysId",
+		a.gys_name AS "gysName",
+		a.count AS "count",
+		a.price AS "price",
+		a.order_state AS "orderState",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tsOrderJoins">
+	</sql>
+    
+	<select id="get" resultType="TsOrder">
+		SELECT 
+			<include refid="tsOrderColumns"/>
+		FROM ts_order a
+		<include refid="tsOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsOrder">
+		SELECT a.* from (SELECT b.id AS "id",
+		b.`name` AS "name",
+		b.order_number AS "orderNumber",
+		b.gys_id AS "gysId",
+		p.`name` AS "gysName",
+		b.count AS "count",
+		b.price AS "price",
+		b.order_state AS "orderState",
+		u.`name` AS "createBy.id",
+		b.create_date AS "createDate",
+		b.remarks AS "remarks",
+		b.del_flag AS "delFlag" from ts_order b , sys_user u ,ts_supplier p where b.create_by=u.id and p.id=b.gys_name )a
+		<include refid="tsOrderJoins"/>
+		<where>
+			a.delFlag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="gysName != null and gysName != ''">
+				AND a.gysName = #{gysName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsOrder">
+		SELECT 
+			<include refid="tsOrderColumns"/>
+		FROM ts_order a
+		<include refid="tsOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_order(
+			id,
+			name,
+			order_number,
+			gys_id,
+			gys_name,
+			count,
+			price,
+			order_state,
+			create_by,
+			create_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{orderNumber},
+			#{gysId},
+			#{gysName},
+			#{count},
+			#{price},
+			#{orderState},
+			#{createBy.id},
+			#{createDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_order SET 	
+			name = #{name},
+			order_number = #{orderNumber},
+			gys_id = #{gysId},
+			gys_name = #{gysName},
+			count = #{count},
+			price = #{price},
+			order_state = #{orderState},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ts_order SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

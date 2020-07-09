@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sbdeploy.dao.SbDeployDao">
+    
+	<sql id="sbDeployColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.bus_type AS "busType",
+		a.column_id AS "columnId",
+		a.column_name AS "columnName",
+		a.column_comments AS "columnComments",
+		a.table_id AS "tableId",
+		a.column_jdbc_type AS "columnJdbcType",
+		a.table_comments AS "tableComments",
+		a.sort AS "sort",
+		a.is_null AS "isNull",
+		a.is_insert AS "isInsert",
+		a.is_edit AS "isEdit",
+		a.is_list AS "isList",
+		a.is_query AS "isQuery",
+		a.query_type AS "queryType",
+		a.show_type AS "showType",
+		a.dict_type AS "dictType",
+		a.table_name AS "tableName",
+		u2.name AS "user.name"
+	</sql>
+	
+	<sql id="sbDeployJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SbDeploy">
+		SELECT 
+			<include refid="sbDeployColumns"/>
+		FROM sb_deploy a
+		<include refid="sbDeployJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByUserId" resultType="SbDeploy">
+		SELECT 
+			<include refid="sbDeployColumns"/>
+		FROM sb_deploy a
+		<include refid="sbDeployJoins"/>
+		WHERE a.user_id = #{user.id}
+	</select>
+	
+	<select id="findList" resultType="SbDeploy">
+		SELECT 
+			<include refid="sbDeployColumns"/>
+		FROM sb_deploy a
+		<include refid="sbDeployJoins"/>
+		<where>
+			
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="busType != null and busType != ''">
+				AND a.bus_type = #{busType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbDeploy">
+		SELECT 
+			<include refid="sbDeployColumns"/>
+		FROM sb_deploy a
+		<include refid="sbDeployJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_deploy(
+			id,
+			user_id,
+			bus_type,
+			column_id,
+			column_name,
+			column_comments,
+			table_id,
+			column_jdbc_type,
+			table_comments,
+			sort,
+			is_null,
+			is_insert,
+			is_edit,
+			is_list,
+			is_query,
+			query_type,
+			show_type,
+			dict_type,
+			table_name
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{busType},
+			#{columnId},
+			#{columnName},
+			#{columnComments},
+			#{tableId},
+			#{columnJdbcType},
+			#{tableComments},
+			#{sort},
+			#{isNull},
+			#{isInsert},
+			#{isEdit},
+			#{isList},
+			#{isQuery},
+			#{queryType},
+			#{showType},
+			#{dictType},
+			#{tableName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_deploy SET 	
+			user_id = #{user.id},
+			bus_type = #{busType},
+			column_id = #{columnId},
+			column_name = #{columnName},
+			column_comments = #{columnComments},
+			table_id = #{tableId},
+			column_jdbc_type = #{columnJdbcType},
+			table_comments = #{tableComments},
+			sort = #{sort},
+			is_null = #{isNull},
+			is_insert = #{isInsert},
+			is_edit = #{isEdit},
+			is_list = #{isList},
+			is_query = #{isQuery},
+			query_type = #{queryType},
+			show_type = #{showType},
+			dict_type = #{dictType},
+			table_name = #{tableName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_deploy
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

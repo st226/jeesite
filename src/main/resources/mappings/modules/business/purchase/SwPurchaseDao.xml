@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.purchase.SwPurchaseDao">
+    
+	<sql id="swPurchaseColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.state AS "state",
+		a.code AS "code",
+		a.order_id AS "orderId",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.name AS "name",
+		a.amount AS "amount",
+		a.specifications AS "specifications",
+		a.made AS "made",
+		a.unit_price AS "unitPrice",
+		a.funds AS "funds",
+		a.file AS "file",
+		a.reason AS "reason",
+		a.applicant AS "applicant",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		o4.name AS "office.name",
+		u6.name AS "user.name"
+	</sql>
+	
+	<sql id="swPurchaseJoins">
+		LEFT JOIN sys_office o4 ON o4.id = a.office_id
+		LEFT JOIN sys_user u6 ON u6.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SwPurchase">
+		SELECT 
+			<include refid="swPurchaseColumns"/>
+		FROM sw_purchase a
+		<include refid="swPurchaseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwPurchase">
+		SELECT 
+			<include refid="swPurchaseColumns"/>
+		FROM sw_purchase a
+		<include refid="swPurchaseJoins"/>
+		<where>
+			
+			<if test="officeName != null and officeName != ''">
+				AND a.office_name = #{officeName}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwPurchase">
+		SELECT 
+			<include refid="swPurchaseColumns"/>
+		FROM sw_purchase a
+		<include refid="swPurchaseJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_purchase(
+			id,
+			processinstid,
+			state,
+			code,
+			order_id,
+			office_id,
+			office_name,
+			user_id,
+			user_name,
+			name,
+			amount,
+			specifications,
+			made,
+			unit_price,
+			funds,
+			file,
+			reason,
+			applicant,
+			create_by,
+			create_date,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{processinstid},
+			#{state},
+			#{code},
+			#{orderId},
+			#{office.id},
+			#{officeName},
+			#{user.id},
+			#{userName},
+			#{name},
+			#{amount},
+			#{specifications},
+			#{made},
+			#{unitPrice},
+			#{funds},
+			#{file},
+			#{reason},
+			#{applicant},
+			#{createBy.id},
+			#{createDate},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_purchase SET 	
+			processinstid = #{processinstid},
+			state = #{state},
+			code = #{code},
+			order_id = #{orderId},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			user_id = #{user.id},
+			user_name = #{userName},
+			name = #{name},
+			amount = #{amount},
+			specifications = #{specifications},
+			made = #{made},
+			unit_price = #{unitPrice},
+			funds = #{funds},
+			file = #{file},
+			reason = #{reason},
+			applicant = #{applicant},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_purchase
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

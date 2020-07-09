@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.event.SbEventDao">
+    
+	<sql id="sbEventColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.state AS "state",
+		a.office_id AS "office.id",
+		a.user_id AS "user.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.type AS "type",
+		a.end_date AS "endDate",
+		a.cause AS "cause",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		o4.name AS "office.name",
+		u5.name AS "user.name"
+	</sql>
+	
+	<sql id="sbEventJoins">
+		LEFT JOIN sys_office o4 ON o4.id = a.office_id
+		LEFT JOIN sys_user u5 ON u5.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SbEvent">
+		SELECT 
+			<include refid="sbEventColumns"/>
+		FROM sb_event a
+		<include refid="sbEventJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByProcessInstID" resultType="SbEvent">
+		SELECT 
+			<include refid="sbEventColumns"/>
+		FROM sb_event a
+		<include refid="sbEventJoins"/>
+		WHERE a.PROCESSINSTID = #{processInstID}
+	</select>
+	
+	<select id="findList" resultType="SbEvent">
+		SELECT 
+			<include refid="sbEventColumns"/>
+		FROM sb_event a
+		<include refid="sbEventJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbEvent">
+		SELECT 
+			<include refid="sbEventColumns"/>
+		FROM sb_event a
+		<include refid="sbEventJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_event(
+			id,
+			processinstid,
+			state,
+			office_id,
+			user_id,
+			create_by,
+			create_date,
+			type,
+			end_date,
+			cause,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{processinstid},
+			#{state},
+			#{office.id},
+			#{user.id},
+			#{createBy.id},
+			#{createDate},
+			#{type},
+			#{endDate},
+			#{cause},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_event SET 	
+			processinstid = #{processinstid},
+			state = #{state},
+			office_id = #{office.id},
+			user_id = #{user.id},
+			type = #{type},
+			end_date = #{endDate},
+			cause = #{cause},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_event
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

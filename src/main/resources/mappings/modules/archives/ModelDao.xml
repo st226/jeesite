@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.archives.dao.ModelDao">
+    
+	<sql id="modelColumns">
+		a.id AS "id",
+		a.application_id AS "applicationId.id",
+		a.image_type AS "imageType",
+		a.image_no AS "imageNo",
+		a.image_pageno AS "imagePageno",
+		a.model_class AS "modelClass",
+		a.image_number AS "imageNumber",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.image_page_number AS "imagePageNumber",
+		a.image_pagea4_number AS "imagePagea4Number",
+		a.image_typename AS "imageTypename",
+		a.image_pagea4_number2 AS "imagePagea4Number2",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.atlas_date AS "atlasDate",
+		a.atlas_pid AS "atlasPid",
+		a.atlas_status AS "atlasStatus",
+		a.files AS "files",
+		a.sy_jdbj AS "syJdbj",
+		a.sy_index AS "syIndex",
+		o8.name AS "office.name",
+		u14.name AS "user.name"
+	</sql>
+	
+	<sql id="modelJoins">
+		LEFT JOIN jgsy_application b ON b.id = a.application_id
+		LEFT JOIN sys_office o8 ON o8.id = a.office_id
+		LEFT JOIN sys_user u14 ON u14.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="Model">
+		SELECT 
+			<include refid="modelColumns"/>
+		FROM jgsy_model a
+		<include refid="modelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	<select id="getModelList" resultType="Model">
+		SELECT 
+			<include refid="modelColumns"/>
+		FROM jgsy_model a
+		<include refid="modelJoins"/>
+		<where>
+			<if test="imageNo != null and imageNo != ''">
+				AND a.image_no = #{imageNo}
+			</if>
+			<if test="imagePageno != null and imagePageno != ''">
+				AND a.image_pageno = #{imagePageno}
+			</if>
+			<if test="atlasStatus != null and atlasStatus != ''">
+				AND a.atlas_status = #{atlasStatus}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="findList" resultType="Model">
+		SELECT 
+			<include refid="modelColumns"/>
+		FROM jgsy_model a
+		<include refid="modelJoins"/>
+		<where>
+			
+			<if test="applicationId.id != null and applicationId.id != ''">
+				AND a.application_id = #{applicationId.id}
+			</if>
+			<if test="imageNo != null and imageNo != ''">
+				AND a.image_no = #{imageNo}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			    ORDER BY a.sy_index
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Model">
+		SELECT 
+			<include refid="modelColumns"/>
+		FROM jgsy_model a
+		<include refid="modelJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jgsy_model(
+			id,
+			application_id,
+			image_no,
+			image_pageno,
+			model_class,
+			image_number,
+			office_id,
+			office_name,
+			image_page_number,
+			image_pagea4_number,
+			atlas_status,
+			sy_jdbj,
+		    sy_index,
+		    files
+		) VALUES (
+			#{id},
+			#{applicationId.id},
+			#{imageNo},
+			#{imagePageno},
+			#{modelClass},
+			#{imageNumber},
+			#{office.id},
+			#{officeName},
+			#{imagePageNumber},
+			#{imagePagea4Number},
+			#{atlasStatus},
+			#{syJdbj},
+			#{syIndex},
+			#{files}
+		
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jgsy_model SET 	
+			image_no = #{imageNo},
+			image_pageno = #{imagePageno},
+			model_class = #{modelClass},
+			image_number = #{imageNumber},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			image_page_number = #{imagePageNumber},
+			image_pagea4_number = #{imagePagea4Number},
+			atlas_status = #{atlasStatus},
+			files = #{files},
+			sy_index = #{syIndex},
+			sy_jdbj = #{syJdbj}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jgsy_model
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE application_id = #{applicationId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

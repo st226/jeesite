@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.quality.dao.qmsupplier.QmSupplierAdmittanceDao">
+    
+	<sql id="qmSupplierAdmittanceColumns">
+		a.id AS "id",
+		a.supplier_id AS "supplierId.id",
+		a.admittance_index AS "admittanceIndex",
+		a.name AS "name",
+		a.is_submit AS "isSubmit",
+		a.file AS "file",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="qmSupplierAdmittanceJoins">
+		LEFT JOIN qm_supplier b ON b.id = a.supplier_id
+	</sql>
+    
+	<select id="get" resultType="QmSupplierAdmittance">
+		SELECT 
+			<include refid="qmSupplierAdmittanceColumns"/>
+		FROM qm_supplier_admittance a
+		<include refid="qmSupplierAdmittanceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QmSupplierAdmittance">
+		SELECT 
+			<include refid="qmSupplierAdmittanceColumns"/>
+		FROM qm_supplier_admittance a
+		<include refid="qmSupplierAdmittanceJoins"/>
+		<where>
+			
+			<if test="supplierId.id != null and supplierId.id != ''">
+				AND a.supplier_id = #{supplierId.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.admittance_index+0 ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QmSupplierAdmittance">
+		SELECT 
+			<include refid="qmSupplierAdmittanceColumns"/>
+		FROM qm_supplier_admittance a
+		<include refid="qmSupplierAdmittanceJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO qm_supplier_admittance(
+			id,
+			supplier_id,
+			admittance_index,
+			name,
+			is_submit,
+			file,
+			remarks,
+			create_by,
+			create_date,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{supplierId.id},
+			#{admittanceIndex},
+			#{name},
+			#{isSubmit},
+			#{file},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qm_supplier_admittance SET 	
+			supplier_id = #{supplierId.id},
+			admittance_index = #{admittanceIndex},
+			name = #{name},
+			is_submit = #{isSubmit},
+			file = #{file},
+			remarks = #{remarks},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM qm_supplier_admittance
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE supplier_id = #{supplierId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

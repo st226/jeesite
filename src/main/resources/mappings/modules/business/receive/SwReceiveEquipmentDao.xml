@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.receive.SwReceiveEquipmentDao">
+    
+	<sql id="swReceiveEquipmentColumns">
+		a.id AS "id",
+		a.receive_id AS "receiveId.id",
+		a.equipment_name AS "equipmentName",
+		a.equipment_id AS "equipmentId",
+		a.equipment_model AS "equipmentModel",
+		a.equipment_norms AS "equipmentNorms",
+		a.equipment_value AS "equipmentValue",
+		a.equipment_power AS "equipmentPower",
+		a.equipment_factory_number AS "equipmentFactoryNumber",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.zccode AS "zccode",
+		a.amount AS "amount",
+		a.unitprice AS "unitprice",
+		a.price AS "price",
+		a.team AS "team",
+		a.teamname AS "teamname",
+		a.usepeople AS "usepeople",
+		a.usepeoplename AS "usepeoplename",
+		a.local AS "local",
+		a.is_metering AS "isMetering",
+		a.metering_date AS "meteringDate",
+		a.metering_type AS "meteringType",
+		a.metering_time AS "meteringTime",
+		a.fundingsource AS "fundingsource",
+		a.fs_type AS "fsType",
+		a.fs_type_name AS "fsTypeName",
+		a.sb_type AS "sbType",
+		a.sb_type_name AS "sbTypeName",
+		a.state AS "state",
+		a.outtime AS "outtime",
+	    a.cometime AS "cometime",
+	    a.is_agreement AS "isAgreement",
+	    a.is_appearance AS "isAppearance",
+	    a.is_norms AS "isNorms",
+	    a.is_model AS "isModel",
+	     a.made AS "made",
+	      a.rfiles AS "rfiles",
+	       a.cfiles AS "cfiles"
+		
+	</sql>
+	
+	<sql id="swReceiveEquipmentJoins">
+		LEFT JOIN sw_receive b ON b.id = a.receive_id
+	</sql>
+    
+	<select id="get" resultType="SwReceiveEquipment">
+		SELECT 
+			<include refid="swReceiveEquipmentColumns"/>
+		FROM sw_receive_equipment a
+		<include refid="swReceiveEquipmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwReceiveEquipment">
+		SELECT 
+			<include refid="swReceiveEquipmentColumns"/>
+		FROM sw_receive_equipment a
+		<include refid="swReceiveEquipmentJoins"/>
+		<where>
+			
+			<if test="receiveId.id != null and receiveId.id != ''">
+				AND a.receive_id = #{receiveId.id}
+			</if>
+			<if test="equipmentModel != null and equipmentModel != ''">
+				AND a.equipment_model = #{equipmentModel}
+			</if>
+			<if test="equipmentNorms != null and equipmentNorms != ''">
+				AND a.equipment_norms = #{equipmentNorms}
+			</if>
+			<if test="equipmentValue != null and equipmentValue != ''">
+				AND a.equipment_value = #{equipmentValue}
+			</if>
+			<if test="equipmentPower != null and equipmentPower != ''">
+				AND a.equipment_power = #{equipmentPower}
+			</if>
+			<if test="equipmentFactoryNumber != null and equipmentFactoryNumber != ''">
+				AND a.equipment_factory_number = #{equipmentFactoryNumber}
+			</if>
+			<if test="equipmentId != null and equipmentId != ''">
+				AND a.equipment_id = #{equipmentId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			    ORDER BY a.equipment_factory_number
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="findSwReceiveEquipmentList" resultType="SwReceiveEquipment">
+		SELECT 
+			<include refid="swReceiveEquipmentColumns"/>
+		FROM sw_receive_equipment a
+		<include refid="swReceiveEquipmentJoins"/>
+		<where>
+			
+			<if test="equipmentId != null and equipmentId != ''">
+				AND a.id in #{equipmentId}
+			</if>
+		</where>
+		
+	</select>
+	
+	<select id="findAllList" resultType="SwReceiveEquipment">
+		SELECT 
+			<include refid="swReceiveEquipmentColumns"/>
+		FROM sw_receive_equipment a
+		<include refid="swReceiveEquipmentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_receive_equipment(
+			id,
+			receive_id,
+			equipment_name,
+			equipment_id,
+			equipment_model,
+			equipment_norms,
+			equipment_value,
+			equipment_power,
+			equipment_factory_number,
+			zccode ,
+		amount,
+		unitprice,
+		price,
+		team,
+		teamname,
+		usepeople,
+		usepeoplename,
+		local,
+		is_metering,
+		metering_date,
+		metering_type,
+		metering_time,
+		fundingsource,
+		fs_type,
+		fs_type_name,
+		sb_type,
+		sb_type_name,
+		state,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			outtime ,
+	        cometime ,
+	        is_agreement ,
+	        is_appearance ,
+	        is_norms ,
+	        is_model ,
+	        made,
+	        rfiles,
+	       cfiles
+		) VALUES (
+			#{id},
+			#{receiveId.id},
+			#{equipmentName},
+			#{equipmentId},
+			#{equipmentModel},
+			#{equipmentNorms},
+			#{equipmentValue},
+			#{equipmentPower},
+			#{equipmentFactoryNumber},
+			#{zccode},
+		#{amount},
+		#{unitprice},
+		#{price},
+		#{team},
+		#{teamname},
+		#{usepeople},
+		#{usepeoplename},
+		#{local},
+		#{isMetering},
+		#{meteringDate},
+		#{meteringType},
+		#{meteringTime},
+		#{fundingsource},
+		#{fsType},
+		#{fsTypeName},
+		#{sbType},
+		#{sbTypeName},
+		#{state},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{outtime},
+	    #{cometime},
+	    #{isAgreement},
+	    #{isAppearance},
+	   #{isNorms},
+	    #{isModel},
+	     #{made},
+	     #{rfiles},
+	     #{cfiles}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_receive_equipment SET 	
+			receive_id = #{receiveId.id},
+			equipment_name = #{equipmentName},
+			equipment_id = #{equipmentId},
+			equipment_model = #{equipmentModel},
+			equipment_norms = #{equipmentNorms},
+			equipment_value = #{equipmentValue},
+			equipment_power = #{equipmentPower},
+			equipment_factory_number = #{equipmentFactoryNumber},
+			zccode = #{zccode},
+		amount= #{amount},
+		unitprice=#{unitprice},
+		price=#{price},
+		team=#{team},
+		teamname= #{teamname},
+		usepeople =#{usepeople},
+		usepeoplename= #{usepeoplename},
+		local =#{local},
+		is_metering = #{isMetering},
+		metering_date =#{meteringDate},
+		metering_type = #{meteringType},
+		metering_time = #{meteringTime},
+		fundingsource = #{fundingsource},
+		fs_type = #{fsType},
+		fs_type_name = #{fsTypeName},
+		sb_type = #{sbType},
+		sb_type_name = #{sbTypeName},
+		state = #{state},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			outtime= #{outtime} ,
+	        cometime = #{cometime},
+	        is_agreement= #{isAgreement} ,
+	        is_appearance= #{isAppearance} ,
+	        is_norms= #{isNorms} ,
+	        is_model= #{isModel} ,
+	        made= #{made} ,
+	         rfiles= #{rfiles} ,
+	          cfiles= #{cfiles} 
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_receive_equipment
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE receive_id = #{receiveId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

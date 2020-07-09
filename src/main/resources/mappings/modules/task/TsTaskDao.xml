@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.task.dao.TsTaskDao">
+    
+	<sql id="tsTaskColumns">
+		a.id AS "id",
+		a.equipmentname AS "equipmentname",
+		a.equipmentid AS "equipmentid",
+		a.officeid AS "officeid",
+		a.userid AS "userid",
+		a.lasttime AS "lasttime",
+		a.acquisitiontime AS "acquisitiontime",
+		a.amount AS "amount",
+		a.state AS "state",
+		a.bus_type AS "busType"
+	</sql>
+	
+	<sql id="tsTaskJoins">
+	</sql>
+    
+	<select id="get" resultType="TsTask">
+		SELECT 
+			<include refid="tsTaskColumns"/>
+		FROM ts_task a
+		<include refid="tsTaskJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsTask">
+		SELECT 
+			<include refid="tsTaskColumns"/>
+		FROM ts_task a
+		<include refid="tsTaskJoins"/>
+		<where>
+			
+			
+			<if test="officeid != null and officeid != ''">
+				AND a.officeid = #{officeid}
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+		
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsTask">
+		SELECT 
+			<include refid="tsTaskColumns"/>
+		FROM ts_task a
+		<include refid="tsTaskJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_task(
+			id,
+			equipmentname,
+			equipmentid,
+			officeid,
+			userid,
+			lasttime,
+			acquisitiontime,
+			amount,
+			state,
+			bus_type
+		) VALUES (
+			#{id},
+			#{equipmentname},
+			#{equipmentid},
+			#{officeid},
+			#{userid},
+			#{lasttime},
+			#{acquisitiontime},
+			#{amount},
+			#{state},
+			#{busType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_task SET 	
+			equipmentname = #{equipmentname},
+			equipmentid = #{equipmentid},
+			officeid = #{officeid},
+			userid = #{userid},
+			lasttime = #{lasttime},
+			acquisitiontime = #{acquisitiontime},
+			amount = #{amount},
+			state = #{state},
+			bus_type = #{busType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_task
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

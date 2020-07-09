@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.bidding.SwBiddingDao">
+    
+	<sql id="swBiddingColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.goods_name AS "goodsName",
+		a.goods_amount AS "goodsAmount",
+		a.goods_brand AS "goodsBrand",
+		a.address AS "address",
+		a.closing_date AS "closingDate",
+		a.project_name AS "projectName",
+		a.goods_composition AS "goodsComposition",
+		a.technical AS "technical",
+		a.budget AS "budget",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.state AS "state",
+		a.field1 AS "field1",
+		a.complete_by AS "completeBy",
+		a.field2 AS "field2",
+		a.complete_date AS "completeDate",
+		a.field3 AS "field3",
+		a.file AS "file",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.field6 AS "field6",
+		a.field7 AS "field7",
+		a.field8 AS "field8",
+		a.field9 AS "field9",
+		a.field10 AS "field10",
+		a.opening_time AS "openingTime",
+	    a.winning_time AS "winningTime",
+	    a.sign_file AS "signFile",		
+	    a.notice AS "notice"	
+	</sql>
+	
+	<sql id="swBiddingJoins">
+	</sql>
+    
+	<select id="get" resultType="SwBidding">
+		SELECT 
+			<include refid="swBiddingColumns"/>
+		FROM sw_bidding a
+		<include refid="swBiddingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwBidding">
+		SELECT 
+			<include refid="swBiddingColumns"/>
+		FROM sw_bidding a
+		<include refid="swBiddingJoins"/>
+		<where>
+			
+			<if test="goodsName != null and goodsName != ''">
+				AND a.goods_name = #{goodsName}
+			</if>
+			<if test="goodsAmount != null and goodsAmount != ''">
+				AND a.goods_amount = #{goodsAmount}
+			</if>
+			<if test="goodsBrand != null and goodsBrand != ''">
+				AND a.goods_brand = #{goodsBrand}
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwBidding">
+		SELECT 
+			<include refid="swBiddingColumns"/>
+		FROM sw_bidding a
+		<include refid="swBiddingJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_bidding(
+			id,
+			order_id,
+			goods_name,
+			goods_amount,
+			goods_brand,
+			address,
+			closing_date,
+			project_name,
+			goods_composition,
+			technical,
+			budget,
+			create_by,
+			create_date,
+			state,
+			field1,
+			complete_by,
+			field2,
+			complete_date,
+			field3,
+			file,
+			field4,
+			field5,
+			field6,
+			field7,
+			field8,
+			field9,
+			field10,
+			opening_time,
+	        winning_time,
+	        sign_file,		
+	        notice	
+		) VALUES (
+			#{id},
+			#{orderId},
+			#{goodsName},
+			#{goodsAmount},
+			#{goodsBrand},
+			#{address},
+			#{closingDate},
+			#{projectName},
+			#{goodsComposition},
+			#{technical},
+			#{budget},
+			#{createBy.id},
+			#{createDate},
+			#{state},
+			#{field1},
+			#{completeBy},
+			#{field2},
+			#{completeDate},
+			#{field3},
+			#{file},
+			#{field4},
+			#{field5},
+			#{field6},
+			#{field7},
+			#{field8},
+			#{field9},
+			#{field10},
+			#{openingTime},
+	        #{winningTime},
+	        #{signFile},		
+	        #{notice}	
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_bidding SET 	
+			order_id = #{orderId},
+			goods_name = #{goodsName},
+			goods_amount = #{goodsAmount},
+			goods_brand = #{goodsBrand},
+			address = #{address},
+			closing_date = #{closingDate},
+			project_name = #{projectName},
+			goods_composition = #{goodsComposition},
+			technical = #{technical},
+			budget = #{budget},
+			state = #{state},
+			field1 = #{field1},
+			complete_by = #{completeBy},
+			field2 = #{field2},
+			complete_date = #{completeDate},
+			field3 = #{field3},
+			file = #{file},
+			field4 = #{field4},
+			field5 = #{field5},
+			field6 = #{field6},
+			field7 = #{field7},
+			field8 = #{field8},
+			field9 = #{field9},
+			opening_time = #{openingTime},
+			winning_time = #{winningTime},
+			sign_file = #{signFile},
+			notice = #{notice},
+			field10 = #{field10}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_bidding
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

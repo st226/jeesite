@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.receive.SwReceiveDao">
+    
+	<sql id="swReceiveColumns">
+		a.id AS "id",
+		a.state AS "state",
+		a.order_id AS "orderId",
+		a.voucher_no AS "voucherNo",
+		a.plan_number AS "planNumber",
+		a.items AS "items",
+		a.assets AS "assets",
+		a.sb_name AS "sbName",
+		a.contract_id AS "contractId",
+		a.contract_code AS "contractCode",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.made AS "made",
+		a.production_date AS "productionDate",
+		a.arrival_date AS "arrivalDate",
+		a.contact_information AS "contactInformation",
+		a.location AS "location",
+		a.supplier AS "supplier",
+		a.supplier_user AS "supplierUser",
+		a.supplier_phone AS "supplierPhone",
+		a.is_agreement AS "isAgreement",
+		a.is_appearance AS "isAppearance",
+		a.is_norms AS "isNorms",
+		a.is_model AS "isModel",
+		a.factory_number AS "factoryNumber",
+		a.acceptor AS "acceptor",
+		a.acceptor_date AS "acceptorDate",
+		a.archives AS "archives",
+		a.archives_date AS "archivesDate",
+		a.sb_model AS "sbModel",
+		a.sb_norms AS "sbNorms",
+		a.sb_original_value AS "sbOriginalValue",
+		a.sb_power AS "sbPower",
+		a.leader AS "leader",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.file AS "file",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.field6 AS "field6",
+		a.field7 AS "field7",
+		a.field8 AS "field8",
+		o11.name AS "office.name",
+		u13.name AS "user.name"
+	</sql>
+	
+	<sql id="swReceiveJoins">
+		LEFT JOIN sys_office o11 ON o11.id = a.office_id
+		LEFT JOIN sys_user u13 ON u13.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SwReceive">
+		SELECT 
+			<include refid="swReceiveColumns"/>
+		FROM sw_receive a
+		<include refid="swReceiveJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwReceive">
+		SELECT 
+			<include refid="swReceiveColumns"/>
+		FROM sw_receive a
+		<include refid="swReceiveJoins"/>
+		<where>
+			
+			<if test="planNumber != null and planNumber != ''">
+				AND a.plan_number = #{planNumber}
+			</if>
+			<if test="items != null and items != ''">
+				AND a.items = #{items}
+			</if>
+			<if test="sbName != null and sbName != ''">
+				AND a.sb_name = #{sbName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwReceive">
+		SELECT 
+			<include refid="swReceiveColumns"/>
+		FROM sw_receive a
+		<include refid="swReceiveJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_receive(
+			id,
+			state,
+			order_id,
+			voucher_no,
+			plan_number,
+			items,
+			assets,
+			sb_name,
+			contract_id,
+			contract_code,
+			office_id,
+			office_name,
+			user_id,
+			user_name,
+			made,
+			production_date,
+			arrival_date,
+			contact_information,
+			location,
+			supplier,
+			supplier_user,
+			supplier_phone,
+			is_agreement,
+			is_appearance,
+			is_norms,
+			is_model,
+			factory_number,
+			acceptor,
+			acceptor_date,
+			archives,
+			archives_date,
+			sb_model,
+			sb_norms,
+			sb_original_value,
+			sb_power,
+			leader,
+			remarks,
+			create_by,
+			create_date,
+			file,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			field6,
+			field7,
+			field8
+		) VALUES (
+			#{id},
+			#{state},
+			#{orderId},
+			#{voucherNo},
+			#{planNumber},
+			#{items},
+			#{assets},
+			#{sbName},
+			#{contractId},
+			#{contractCode},
+			#{office.id},
+			#{officeName},
+			#{user.id},
+			#{userName},
+			#{made},
+			#{productionDate},
+			#{arrivalDate},
+			#{contactInformation},
+			#{location},
+			#{supplier},
+			#{supplierUser},
+			#{supplierPhone},
+			#{isAgreement},
+			#{isAppearance},
+			#{isNorms},
+			#{isModel},
+			#{factoryNumber},
+			#{acceptor},
+			#{acceptorDate},
+			#{archives},
+			#{archivesDate},
+			#{sbModel},
+			#{sbNorms},
+			#{sbOriginalValue},
+			#{sbPower},
+			#{leader},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{file},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{field6},
+			#{field7},
+			#{field8}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_receive SET 	
+			state = #{state},
+			order_id = #{orderId},
+			voucher_no = #{voucherNo},
+			plan_number = #{planNumber},
+			items = #{items},
+			assets = #{assets},
+			sb_name = #{sbName},
+			contract_id = #{contractId},
+			contract_code = #{contractCode},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			user_id = #{user.id},
+			user_name = #{userName},
+			made = #{made},
+			production_date = #{productionDate},
+			arrival_date = #{arrivalDate},
+			contact_information = #{contactInformation},
+			location = #{location},
+			supplier = #{supplier},
+			supplier_user = #{supplierUser},
+			supplier_phone = #{supplierPhone},
+			is_agreement = #{isAgreement},
+			is_appearance = #{isAppearance},
+			is_norms = #{isNorms},
+			is_model = #{isModel},
+			factory_number = #{factoryNumber},
+			acceptor = #{acceptor},
+			acceptor_date = #{acceptorDate},
+			archives = #{archives},
+			archives_date = #{archivesDate},
+			sb_model = #{sbModel},
+			sb_norms = #{sbNorms},
+			sb_original_value = #{sbOriginalValue},
+			sb_power = #{sbPower},
+			leader = #{leader},
+			remarks = #{remarks},
+			file = #{file},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			field6 = #{field6},
+			field7 = #{field7},
+			field8 = #{field8}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_receive
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

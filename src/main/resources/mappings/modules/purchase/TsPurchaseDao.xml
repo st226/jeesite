@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.purchase.dao.TsPurchaseDao">
+    
+	<sql id="tsPurchaseColumns">
+		a.id AS "id",
+		a.zy_type AS "zyType",
+		a.name AS "name",
+		a.author AS "author",
+		a.press AS "press",
+		a.cg_type AS "cgType",
+		a.isbn AS "isbn",
+		a.pages AS "pages",
+		a.price AS "price",
+		a.zy_state AS "zyState",
+		a.is_double AS "isDouble",
+		a.count AS "count",
+		a.office_id AS "office.id",
+		a.user_id AS "user.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.order_id AS "orderId",
+		o13.name AS "office.name",
+		u14.name AS "user.name"
+	</sql>
+	
+	<sql id="tsPurchaseJoins">
+		LEFT JOIN sys_office o13 ON o13.id = a.office_id
+		LEFT JOIN sys_user u14 ON u14.id = a.user_id
+		LEFT JOIN sys_user u15 ON u15.id = a.create_by
+	</sql>
+    
+	<select id="get" resultType="TsPurchase">
+		SELECT 
+			<include refid="tsPurchaseColumns"/>
+		FROM ts_purchase a
+		<include refid="tsPurchaseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsPurchase">
+		SELECT 
+			a.id AS "id",
+		a.zy_type AS "zyType",
+		a.name AS "name",
+		a.author AS "author",
+		a.press AS "press",
+		a.cg_type AS "cgType",
+		a.isbn AS "isbn",
+		a.pages AS "pages",
+		a.price AS "price",
+		a.zy_state AS "zyState",
+		a.is_double AS "isDouble",
+		a.count AS "count",
+		a.office_id AS "office.id",
+		a.user_id AS "user.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		(select o.`name` from ts_order o  where o.id = a.order_id) AS "orderId",
+		o13.name AS "office.name",
+		u14.name AS "user.name"
+		FROM ts_purchase a
+		<include refid="tsPurchaseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="cgType != null and cgType != ''">
+				AND a.cg_type = #{cgType}
+			</if>
+			<if test="zyState != null and zyState != ''">
+				AND a.zy_state = #{zyState}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsPurchase">
+		SELECT 
+			<include refid="tsPurchaseColumns"/>
+		FROM ts_purchase a
+		<include refid="tsPurchaseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getTsPurchaseByOrder" resultType="TsPurchase">
+		SELECT a.id,
+          (select d.label from sys_dict d where d.type = 'zy_type' and d.`value`=a.zy_type) zy_type,
+           a.`name`,a.author,a.press,
+          (select d.label from sys_dict d where d.type = 'zy_type' and d.`value`=a.cg_type) cg_type,
+           a.isbn,a.pages,a.price,a.count,
+          (select d.`name` from sys_office d where  d.id=a.office_id) `office.name`,
+          (select d.`name` from sys_user d where  d.id=a.user_id) `userName`,
+          a.create_date 
+           FROM ts_purchase a   where a.del_flag = #{DEL_FLAG_NORMAL} and a.order_id=#{orderId}
+		
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_purchase(
+			id,
+			zy_type,
+			name,
+			author,
+			press,
+			cg_type,
+			isbn,
+			pages,
+			price,
+			count,
+			zy_state,
+			office_id,
+			user_id,
+			create_date,
+			remarks,
+			del_flag,
+			order_id
+		) VALUES (
+			#{id},
+			#{zyType},
+			#{name},
+			#{author},
+			#{press},
+			#{cgType},
+			#{isbn},
+			#{pages},
+			#{count},
+			#{price},
+			#{zyState},
+			#{office.id},
+			#{user.id},
+			#{createDate},
+			#{remarks},
+			#{delFlag},
+			#{orderId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_purchase SET 	
+			zy_type = #{zyType},
+			name = #{name},
+			author = #{author},
+			press = #{press},
+			cg_type = #{cgType},
+			isbn = #{isbn},
+			pages = #{pages},
+			price = #{price},
+			count = #{count},
+			zy_state = #{zyState},
+			office_id = #{office.id},
+			user_id = #{user.id},
+			create_date = #{createDate},
+			remarks = #{remarks},
+			order_id = #{orderId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ts_purchase SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

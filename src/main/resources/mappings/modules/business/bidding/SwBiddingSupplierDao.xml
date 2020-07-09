@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.bidding.SwBiddingSupplierDao">
+    
+	<sql id="swBiddingSupplierColumns">
+		a.id AS "id",
+		a.bidding_id AS "biddingId.id",
+		a.supplier_id AS "supplierId",
+		a.supplier_name AS "supplierName",
+		a.supplier_user AS "supplierUser",
+		a.phone AS "phone",
+		a.tel AS "tel",
+		a.email AS "email",
+		a.total_price AS "totalPrice",
+		a.negotiate_price AS "negotiatePrice",
+		a.balance_price AS "balancePrice",
+		a.appendix AS "appendix",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.is_bid AS "isBid"
+	</sql>
+	
+	<sql id="swBiddingSupplierJoins">
+		LEFT JOIN sw_bidding b ON b.id = a.bidding_id
+	</sql>
+    
+	<select id="get" resultType="SwBiddingSupplier">
+		SELECT 
+			<include refid="swBiddingSupplierColumns"/>
+		FROM sw_bidding_supplier a
+		<include refid="swBiddingSupplierJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwBiddingSupplier">
+		SELECT 
+			<include refid="swBiddingSupplierColumns"/>
+		FROM sw_bidding_supplier a
+		<include refid="swBiddingSupplierJoins"/>
+		<where>
+			
+			<if test="biddingId.id != null and biddingId.id != ''">
+				AND a.bidding_id = #{biddingId.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwBiddingSupplier">
+		SELECT 
+			<include refid="swBiddingSupplierColumns"/>
+		FROM sw_bidding_supplier a
+		<include refid="swBiddingSupplierJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_bidding_supplier(
+			id,
+			bidding_id,
+			supplier_id,
+			supplier_name,
+			supplier_user,
+			phone,
+			tel,
+			email,
+			total_price,
+			negotiate_price,
+			balance_price,
+			appendix,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			is_bid
+		) VALUES (
+			#{id},
+			#{biddingId.id},
+			#{supplierId},
+			#{supplierName},
+			#{supplierUser},
+			#{phone},
+			#{tel},
+			#{email},
+			#{totalPrice},
+			#{negotiatePrice},
+			#{balancePrice},
+			#{appendix},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{isBid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_bidding_supplier SET 	
+			bidding_id = #{biddingId.id},
+			supplier_id = #{supplierId},
+			supplier_name = #{supplierName},
+			supplier_user = #{supplierUser},
+			phone = #{phone},
+			tel = #{tel},
+			email = #{email},
+			total_price = #{totalPrice},
+			negotiate_price = #{negotiatePrice},
+			balance_price = #{balancePrice},
+			appendix = #{appendix},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			is_bid = #{isBid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_bidding_supplier
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE bidding_id = #{biddingId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.quality.dao.qmresource.QmResourceDao">
+    
+	<sql id="qmResourceColumns">
+		a.id AS "id",
+		a.file_type AS "fileType",
+		a.file_type_name AS "fileTypeName",
+		a.qm_type AS "qmType",
+		a.qm_type_name AS "qmTypeName",
+		a.name AS "name",
+		a.basis AS "basis",
+		a.file AS "file",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5"
+	</sql>
+	
+	<sql id="qmResourceJoins">
+	</sql>
+    
+	<select id="get" resultType="QmResource">
+		SELECT 
+			<include refid="qmResourceColumns"/>
+		FROM qm_resource a
+		<include refid="qmResourceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QmResource">
+		SELECT 
+			<include refid="qmResourceColumns"/>
+		FROM qm_resource a
+		<include refid="qmResourceJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="qmType != null and qmType != ''">
+				AND a.qm_type = #{qmType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QmResource">
+		SELECT 
+			<include refid="qmResourceColumns"/>
+		FROM qm_resource a
+		<include refid="qmResourceJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO qm_resource(
+			id,
+			file_type,
+			file_type_name,
+			qm_type,
+			qm_type_name,
+			name,
+			basis,
+			file,
+			create_date,
+			create_by,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{fileType},
+			#{fileTypeName},
+			#{qmType},
+			#{qmTypeName},
+			#{name},
+			#{basis},
+			#{file},
+			#{createDate},
+			#{createBy.id},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qm_resource SET 	
+			file_type = #{fileType},
+			file_type_name = #{fileTypeName},
+			qm_type = #{qmType},
+			qm_type_name = #{qmTypeName},
+			name = #{name},
+			basis = #{basis},
+			file = #{file}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM qm_resource
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

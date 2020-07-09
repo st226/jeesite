@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.metering.SbMeteringChildDao">
+    
+	<sql id="sbMeteringChildColumns">
+		a.id AS "id",
+		a.metering_id AS "meteringId.id",
+		a.equipment_id AS "equipmentId",
+		a.equipment_name AS "equipmentName",
+		a.equipment_type AS "equipmentType",
+		a.equipment_sbcode AS "equipmentSbcode",
+		a.equipment_cccode AS "equipmentCccode",
+		a.metering_state AS "meteringState",
+		a.metering_type AS "meteringType",
+		a.metering_time AS "meteringTime",
+		a.measurement AS "measurement",
+		a.ismeasurement AS "ismeasurement",
+		a.reason AS "reason",
+		a.is_good AS "isGood",
+		a.create_date AS "createDate",
+		a.inspection_date AS "inspectionDate",
+		a.effective_date AS "effectiveDate",
+		a.enclosure AS "enclosure",
+		a.create_by AS "createBy.id",
+		a.office_id AS "office.id",
+		a.user_id AS "user.id",
+		a.person AS "person",
+		a.department AS "department",
+		a.departmentid AS "departmentid",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		o19.name AS "office.name",
+		u20.name AS "user.name"
+	</sql>
+	
+	<sql id="sbMeteringChildJoins">
+		LEFT JOIN sb_metering b ON b.id = a.metering_id
+		LEFT JOIN sys_office o19 ON o19.id = a.office_id
+		LEFT JOIN sys_user u20 ON u20.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SbMeteringChild">
+		SELECT 
+			<include refid="sbMeteringChildColumns"/>
+		FROM sb_metering_child a
+		<include refid="sbMeteringChildJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getMeteringChildList" resultType="SbMeteringChild">
+		SELECT 
+			<include refid="sbMeteringChildColumns"/>
+		FROM sb_metering_child a
+		<include refid="sbMeteringChildJoins"/>
+		<where>
+			
+			<if test="meteringId != null and meteringId != ''">
+				AND a.metering_id = #{meteringId.id}
+			</if>
+			<if test="equipmentName != null and equipmentName != ''">
+				AND a.equipment_name = #{equipmentName}
+			</if>
+			<if test="equipmentSbcode != null and equipmentSbcode != ''">
+				AND a.equipment_sbcode = #{equipmentSbcode}
+			</if>
+			<if test="meteringType != null and meteringType != ''">
+				AND a.metering_type = #{meteringType}
+			</if>
+			<if test="meteringTime != null and meteringTime != ''">
+				AND a.metering_time = #{meteringTime}
+			</if>
+			<if test="isGood != null and isGood != ''">
+				AND a.is_good = #{isGood}
+			</if>
+			<if test="field1 != null and field1 != ''">
+				AND a.field1 = #{field1}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findList" resultType="SbMeteringChild">
+		SELECT 
+			<include refid="sbMeteringChildColumns"/>
+		FROM sb_metering_child a
+		<include refid="sbMeteringChildJoins"/>
+		<where>
+			
+			<if test="meteringId != null and meteringId != ''">
+				AND a.metering_id = #{meteringId.id}
+			</if>
+			<if test="field1 != null and field1 != ''">
+				AND a.field1 = #{field1}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbMeteringChild">
+		SELECT 
+			<include refid="sbMeteringChildColumns"/>
+		FROM sb_metering_child a
+		<include refid="sbMeteringChildJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_metering_child(
+			id,
+			metering_id,
+			equipment_id,
+			equipment_name,
+			equipment_type,
+			equipment_sbcode,
+			equipment_cccode,
+			metering_state,
+			metering_type,
+			metering_time,
+			measurement,
+			ismeasurement,
+			reason,
+			is_good,
+			create_date,
+			inspection_date,
+			effective_date,
+			enclosure,
+			create_by,
+			office_id,
+			user_id,
+			person,
+			department,
+			departmentid,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{meteringId.id},
+			#{equipmentId},
+			#{equipmentName},
+			#{equipmentType},
+			#{equipmentSbcode},
+			#{equipmentCccode},
+			#{meteringState},
+			#{meteringType},
+			#{meteringTime},
+			#{measurement},
+			#{ismeasurement},
+			#{reason},
+			#{isGood},
+			#{createDate},
+			#{inspectionDate},
+			#{effectiveDate},
+			#{enclosure},
+			#{createBy.id},
+			#{office.id},
+			#{user.id},
+			#{person},
+			#{department},
+			#{departmentid},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_metering_child SET 	
+			metering_id = #{meteringId.id},
+			equipment_id = #{equipmentId},
+			equipment_name = #{equipmentName},
+			equipment_type = #{equipmentType},
+			equipment_sbcode = #{equipmentSbcode},
+			equipment_cccode = #{equipmentCccode},
+			metering_state = #{meteringState},
+			metering_type = #{meteringType},
+			metering_time = #{meteringTime},
+			measurement = #{measurement},
+			ismeasurement = #{ismeasurement},
+			reason = #{reason},
+			is_good = #{isGood},
+			inspection_date = #{inspectionDate},
+			effective_date = #{effectiveDate},
+			enclosure = #{enclosure},
+			office_id = #{office.id},
+			user_id = #{user.id},
+			person = #{person},
+			department = #{department},
+			departmentid = #{departmentid},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_metering_child
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE metering_id = #{meteringId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.survey.SwSurveyDao">
+    
+	<sql id="swSurveyColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.main_uses AS "mainUses",
+		a.situation AS "situation",
+		a.technical AS "technical",
+		a.budget AS "budget",
+		a.supplier AS "supplier",
+		a.result AS "result",
+		a.other AS "other",
+		a.state AS "state",
+		a.file AS "file",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.complete_by AS "completeBy",
+		a.complete_date AS "completeDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.resolutionOther AS "resolutionOther",
+		a.resolutionFile AS "resolutionFile",
+		a.resolution AS "resolution",
+		a.resolutionResult AS "resolutionResult",
+		a.resolutionDate AS "resolutionDate"
+	</sql>
+	
+	<sql id="swSurveyJoins">
+	</sql>
+    
+	<select id="get" resultType="SwSurvey">
+		SELECT 
+			<include refid="swSurveyColumns"/>
+		FROM sw_survey a
+		<include refid="swSurveyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwSurvey">
+		SELECT 
+			<include refid="swSurveyColumns"/>
+		FROM sw_survey a
+		<include refid="swSurveyJoins"/>
+		<where>
+			
+			<if test="orderId != null and orderId != ''">
+				AND a.order_id = #{orderId}
+			</if>
+			<if test="mainUses != null and mainUses != ''">
+				AND a.main_uses   LIKE  concat('%',#{mainUses},'%')
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+			<if test="field4 != null and field4 != ''">
+				AND a.field4 = #{field4}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwSurvey">
+		SELECT 
+			<include refid="swSurveyColumns"/>
+		FROM sw_survey a
+		<include refid="swSurveyJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_survey(
+			id,
+			order_id,
+			main_uses,
+			situation,
+			technical,
+			budget,
+			supplier,
+			result,
+			other,
+			state,
+			create_by,
+			create_date,
+			complete_by,
+			complete_date,
+			file,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+		resolutionOther ,
+		resolutionFile ,
+		resolution,
+		resolutionResult ,
+		resolutionDate 
+		) VALUES (
+			#{id},
+			#{orderId},
+			#{mainUses},
+			#{situation},
+			#{technical},
+			#{budget},
+			#{supplier},
+			#{result},
+			#{other},
+			#{state},
+			#{createBy.id},
+			#{createDate},
+			#{completeBy},
+			#{completeDate},
+			#{file},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+		#{resolutionOther},
+		#{resolutionFile},
+		#{resolution},
+		#{resolutionResult},
+		#{resolutionDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_survey SET 	
+			order_id = #{orderId},
+			main_uses = #{mainUses},
+			situation = #{situation},
+			technical = #{technical},
+			budget = #{budget},
+			supplier = #{supplier},
+			result = #{result},
+			other = #{other},
+			state = #{state},
+			complete_by = #{completeBy},
+			complete_date = #{completeDate},
+			file = #{file},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			resolutionOther =#{resolutionOther},
+		resolutionFile = #{resolutionFile},
+		resolution = #{resolution},
+		resolutionResult = #{resolutionResult},
+		resolutionDate = #{resolutionDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_survey
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

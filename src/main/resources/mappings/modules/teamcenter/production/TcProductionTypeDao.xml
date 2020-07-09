@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.teamcenter.dao.production.TcProductionTypeDao">
+    
+	<sql id="tcProductionTypeColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.code AS "code",
+		a.drawing_no AS "drawingNo",
+		a.stage AS "stage",
+		a.edition AS "edition",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.model AS "model",
+		a.manager AS "manager",
+		a.managername AS "managername"
+	</sql>
+	
+	<sql id="tcProductionTypeJoins">
+	</sql>
+    
+	<select id="get" resultType="TcProductionType">
+		SELECT 
+			<include refid="tcProductionTypeColumns"/>
+		FROM tc_production_type a
+		<include refid="tcProductionTypeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TcProductionType">
+		SELECT 
+			<include refid="tcProductionTypeColumns"/>
+		FROM tc_production_type a
+		<include refid="tcProductionTypeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} 
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="drawingNo != null and drawingNo != ''">
+				AND a.drawing_no = #{drawingNo}
+			</if>
+			<if test="stage != null and stage != ''">
+				AND a.stage = #{stage}
+			</if>
+			<if test="edition != null and edition != ''">
+				AND a.edition = #{edition}
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findAllList" resultType="TcProductionType">
+		SELECT 
+			<include refid="tcProductionTypeColumns"/>
+		FROM tc_production_type a
+		<include refid="tcProductionTypeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="TcProductionType">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM tc_production_type a
+		<include refid="tcProductionTypeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tc_production_type(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			code,
+			drawing_no,
+			stage,
+			edition,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			model,
+			manager,
+			managername
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{name},
+			#{code},
+			#{drawingNo},
+			#{stage},
+			#{edition},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{model},
+			#{manager},
+			#{managername}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tc_production_type SET 	
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			name = #{name},
+			code = #{code},
+			drawing_no = #{drawingNo},
+			stage = #{stage},
+			edition = #{edition},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			model = #{model},
+			manager = #{manager},
+			managername = #{managername}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE tc_production_type SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE tc_production_type SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+	
+</mapper>

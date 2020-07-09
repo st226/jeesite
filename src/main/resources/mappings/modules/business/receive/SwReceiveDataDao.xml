@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.receive.SwReceiveDataDao">
+    
+	<sql id="swReceiveDataColumns">
+		a.id AS "id",
+		a.receive_id AS "receiveId.id",
+		a.name AS "name",
+		a.copies AS "copies",
+		a.pages AS "pages",
+		a.special AS "special",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.equipment_id AS "equipmentId",
+		a.equipment_name AS "equipmentName"
+	</sql>
+	
+	<sql id="swReceiveDataJoins">
+		LEFT JOIN sw_receive b ON b.id = a.receive_id
+	</sql>
+    
+	<select id="get" resultType="SwReceiveData">
+		SELECT 
+			<include refid="swReceiveDataColumns"/>
+		FROM sw_receive_data a
+		<include refid="swReceiveDataJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwReceiveData">
+		SELECT 
+			<include refid="swReceiveDataColumns"/>
+		FROM sw_receive_data a
+		<include refid="swReceiveDataJoins"/>
+		<where>
+			
+			<if test="receiveId.id != null and receiveId.id != ''">
+				AND a.receive_id = #{receiveId.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwReceiveData">
+		SELECT 
+			<include refid="swReceiveDataColumns"/>
+		FROM sw_receive_data a
+		<include refid="swReceiveDataJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_receive_data(
+			id,
+			receive_id,
+			name,
+			copies,
+			pages,
+			special,
+			field1,
+			field2,
+			field3,
+			equipment_id ,
+		    equipment_name
+		) VALUES (
+			#{id},
+			#{receiveId.id},
+			#{name},
+			#{copies},
+			#{pages},
+			#{special},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{equipmentId},
+		    #{equipmentName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_receive_data SET 	
+			receive_id = #{receiveId.id},
+			name = #{name},
+			copies = #{copies},
+			pages = #{pages},
+			special = #{special},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			equipment_id = #{equipmentId},
+			equipment_name = #{equipmentName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_receive_data
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE receive_id = #{receiveId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

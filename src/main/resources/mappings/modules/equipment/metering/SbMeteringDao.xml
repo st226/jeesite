@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.metering.SbMeteringDao">
+    
+	<sql id="sbMeteringColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.state AS "state",
+		a.code AS "code",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.totle AS "totle",
+		a.sureTotle AS "sureTotle",
+		a.rate AS "rate"
+	</sql>
+	
+	<sql id="sbMeteringJoins">
+	</sql>
+    
+	<select id="get" resultType="SbMetering">
+		SELECT 
+			<include refid="sbMeteringColumns"/>
+		FROM sb_metering a
+		<include refid="sbMeteringJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByProcessInstID" resultType="SbMetering">
+		SELECT 
+			<include refid="sbMeteringColumns"/>
+		FROM sb_metering a
+		<include refid="sbMeteringJoins"/>
+		WHERE a.PROCESSINSTID = #{processInstID}
+	</select>
+	
+	<select id="findList" resultType="SbMetering">
+		SELECT 
+			<include refid="sbMeteringColumns"/>
+		FROM sb_metering a
+		<include refid="sbMeteringJoins"/>
+		<where>
+			
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbMetering">
+		SELECT 
+			<include refid="sbMeteringColumns"/>
+		FROM sb_metering a
+		<include refid="sbMeteringJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_metering(
+			id,
+			processinstid,
+			state,
+			code,
+			create_by,
+			create_date,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			totle,
+		    sureTotle,
+		    rate
+		) VALUES (
+			#{id},
+			#{processinstid},
+			#{state},
+			#{code},
+			#{createBy.id},
+			#{createDate},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{totle},
+			#{sureTotle},
+			#{rate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_metering SET 	
+			processinstid = #{processinstid},
+			state = #{state},
+			code = #{code},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			totle = #{totle},
+			sureTotle = #{sureTotle},
+			rate = #{rate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_metering
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

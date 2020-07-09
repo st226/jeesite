@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.sbcache.SbCacheDao">
+    
+	<sql id="sbCacheColumns">
+		a.id AS "id",
+		a.sb_id AS "sbId",
+		a.sb_name AS "sbName",
+		a.sb_code AS "sbCode",
+		a.type AS "type",
+		a.userid AS "userid"
+	</sql>
+	
+	<sql id="sbCacheJoins">
+	</sql>
+    
+	<select id="get" resultType="SbCache">
+		SELECT 
+			<include refid="sbCacheColumns"/>
+		FROM sb_cache a
+		<include refid="sbCacheJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SbCache">
+		SELECT 
+			<include refid="sbCacheColumns"/>
+		FROM sb_cache a
+		<include refid="sbCacheJoins"/>
+		<where>
+			<if test="userid != null and userid != ''">
+			    AND a.userid='${userid}'
+		    </if>
+		    <if test="type != null and type != ''">
+			    AND a.type='${type}'
+		    </if>
+		     <if test="sbId != null and sbId != ''">
+			    AND a.sb_id='${sbId}'
+		    </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbCache">
+		SELECT 
+			<include refid="sbCacheColumns"/>
+		FROM sb_cache a
+		<include refid="sbCacheJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_cache(
+			id,
+			sb_id,
+			sb_name,
+			sb_code,
+			type,
+			userid
+		) VALUES (
+			#{id},
+			#{sbId},
+			#{sbName},
+			#{sbCode},
+			#{type},
+			#{userid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_cache SET 	
+			sb_id = #{sbId},
+			sb_name = #{sbName},
+			sb_code = #{sbCode},
+			type = #{type},
+			userid = #{userid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_cache
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBysbId">
+		DELETE FROM sb_cache
+		WHERE sb_id = #{sbId}
+	</update>
+	
+	<update id="deleteByuserId">
+		DELETE FROM sb_cache
+		WHERE userid = #{userid} and type = #{type} 
+	</update>
+	
+</mapper>

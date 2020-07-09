@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sdarchives.dao.SdApplicationDao">
+    
+	<sql id="sdApplicationColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.apply_personsj AS "applyPersonsj",
+		a.code AS "code",
+		a.aplly_unit AS "apllyUnit",
+		a.aplly_person AS "apllyPerson",
+		a.aplly_date AS "apllyDate",
+		a.aplly_status AS "apllyStatus",
+		a.user_name AS "userName",
+		a.sd_type AS "sdType",
+		a.office_id AS "office.id",
+		a.user_id AS "user.id",
+		a.office_name AS "officeName",
+		o10.name AS "office.name",
+		u11.name AS "user.name"
+	</sql>
+	
+	<sql id="sdApplicationJoins">
+		LEFT JOIN sys_office o10 ON o10.id = a.office_id
+		LEFT JOIN sys_user u11 ON u11.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SdApplication">
+		SELECT 
+			<include refid="sdApplicationColumns"/>
+		FROM jgsd_application a
+		<include refid="sdApplicationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByProcessInstID" resultType="SdApplication">
+		SELECT 
+			<include refid="sdApplicationColumns"/>
+		FROM jgsd_application a
+		<include refid="sdApplicationJoins"/>
+		WHERE a.PROCESSINSTID = #{processInstID}
+	</select>
+	
+	<select id="findList" resultType="SdApplication">
+		SELECT 
+			<include refid="sdApplicationColumns"/>
+		FROM jgsd_application a
+		<include refid="sdApplicationJoins"/>
+		<where>
+			
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="sdType != null and sdType != ''">
+				AND a.sd_type = #{sdType}
+			</if>
+			<if test="apllyDate != null and apllyDate != ''">
+				AND a.aplly_date = #{apllyDate}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SdApplication">
+		SELECT 
+			<include refid="sdApplicationColumns"/>
+		FROM jgsd_application a
+		<include refid="sdApplicationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jgsd_application(
+			id,
+			apply_personsj,
+			code,
+			aplly_date,
+			aplly_status,
+			office_id,
+			user_id,
+			sd_type,
+			processinstid
+		) VALUES (
+			#{id},
+			#{applyPersonsj},
+			#{code},
+			#{apllyDate},
+			#{apllyStatus},
+			#{office.id},
+			#{user.id},
+			#{sdType},
+			#{processinstid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jgsd_application SET 	
+			apply_personsj = #{applyPersonsj},
+			code = #{code},
+			aplly_date = #{apllyDate},
+			aplly_status = #{apllyStatus},
+			office_id = #{office.id},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jgsd_application
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

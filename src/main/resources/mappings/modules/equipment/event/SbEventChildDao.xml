@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.equipment.dao.event.SbEventChildDao">
+    
+	<sql id="sbEventChildColumns">
+		a.id AS "id",
+		a.event_id AS "eventId.id",
+		a.equipment_id AS "equipmentId",
+		a.equipment_name AS "equipmentName",
+		a.equipment_type AS "equipmentType",
+		a.equipment_sbcode AS "equipmentSbcode",
+		a.equipment_cccode AS "equipmentCccode",
+		a.state AS "state",
+		a.borrow_type AS "borrowType",
+		a.measurement AS "measurement",
+		a.ismeasurement AS "ismeasurement",
+		a.enclosure AS "enclosure",
+		a.frequency AS "frequency",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.statr_date AS "statrDate",
+		a.end_date AS "endDate",
+		a.office_id AS "office.id",
+		a.user_id AS "user.id",
+		a.is_good AS "isGood",
+		a.reason AS "reason",
+		a.end_is_good AS "endIsGood",
+		a.end_reason AS "endReason",
+		a.manage AS "manage",
+		a.end_manage AS "endManage",
+		a.files AS "files",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		o18.name AS "office.name",
+		u19.name AS "user.name"
+	</sql>
+	
+	<sql id="sbEventChildJoins">
+		LEFT JOIN sb_event b ON b.id = a.event_id
+		LEFT JOIN sys_office o18 ON o18.id = a.office_id
+		LEFT JOIN sys_user u19 ON u19.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SbEventChild">
+		SELECT 
+			<include refid="sbEventChildColumns"/>
+		FROM sb_event_child a
+		<include refid="sbEventChildJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SbEventChild">
+		SELECT 
+			<include refid="sbEventChildColumns"/>
+		FROM sb_event_child a
+		<include refid="sbEventChildJoins"/>
+		<where>
+			
+			<if test="eventId.id != null and eventId.id != ''">
+				AND a.event_id = #{eventId.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbEventChild">
+		SELECT 
+			<include refid="sbEventChildColumns"/>
+		FROM sb_event_child a
+		<include refid="sbEventChildJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_event_child(
+			id,
+			event_id,
+			equipment_id,
+			equipment_name,
+			equipment_type,
+			equipment_sbcode,
+			equipment_cccode,
+			state,
+			borrow_type,
+			measurement,
+			ismeasurement,
+			enclosure,
+			frequency,
+			create_by,
+			create_date,
+			statr_date,
+			end_date,
+			office_id,
+			user_id,
+			is_good,
+			reason,
+			end_is_good,
+			end_reason,
+			manage,
+			end_manage,
+			files,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{eventId.id},
+			#{equipmentId},
+			#{equipmentName},
+			#{equipmentType},
+			#{equipmentSbcode},
+			#{equipmentCccode},
+			#{state},
+			#{borrowType},
+			#{measurement},
+			#{ismeasurement},
+			#{enclosure},
+			#{frequency},
+			#{createBy.id},
+			#{createDate},
+			#{statrDate},
+			#{endDate},
+			#{office.id},
+			#{user.id},
+			#{isGood},
+			#{reason},
+			#{endIsGood},
+			#{endReason},
+			#{manage},
+			#{endManage},
+			#{files},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_event_child SET 	
+			event_id = #{eventId.id},
+			equipment_id = #{equipmentId},
+			equipment_name = #{equipmentName},
+			equipment_type = #{equipmentType},
+			equipment_sbcode = #{equipmentSbcode},
+			equipment_cccode = #{equipmentCccode},
+			state = #{state},
+			borrow_type = #{borrowType},
+			measurement = #{measurement},
+			ismeasurement = #{ismeasurement},
+			enclosure = #{enclosure},
+			frequency = #{frequency},
+			statr_date = #{statrDate},
+			end_date = #{endDate},
+			office_id = #{office.id},
+			user_id = #{user.id},
+			is_good = #{isGood},
+			reason = #{reason},
+			end_is_good = #{endIsGood},
+			end_reason = #{endReason},
+			manage = #{manage},
+			end_manage = #{endManage},
+			files = #{files},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_event_child
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE event_id = #{eventId.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.pay.SwPayDao">
+    
+	<sql id="swPayColumns">
+		a.id AS "id",
+		a.contract_id AS "contractId",
+		a.purchase_id AS "purchaseId",
+		a.pay_index AS "payIndex",
+		a.pay_id AS "payId",
+		a.order_id AS "orderId",
+		a.state AS "state",
+		a.processinstid AS "processinstid",
+		a.contract_code AS "contractCode",
+		a.contrate_name AS "contrateName",
+		a.pay_type AS "payType",
+		a.supplier_id AS "supplierId",
+		a.supplier_name AS "supplierName",
+		a.supplier_tel AS "supplierTel",
+		a.contrate_price AS "contratePrice",
+		a.contrate_paid AS "contratePaid",
+		a.contrate_treat AS "contrateTreat",
+		a.supplier_bank AS "supplierBank",
+		a.supplier_bank_name AS "supplierBankName",
+		a.supplier_bank_number AS "supplierBankNumber",
+		a.supplier_account AS "supplierAccount",
+		a.appendix AS "appendix",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.phone AS "phone",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.collect_id AS "collectId",
+		a.completion_time AS "completionTime",
+		a.expected_completion_time AS "expectedCompletionTime",
+		a.project_date  AS "projectDate",
+		a.project_class  AS "projectClass",
+		a.pay_condition  AS "payCondition",
+		a.identification  AS "identification"
+	</sql>
+	
+	<sql id="swPayJoins">
+	</sql>
+    
+	<select id="get" resultType="SwPay">
+		SELECT 
+			<include refid="swPayColumns"/>
+		FROM sw_pay a
+		<include refid="swPayJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByPayId" resultType="SwPay">
+		SELECT 
+			<include refid="swPayColumns"/>
+		FROM sw_pay a
+		<include refid="swPayJoins"/>
+		WHERE a.pay_id = #{payId}
+	</select>
+	
+	<select id="findList" resultType="SwPay">
+		SELECT 
+			<include refid="swPayColumns"/>
+		FROM sw_pay a
+		<include refid="swPayJoins"/>
+		<where>
+			
+			<if test="contractCode != null and contractCode != ''">
+				AND a.contract_code = #{contractCode}
+			</if>
+			<if test="contrateName != null and contrateName != ''">
+				AND a.contrate_name = #{contrateName}
+			</if>
+			<if test="payType != null and payType != ''">
+				AND a.pay_type = #{payType}
+			</if>
+			<if test="supplierName != null and supplierName != ''">
+				AND a.supplier_name = #{supplierName}
+			</if>
+			<if test="supplierTel != null and supplierTel != ''">
+				AND a.supplier_tel = #{supplierTel}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND a.order_id = #{orderId}
+			</if>
+			<if test="payCondition != null and payCondition != ''">
+				AND a.pay_condition = #{payCondition}
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+			<if test="collectId != null and collectId != ''">
+				AND a.collect_id = #{collectId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			   ORDER BY a.pay_index
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwPay">
+		SELECT 
+			<include refid="swPayColumns"/>
+		FROM sw_pay a
+		<include refid="swPayJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_pay(
+			id,
+			contract_id,
+			purchase_id,
+			pay_id,
+			pay_index,
+			order_id,
+			state,
+			processinstid,
+			contract_code,
+			contrate_name,
+			pay_type,
+			supplier_id,
+			supplier_name,
+			supplier_tel,
+			contrate_price,
+			contrate_paid,
+			contrate_treat,
+			supplier_bank,
+			supplier_bank_name,
+			supplier_bank_number,
+			supplier_account,
+			appendix,
+			create_by,
+			create_date,
+			phone,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			completion_time,
+			expected_completion_time,
+			collect_id,
+			project_date,
+		    project_class,
+		    pay_condition,
+		    identification
+		) VALUES (
+			#{id},
+			#{contractId},
+			#{purchaseId},
+			#{payId},
+			#{payIndex},
+			#{orderId},
+			#{state},
+			#{processinstid},
+			#{contractCode},
+			#{contrateName},
+			#{payType},
+			#{supplierId},
+			#{supplierName},
+			#{supplierTel},
+			#{contratePrice},
+			#{contratePaid},
+			#{contrateTreat},
+			#{supplierBank},
+			#{supplierBankName},
+			#{supplierBankNumber},
+			#{supplierAccount},
+			#{appendix},
+			#{createBy.id},
+			#{createDate},
+			#{phone},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{completionTime},
+			#{expectedCompletionTime},
+			#{collectId},
+			#{projectDate},
+		    #{projectClass},
+		   #{payCondition},
+		   #{identification}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_pay SET 	
+			contract_id = #{contractId},
+			purchase_id = #{purchaseId},
+			pay_id = #{payId},
+			pay_index = #{payIndex},
+			order_id = #{orderId},
+			state = #{state},
+			processinstid = #{processinstid},
+			contract_code = #{contractCode},
+			contrate_name = #{contrateName},
+			pay_type = #{payType},
+			supplier_id = #{supplierId},
+			supplier_name = #{supplierName},
+			supplier_tel = #{supplierTel},
+			contrate_price = #{contratePrice},
+			contrate_paid = #{contratePaid},
+			contrate_treat = #{contrateTreat},
+			supplier_bank = #{supplierBank},
+			supplier_bank_name = #{supplierBankName},
+			supplier_bank_number = #{supplierBankNumber},
+			supplier_account = #{supplierAccount},
+			appendix = #{appendix},
+			phone = #{phone},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			completion_time = #{completionTime},
+			expected_completion_time = #{expectedCompletionTime},
+			collect_id = #{collectId},
+			project_class = #{projectClass},
+			project_date = #{projectDate},
+			pay_condition = #{payCondition}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_pay
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findListMap" resultType="java.util.Map" >
+		select k.`name`,k.`code`,t.supplier_name as product_made,t.*,
+k.dyuser_name,k.state as orderState,k.user_name ,k.project_type
+from sw_order k LEFT JOIN (
+select '2' as type ,p.id,p.order_id,p.state,p.contract_code,p.contrate_name,p.supplier_name,
+p.contrate_price,p.contrate_paid,p.contrate_treat,CONCAT(CEIL(p.contrate_treat/p.contrate_price*100),'%') as bl,
+p.contrate_price-p.contrate_paid-p.contrate_treat as sy,
+p.project_date,p.project_class
+from sw_pay p where state=0
+union all
+select '1' as type ,a.id,a.id as 'order_id','0' as state ,'' as contract_code,'' as contract_name,'' as supplier_name,
+a.amount_ys as contrate_price ,'0' as contrate_paid ,IF(a.amount_ys>=20000,a.amount_ys*0.3,a.amount_ys) contrate_treat
+,IF(a.amount_ys>=20000,'30%','100%') bl,IF(a.amount_ys>=20000,a.amount_ys*0.7,0) sy,a.field6_date as project_date ,a.project_class
+from sw_order a where a.id not in (select p.order_id from sw_pay p)
+) t on k.id= t.order_id  where t.project_date is not null
+	
+			
+			<if test="completionTime != null and completionTime != ''">
+				AND t.project_date >= #{completionTime}
+			</if>
+			<if test="expectedCompletionTime != null and expectedCompletionTime != ''">
+				AND #{expectedCompletionTime} >= t.project_date 
+			</if>
+
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			   ORDER BY t.project_class desc
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="getMap" resultType="java.util.Map" >
+	       select sum(g.contrate_treat) as contrate_treat , sum(IF(g.project_class>0,g.contrate_treat,0)) as contrate_treat2 from (
+select k.product_name,k.product_amount,k.product_type,IF(t.supplier_name!=null,t.supplier_name,k.product_made) as product_made,t.*,
+k.office_name,k.state as orderState,k.field1,k.zr_user_name ,k.project_type
+from sw_product k LEFT JOIN (
+select '2' as type ,p.id,p.order_id,p.state,p.contract_code,p.contrate_name,p.supplier_name,
+p.contrate_price,p.contrate_paid,p.contrate_treat,CONCAT(CEIL(p.contrate_treat/p.contrate_price*100),'%') as bl,
+p.contrate_price-p.contrate_paid-p.contrate_treat as sy,
+p.project_date,p.project_class
+from sw_pay p where state=0
+union all
+select '1' as type ,a.id,a.id as 'order_id','0' as state ,'' as contract_code,'' as contract_name,'' as supplier_name,
+a.amount_ys as contrate_price ,'0' as contrate_paid ,IF(a.amount_ys>=20000,a.amount_ys*0.3,a.amount_ys) contrate_treat
+,IF(a.amount_ys>=20000,'30%','100%') bl,IF(a.amount_ys>=20000,a.amount_ys*0.7,0) sy,a.field6_date as project_date ,a.project_class
+from sw_order a where a.id not in (select p.order_id from sw_pay p)
+) t on k.order_id= t.order_id  where t.project_date is not null 
+                  <if test="completionTime != null and completionTime != ''">
+				AND t.project_date >= #{completionTime}
+			</if>
+			<if test="expectedCompletionTime != null and expectedCompletionTime != ''">
+				AND #{expectedCompletionTime} >= t.project_date 
+			</if>
+
+) g
+	</select>
+	
+	
+	<select id="findListMap2" resultType="java.util.Map" >
+	
+		select  t.*,
+(select sum(p.product_amount) from sw_product p where t.id=p.order_id) product_amount ,
+(select max(p.product_type) from sw_product p where t.id=p.order_id) product_type,
+(select max(p.product_made) from sw_product p where t.id=p.order_id) product_made,
+(select max(p.office_name) from sw_product p where t.id=p.order_id) office_name
+		from (
+select o.id,o.`name`,'1' type ,o.user_name,o.field7_date_end,o.project_type,
+(select max(y.contrate_price) from sw_pay y where y.order_id=o.id) amount
+,IF((select a.agreement_no from sw_agreement a where a.order_id=o.id)=null ,
+(select p.`code` from sw_purchase p where p.order_id=o.id),(select a.agreement_no from sw_agreement a where a.order_id=o.id)) code,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='1') treat1,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='1') completion_time1,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='2') treat2,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='2') completion_time2,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='3') treat3,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='3') completion_time3,
+(select sum(y.contrate_treat) from sw_pay y where y.order_id=o.id and y.state='1') contrate_paid,
+(select sum(y.contrate_treat) from sw_pay y where y.order_id=o.id and y.state='0') treat,
+(select y.project_date from sw_pay y where y.order_id=o.id and y.state='0'  LIMIT 1 )project_date ,
+(select sum(y.contrate_treat) from sw_pay y where y.order_id=o.id and y.state='0' )contrate_treat
+ from sw_order o where o.id in (select order_id from sw_pay )
+UNION ALL
+select o.id,o.`name`,'2' type ,o.user_name,o.field7_date_end,o.project_type,
+o.amount_ys amount
+,IF((select a.agreement_no from sw_agreement a where a.order_id=o.id)=null ,
+(select p.`code` from sw_purchase p where p.order_id=o.id),(select a.agreement_no from sw_agreement a where a.order_id=o.id)) code,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='1') treat1,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='1') completion_time1,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='2') treat2,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='2') completion_time2,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='3') treat3,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='3') completion_time3,
+(select sum(y.contrate_treat) from sw_pay y where y.order_id=o.id and y.state='1') contrate_paid,
+o.amount_ys as  treat,
+o.field6_date project_date ,
+o.amount_ys as  contrate_treat
+ from sw_order o where o.id not in (select order_id from sw_pay )
+) t   where 1=1
+	
+			
+			<if test="completionTime != null and completionTime != ''">
+				AND t.project_date >= #{completionTime}
+			</if>
+			<if test="expectedCompletionTime != null and expectedCompletionTime != ''">
+				AND #{expectedCompletionTime} >= t.project_date 
+			</if>
+
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+	            ORDER BY t.type    
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="getMap2" resultType="java.util.Map" >
+	  select sum(g.contrate_treat) as contrate_treat , sum(g.contrate_treat)  as contrate_treat2 from (
+	       select * from (
+select o.id,o.`name`,'1' type ,
+(select max(y.contrate_price) from sw_pay y where y.order_id=o.id) amount
+,IF((select a.agreement_no from sw_agreement a where a.order_id=o.id)=null ,
+(select p.`code` from sw_purchase p where p.order_id=o.id),(select a.agreement_no from sw_agreement a where a.order_id=o.id)) code,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='1') treat1,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='1') completion_time1,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='2') treat2,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='2') completion_time2,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='3') treat3,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='3') completion_time3,
+(select max(y.contrate_paid) from sw_pay y where y.order_id=o.id and y.state='1') contrate_paid,
+(select sum(y.contrate_treat) from sw_pay y where y.order_id=o.id and y.state='0') treat,
+(select y.project_date from sw_pay y where y.order_id=o.id and y.state='0'  LIMIT 1 )project_date ,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.state='0' LIMIT 1 )contrate_treat
+ from sw_order o where o.id in (select order_id from sw_pay )
+UNION ALL
+select o.id,o.`name`,'2' type ,
+o.amount_ys amount
+,IF((select a.agreement_no from sw_agreement a where a.order_id=o.id)=null ,
+(select p.`code` from sw_purchase p where p.order_id=o.id),(select a.agreement_no from sw_agreement a where a.order_id=o.id)) code,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='1') treat1,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='1') completion_time1,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='2') treat2,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='2') completion_time2,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='3') treat3,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='3') completion_time3,
+(select max(y.contrate_paid) from sw_pay y where y.order_id=o.id and y.state='1') contrate_paid,
+(select sum(y.contrate_treat) from sw_pay y where y.order_id=o.id and y.state='0') treat,
+o.field6_date project_date ,
+IF(o.amount_ys>=20000,o.amount_ys*0.3,o.amount_ys) as contrate_treat
+ from sw_order o where o.id not in (select order_id from sw_pay )
+) t where 1=1
+                  <if test="completionTime != null and completionTime != ''">
+				AND t.project_date >= #{completionTime}
+			</if>
+			<if test="expectedCompletionTime != null and expectedCompletionTime != ''">
+				AND #{expectedCompletionTime} >= t.project_date 
+			</if>
+) g
+
+	</select>
+	
+	<select id="findListYs" resultType="SwPayYs">
+		
+		select t.*,
+(select sum(p.product_amount) from sw_product p where t.id=p.order_id) product_amount ,
+(select max(p.product_type) from sw_product p where t.id=p.order_id) product_type,
+(select max(p.product_made) from sw_product p where t.id=p.order_id) product_made,
+(select max(p.office_name) from sw_product p where t.id=p.order_id) office_name from (
+select o.id,o.`name`,'1' type ,o.user_name,o.field7_date_end,o.project_type,
+(select max(y.contrate_price) from sw_pay y where y.order_id=o.id) amount
+,IF((select a.agreement_no from sw_agreement a where a.order_id=o.id)=null ,
+(select p.`code` from sw_purchase p where p.order_id=o.id),(select a.agreement_no from sw_agreement a where a.order_id=o.id)) code,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='1') treat1,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='1') completion_time1,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='2') treat2,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='2') completion_time2,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='3') treat3,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='3') completion_time3,
+(select max(y.contrate_paid) from sw_pay y where y.order_id=o.id and y.state='1') contrate_paid,
+(select sum(y.contrate_treat) from sw_pay y where y.order_id=o.id and y.state='0') treat,
+(select y.project_date from sw_pay y where y.order_id=o.id and y.state='0'  LIMIT 1 )project_date ,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.state='0' LIMIT 1 )contrate_treat
+ from sw_order o where o.id in (select order_id from sw_pay )
+UNION ALL
+select o.id,o.`name`,'2' type ,o.user_name,o.field7_date_end,o.project_type,
+o.amount_ys amount
+,IF((select a.agreement_no from sw_agreement a where a.order_id=o.id)=null ,
+(select p.`code` from sw_purchase p where p.order_id=o.id),(select a.agreement_no from sw_agreement a where a.order_id=o.id)) code,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='1') treat1,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='1') completion_time1,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='2') treat2,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='2') completion_time2,
+(select y.contrate_treat from sw_pay y where y.order_id=o.id and y.pay_index='3') treat3,
+(select y.completion_time from sw_pay y where y.order_id=o.id and y.pay_index='3') completion_time3,
+(select max(y.contrate_paid) from sw_pay y where y.order_id=o.id and y.state='1') contrate_paid,
+(select sum(y.contrate_treat) from sw_pay y where y.order_id=o.id and y.state='0') treat,
+o.field6_date project_date ,
+IF(o.amount_ys>=20000,o.amount_ys*0.3,o.amount_ys) as contrate_treat
+ from sw_order o where o.id not in (select order_id from sw_pay )
+) t   where 1=1
+	
+			
+			<if test="completionTime != null and completionTime != ''">
+				AND t.project_date >= #{completionTime}
+			</if>
+			<if test="expectedCompletionTime != null and expectedCompletionTime != ''">
+				AND #{expectedCompletionTime} >= t.project_date 
+			</if>
+
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+	            ORDER BY t.type    
+			</otherwise>
+		</choose>
+		
+		
+		
+	</select>
+	
+</mapper>

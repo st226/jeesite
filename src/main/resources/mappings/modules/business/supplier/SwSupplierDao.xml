@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.business.dao.supplier.SwSupplierDao">
+    
+	<sql id="swSupplierColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.legal AS "legal",
+		a.agent AS "agent",
+		a.code AS "code",
+		a.phone AS "phone",
+		a.local AS "local",
+		a.dutyno AS "dutyno",
+		a.supplier_type AS "supplierType",
+		a.supplier_user AS "supplierUser",
+		a.user_phone AS "userPhone",
+		a.bank_name AS "bankName",
+		a.bank_number AS "bankNumber",
+		a.bank_local AS "bankLocal",
+		a.supplier_fax As "supplierFax",
+		a.supplier_zip As "supplierZip",
+		a.supplier_tel As "supplierTel",
+		a.appendix AS "appendix",
+		a.filed1 AS "filed1",
+		a.filed2 AS "filed2",
+		a.filed3 AS "filed3",
+		a.filed4 AS "filed4",
+		a.filed5 AS "filed5"
+	</sql>
+	
+	<sql id="swSupplierJoins">
+	</sql>
+    
+	<select id="get" resultType="SwSupplier">
+		SELECT 
+			<include refid="swSupplierColumns"/>
+		FROM sw_supplier a
+		<include refid="swSupplierJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SwSupplier">
+		SELECT 
+			<include refid="swSupplierColumns"/>
+		FROM sw_supplier a
+		<include refid="swSupplierJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SwSupplier">
+		SELECT 
+			<include refid="swSupplierColumns"/>
+		FROM sw_supplier a
+		<include refid="swSupplierJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sw_supplier(
+			id,
+			name,
+			legal,
+			agent,
+			code,
+			phone,
+			local,
+			dutyno,
+			supplier_type,
+			supplier_user,
+			user_phone,
+			bank_name,
+			bank_number,
+			bank_local,
+			supplier_fax,
+			supplier_zip,
+			supplier_tel,
+			appendix
+		) VALUES (
+			#{id},
+			#{name},
+			#{legal},
+			#{agent},
+			#{code},
+			#{phone},
+			#{local},
+			#{dutyno},
+			#{supplierType},
+			#{supplierUser},
+			#{userPhone},
+			#{bankName},
+			#{bankNumber},
+			#{bankLocal},
+			#{supplierFax},
+			#{supplierZip},
+			#{supplierTel},
+			#{appendix}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sw_supplier SET 	
+			name = #{name},
+			legal = #{legal},
+			agent = #{agent},
+			code = #{code},
+			phone = #{phone},
+			local = #{local},
+			dutyno = #{dutyno},
+			supplier_type = #{supplierType},
+			supplier_user = #{supplierUser},
+			user_phone = #{userPhone},
+			bank_name = #{bankName},
+			bank_number = #{bankNumber},
+			bank_local = #{bankLocal},
+			supplier_fax = #{supplierFax},
+			supplier_zip = #{supplierZip},
+			supplier_tel = #{supplierTel},
+			appendix = #{appendix}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sw_supplier
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

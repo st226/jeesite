@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.maxtable.dao.TsMaxTableDao">
+    
+	<sql id="tsMaxTableColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.code AS "code"
+	</sql>
+	
+	<sql id="tsMaxTableJoins">
+	</sql>
+    
+	<select id="get" resultType="TsMaxTable">
+		SELECT 
+			<include refid="tsMaxTableColumns"/>
+		FROM ts_max_table a
+		<include refid="tsMaxTableJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findMaxCode" resultType="java.lang.String" >
+		SELECT 
+			 MAX( ${formsn} )
+		FROM ${tableName}  a where  ${formsn} like concat('%',#{code},'%')
+		
+	</select>
+	
+	<select id="findList" resultType="TsMaxTable">
+		SELECT 
+			<include refid="tsMaxTableColumns"/>
+		FROM ts_max_table a
+		<include refid="tsMaxTableJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsMaxTable">
+		SELECT 
+			<include refid="tsMaxTableColumns"/>
+		FROM ts_max_table a
+		<include refid="tsMaxTableJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_max_table(
+			id,
+			name,
+			code
+		) VALUES (
+			#{id},
+			#{name},
+			#{code}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_max_table SET 	
+			name = #{name},
+			code = #{code}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_max_table
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.archives.dao.ApplicationDao">
+    
+	<sql id="applicationColumns">
+		a.id AS "id",
+		a.processinstid AS "processinstid",
+		a.bus_type AS "busType",
+		a.bus_type_name AS "busTypeName",
+		a.apply_cour AS "applyCour",
+		a.code AS "code",
+		a.user_name AS "userName",
+		a.user_id AS "user.id",
+		a.office_name AS "officeName",
+		a.office_id AS "office.id",
+		a.aplly_date AS "apllyDate",
+		a.aplly_no AS "apllyNo",
+		a.aplly_model AS "apllyModel",
+		a.aplly_status AS "apllyStatus",
+		a.aplly_sypc AS "apllySypc",
+		a.aplly_systatus AS "apllySystatus",
+		a.aplly_total AS "apllyTotal",
+		a.aplly_sfsy AS "apllySfsy",
+		a.aplly_syss AS "apllySyss",
+		a.aplly_yjwcrq AS "apllyYjwcrq",
+		a.aplly_gjgzl AS "apllyGjgzl",
+		a.status AS "status",
+		a.aplly_sykssj AS "apllySykssj",
+		a.aplly_sytepy AS "apllySytepy",
+		a.aplly_kyyqsj AS "apllyKyyqsj",
+		a.apply_typename AS "applyTypename",
+		u8.name AS "user.name",
+		o10.name AS "office.name"
+	</sql>
+	
+	<sql id="applicationJoins">
+		LEFT JOIN sys_user u8 ON u8.id = a.user_id
+		LEFT JOIN sys_office o10 ON o10.id = a.office_id
+	</sql>
+    
+	<select id="get" resultType="Application">
+		SELECT 
+			<include refid="applicationColumns"/>
+		FROM jgsy_application a
+		<include refid="applicationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getCode" resultType="String">
+		select MAX(a.`CODE`) as code from jgsy_application a  where a.`CODE` like CONCAT('%', #{code}, '%')
+	</select>
+	
+	<select id="getByProcessInstID" resultType="Application">
+		SELECT 
+			<include refid="applicationColumns"/>
+		FROM jgsy_application a
+		<include refid="applicationJoins"/>
+		WHERE a.PROCESSINSTID = #{processInstID}
+	</select>
+	
+	<select id="findList" resultType="Application">
+		SELECT 
+			<include refid="applicationColumns"/>
+		FROM jgsy_application a
+		<include refid="applicationJoins"/>
+		<where>
+			
+			<if test="busType != null and busType != ''">
+				AND a.bus_type = #{busType}
+			</if>
+			<if test="applyCour != null and applyCour != ''">
+				AND a.apply_cour = #{applyCour}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+			<if test="apllyModel != null and apllyModel != ''">
+				AND a.aplly_model = #{apllyModel}
+			</if>
+			<if test="apllyStatus != null and apllyStatus != ''">
+				AND a.aplly_status = #{apllyStatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Application">
+		SELECT 
+			<include refid="applicationColumns"/>
+		FROM jgsy_application a
+		<include refid="applicationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jgsy_application(
+			id,
+			bus_type,
+			bus_type_name,
+			apply_cour,
+			code,
+			user_id,
+			office_id,
+			aplly_date,
+			aplly_no,
+			aplly_model,
+			aplly_sypc,
+			processinstid
+		) VALUES (
+			#{id},
+			#{busType},
+			#{busTypeName},
+			#{applyCour},
+			#{code},
+			#{user.id},
+			#{office.id},
+			#{apllyDate},
+			#{apllyNo},
+			#{apllyModel},
+			#{apllySypc},
+			#{processinstid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jgsy_application SET 	
+			bus_type = #{busType},
+			bus_type_name = #{busTypeName},
+			apply_cour = #{applyCour},
+			code = #{code},
+			user_id = #{user.id},
+			office_id = #{office.id},
+			aplly_date = #{apllyDate},
+			aplly_no = #{apllyNo},
+			aplly_model = #{apllyModel},
+			aplly_sypc = #{apllySypc}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jgsy_application
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

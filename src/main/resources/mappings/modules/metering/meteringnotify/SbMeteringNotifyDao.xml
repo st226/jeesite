@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.metering.dao.meteringnotify.SbMeteringNotifyDao">
+    
+	<sql id="sbMeteringNotifyColumns">
+		a.id AS "id",
+		a.processInstID AS "processInstID",
+		a.equipment_id AS "equipmentId",
+		a.equipment_name AS "equipmentName",
+		a.equipment_code AS "equipmentCode",
+		a.office_id AS "office.id",
+		a.office_name AS "officeName",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.metering_time AS "meteringTime",
+		a.begin_time AS "beginTime",
+		a.end_time AS "endTime",
+		a.create_by AS "createBy.id",
+		a.create_office AS "createOffice",
+		a.create_date AS "createDate",
+		a.reasoncx AS "reasoncx",
+		a.resultcx AS "resultcx",
+		a.reasonqk AS "reasonqk",
+		a.uname AS "uname",
+		a.leader AS "leader",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		o5.name AS "office.name",
+		u7.name AS "user.name"
+	</sql>
+	
+	<sql id="sbMeteringNotifyJoins">
+		LEFT JOIN sys_office o5 ON o5.id = a.office_id
+		LEFT JOIN sys_user u7 ON u7.id = a.user_id
+	</sql>
+	
+	<select id="getByProcessInstID" resultType="SbMeteringNotify">
+		SELECT 
+			<include refid="sbMeteringNotifyColumns"/>
+		FROM sb_metering_notify a
+		<include refid="sbMeteringNotifyJoins"/>
+		WHERE a.processinstID = #{processinstID}
+	</select>
+    
+	<select id="get" resultType="SbMeteringNotify">
+		SELECT 
+			<include refid="sbMeteringNotifyColumns"/>
+		FROM sb_metering_notify a
+		<include refid="sbMeteringNotifyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SbMeteringNotify">
+		SELECT 
+			<include refid="sbMeteringNotifyColumns"/>
+		FROM sb_metering_notify a
+		<include refid="sbMeteringNotifyJoins"/>
+		<where>
+			
+			<if test="equipmentName != null and equipmentName != ''">
+				AND a.equipment_name = #{equipmentName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbMeteringNotify">
+		SELECT 
+			<include refid="sbMeteringNotifyColumns"/>
+		FROM sb_metering_notify a
+		<include refid="sbMeteringNotifyJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_metering_notify(
+			id,
+			processInstID,
+			equipment_id,
+			equipment_name,
+			equipment_code,
+			office_id,
+			office_name,
+			user_id,
+			user_name,
+			metering_time,
+			begin_time,
+			end_time,
+			create_by,
+			create_office,
+			create_date,
+			reasoncx,
+			resultcx,
+			reasonqk,
+			uname,
+			leader,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5
+		) VALUES (
+			#{id},
+			#{processInstID},
+			#{equipmentId},
+			#{equipmentName},
+			#{equipmentCode},
+			#{office.id},
+			#{officeName},
+			#{user.id},
+			#{userName},
+			#{meteringTime},
+			#{beginTime},
+			#{endTime},
+			#{createBy.id},
+			#{createOffice},
+			#{createDate},
+			#{reasoncx},
+			#{resultcx},
+			#{reasonqk},
+			#{uname},
+			#{leader},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_metering_notify SET 	
+			equipment_name = #{equipmentName},
+			processInstID = #{processInstID},
+			equipment_code = #{equipmentCode},
+			office_id = #{office.id},
+			office_name = #{officeName},
+			user_id = #{user.id},
+			user_name = #{userName},
+			metering_time = #{meteringTime},
+			begin_time = #{beginTime},
+			end_time = #{endTime},
+			create_office = #{createOffice},
+			reasoncx = #{reasoncx},
+			resultcx = #{resultcx},
+			reasonqk = #{reasonqk},
+			uname = #{uname},
+			leader = #{leader},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_metering_notify
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

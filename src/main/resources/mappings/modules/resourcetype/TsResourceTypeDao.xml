@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.resourcetype.dao.TsResourceTypeDao">
+    
+	<sql id="tsResourceTypeColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.model AS "model",
+		a.bj AS "bj",
+		(select u.`name` from sys_user u where u.id= a.manager) AS "managerName",
+		a.manager AS "manager",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tsResourceTypeJoins">
+	</sql>
+    
+	<select id="get" resultType="TsResourceType">
+		SELECT 
+			<include refid="tsResourceTypeColumns"/>
+		FROM ts_resource_type a
+		<include refid="tsResourceTypeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsResourceType">
+		SELECT 
+			<include refid="tsResourceTypeColumns"/>
+		FROM ts_resource_type a
+		<include refid="tsResourceTypeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="bj != null   and bj != ''">
+				AND a.bj = #{bj}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="queryList" resultType="TsResourceType">
+		select (select count(*) from ts_resource r  where 
+r.bus_type in (select id from ts_resource_type y where y.id= t.id or y.parent_ids like concat('%',t.id,'%'))
+   <if test="createDate != null   and createDate != ''">
+				AND r.create_date > #{createDate}
+			</if>
+   <if test="updateDate != null   and updateDate != ''">
+				AND  #{updateDate} > r.create_date 
+			</if>
+) managerName,t.id,t.name,t.sort,t.create_by,t.create_date,t.update_date,t.bj from ts_resource_type t where t.remarks='2'
+             AND
+			t.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<if test="bj != null   and bj != ''">
+				AND t.bj = #{bj}
+			</if>
+			<if test="name != null   and name != ''">
+				AND t.name like concat('%',#{name},'%')
+			</if>
+			
+
+		ORDER BY t.sort ASC
+	</select>
+	
+	
+	<select id="getTsResourceTypeList" resultType="TsResourceType">
+		  SELECT 
+			<include refid="tsResourceTypeColumns"/>
+		FROM ts_resource_type a
+		WHERE a.del_flag=0  and  a.parent_id = #{parentId}
+         
+     </select>
+     
+     <select id="getTsResourceList" resultType="TsResource">
+		  
+             select * from ts_resource r where r.bus_type in (select id from ts_resource_type t where 
+             (t.parent_ids like concat('%',#{parentIds},'%')  or t.id =#{parentIds}) and t.del_flag=0)
+               <if test="remarks != null and remarks != ''">
+				AND r.state = #{remarks}  limit 300
+			</if>        
+     </select>
+      
+     
+     <select id="getLdResourceList" resultType="TsResource">
+		  
+             select * from ts_resource r where r.state = #{model} and (r.office_id = #{name} or r.office_name=#{id})  limit 300
+     </select>
+     
+     <select id="getTsResourceTypeBy" resultType="TsResourceType">
+		  SELECT 
+			<include refid="tsResourceTypeColumns"/>
+		FROM ts_resource_type a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="manager != null and manager != ''">
+				AND a.manager = #{manager}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+		</where>
+         
+     </select>
+	
+	<select id="findAllList" resultType="TsResourceType">
+		SELECT 
+			<include refid="tsResourceTypeColumns"/>
+		FROM ts_resource_type a
+		<include refid="tsResourceTypeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="TsResourceType">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM ts_resource_type a
+		<include refid="tsResourceTypeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_resource_type(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			model,
+			manager,
+			managerName,
+			bj,
+			del_flag
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{name},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{model},
+			#{manager},
+			#{managerName},
+			#{bj},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_resource_type SET 	
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			name = #{name},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			model = #{model},
+			manager = #{manager},
+			managerName = #{managerName},
+			bj = #{bj},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE ts_resource_type SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ts_resource_type SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE  concat('%',#{id},'%')
+		
+	</update>
+	
+</mapper>

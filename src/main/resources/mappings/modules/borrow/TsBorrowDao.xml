@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.borrow.dao.TsBorrowDao">
+    
+	<sql id="tsBorrowColumns">
+		a.id AS "id",
+		a.ts_id AS "tsId",
+		a.ts_name AS "tsName",
+		a.ts_key_code AS "tsKeyCode",
+		a.bus_type AS "busType",
+		a.office_id AS "office.id",
+		a.user_id AS "user.id",
+		a.user_code AS "userCode",
+		a.borrow_state AS "borrowState",
+		a.borrow_type AS "borrowType",
+		a.create_by AS "createBy.id",
+		a.frequency AS "frequency",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		o6.name AS "office.name",
+		u7.name AS "user.name"
+	</sql>
+	
+	<sql id="tsBorrowJoins">
+		LEFT JOIN sys_office o6 ON o6.id = a.office_id
+		LEFT JOIN sys_user u7 ON u7.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="TsBorrow">
+		SELECT 
+			<include refid="tsBorrowColumns"/>
+		FROM ts_borrow a
+		<include refid="tsBorrowJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findListMap" resultType="java.util.Map" >
+	          select b.*  from sb_equipment b 
+	      <where>
+			<if test="key_code != null and key_code != ''">
+				 b.sbcode = #{key_code}
+			</if>
+		</where>
+
+	</select>
+	
+	<select id="findList" resultType="TsBorrow">
+		SELECT 
+			<include refid="tsBorrowColumns"/>
+		FROM ts_borrow a
+		<include refid="tsBorrowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="tsName != null and tsName != ''">
+				AND a.ts_name = #{tsName}
+			</if>
+			<if test="tsKeyCode != null and tsKeyCode != ''">
+				AND a.ts_key_code = #{tsKeyCode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsBorrow">
+		SELECT 
+			<include refid="tsBorrowColumns"/>
+		FROM ts_borrow a
+		<include refid="tsBorrowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_borrow(
+			id,
+			ts_id,
+			ts_name,
+			ts_key_code,
+			bus_type,
+			office_id,
+			user_id,
+			user_code,
+			borrow_state,
+			borrow_type,
+			create_by,
+			frequency,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{tsId},
+			#{tsName},
+			#{tsKeyCode},
+			#{busType},
+			#{office.id},
+			#{user.id},
+			#{userCode},
+			#{borrowState},
+			#{borrowType},
+			#{createBy.id},
+			#{frequency},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_borrow SET 	
+			ts_id = #{tsId},
+			ts_name = #{tsName},
+			ts_key_code = #{tsKeyCode},
+			bus_type = #{busType},
+			office_id = #{office.id},
+			user_id = #{user.id},
+			user_code = #{userCode},
+			borrow_state = #{borrowState},
+			borrow_type = #{borrowType},
+			frequency = #{frequency},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ts_borrow SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

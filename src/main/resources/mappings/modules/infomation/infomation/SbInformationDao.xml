@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.infomation.dao.infomation.SbInformationDao">
+    
+	<sql id="sbInformationColumns">
+		a.id AS "id",
+		a.sb_type AS "sbType",
+		a.sb_type_name AS "sbTypeName",
+		a.sbcode AS "sbcode",
+		a.name AS "name",
+		a.type AS "type",
+		a.sb_secret AS "sbSecret",
+		a.usepeople AS "usepeople",
+		a.usepeoplename AS "usepeoplename",
+		a.starttime AS "starttime",
+		a.useinfo AS "useinfo",
+		a.uset AS "uset",
+		a.team AS "team",
+		a.teamname AS "teamname",
+		a.local AS "local",
+		a.serial_number AS "serialNumber",
+		a.sb_ipaddress AS "sbIpaddress",
+		a.sb_system_time AS "sbSystemTime",
+		a.sb_macaddress AS "sbMacaddress",
+		a.sb_number AS "sbNumber",
+		a.jsj_name AS "jsjName",
+		a.sb_brand AS "sbBrand",
+		a.sb_capacity AS "sbCapacity",
+		a.sb_scrap_time AS "sbScrapTime",
+		a.sb_end_time AS "sbEndTime",
+		a.sb_buy_time AS "sbBuyTime",
+		a.made AS "made",
+		a.sys_type AS "sysType",
+		a.sb_system_version AS "sbSystemVersion",
+		a.state AS "state",
+		a.field1 AS "field1",
+		a.field2 AS "field2",
+		a.field3 AS "field3",
+		a.field4 AS "field4",
+		a.field5 AS "field5",
+		a.field6 AS "field6",
+		a.field7 AS "field7",
+		a.field8 AS "field8",
+		a.field9 AS "field9",
+		a.field10 AS "field10",
+		a.field11 AS "field11",
+		a.field12 AS "field12",
+		a.field13 AS "field13",
+		a.field14 AS "field14",
+		a.field15 AS "field15",
+		a.field16 AS "field16",
+		a.field17 AS "field17",
+		a.field18 AS "field18",
+		a.field19 AS "field19",
+		a.field20 AS "field20",
+		a.bstate AS "bstate"
+	</sql>
+	
+	<sql id="sbInformationJoins">
+	</sql>
+    
+	<select id="get" resultType="SbInformation">
+		SELECT 
+			<include refid="sbInformationColumns"/>
+		FROM sb_information a
+		<include refid="sbInformationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findListMap" resultType="java.util.Map" >
+		SELECT 
+			*
+		FROM sb_information a
+		<where>
+			<if test="sbType != null and sbType != ''">
+				AND a.sb_type in (select id from sb_information_type t where t.id= #{sbType} or t.parent_ids like concat('%',#{sbType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND ( a.name LIKE concat('%',#{name},'%') or
+				       a.sbcode LIKE concat('%',#{name},'%') or
+				       a.sb_type_name LIKE concat('%',#{name},'%') or
+				       a.type LIKE concat('%',#{name},'%') or
+				       a.usepeoplename LIKE concat('%',#{name},'%') or
+				       a.teamname LIKE concat('%',#{name},'%') or
+				       a.local LIKE concat('%',#{name},'%') )
+				      
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type LIKE concat('%',#{type},'%') 
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename LIKE concat('%',#{usepeoplename},'%') 
+			</if>
+			<if test="sbIpaddress != null and sbIpaddress != ''">
+				AND a.sb_ipaddress LIKE concat('%',#{sbIpaddress},'%') 
+			</if>
+			<if test="sbMacaddress != null and sbMacaddress != ''">
+				AND a.sb_macaddress LIKE concat('%',#{sbMacaddress},'%') 
+			</if>
+			<if test="useinfo != null and useinfo != ''">
+				AND a.useinfo LIKE concat('%',#{useinfo},'%') 
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state =#{state}
+			</if>
+			<if test="sbSecret != null and sbSecret != ''">
+				AND a.sb_secret =#{sbSecret}
+			</if>
+			
+		</where>
+		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="findList" resultType="SbInformation">
+		SELECT 
+			<include refid="sbInformationColumns"/>
+		FROM sb_information a
+		<include refid="sbInformationJoins"/>
+		<where>
+		  <if test="sbType != null and sbType != ''">
+				AND a.sb_type in (select id from sb_information_type t where t.id= #{sbType} or t.parent_ids like concat('%',#{sbType},'%'))
+			</if>
+			<if test="name != null and name != ''">
+				AND ( a.name LIKE concat('%',#{name},'%') or
+				       a.sbcode LIKE concat('%',#{name},'%') or
+				       a.sb_type_name LIKE concat('%',#{name},'%') or
+				       a.type LIKE concat('%',#{name},'%') or
+				       a.usepeoplename LIKE concat('%',#{name},'%') or
+				       a.teamname LIKE concat('%',#{name},'%') or
+				       a.local LIKE concat('%',#{name},'%') )
+				      
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type LIKE concat('%',#{type},'%') 
+			</if>
+			<if test="usepeoplename != null and usepeoplename != ''">
+				AND a.usepeoplename LIKE concat('%',#{usepeoplename},'%') 
+			</if>
+			<if test="sbIpaddress != null and sbIpaddress != ''">
+				AND a.sb_ipaddress LIKE concat('%',#{sbIpaddress},'%') 
+			</if>
+			<if test="sbMacaddress != null and sbMacaddress != ''">
+				AND a.sb_macaddress LIKE concat('%',#{sbMacaddress},'%') 
+			</if>
+			<if test="useinfo != null and useinfo != ''">
+				AND a.useinfo LIKE concat('%',#{useinfo},'%') 
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state =#{state}
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SbInformation">
+		SELECT 
+			<include refid="sbInformationColumns"/>
+		FROM sb_information a
+		<include refid="sbInformationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="queryInformationInfo" resultType="java.util.Map" >
+	   select count(*) count,
+(select count(*) count from sb_information b where b.useinfo='1' ) as useinfo ,
+(select count(*) from sb_information t where t.sb_type=(select id from sb_information_type where name='涉密计算机')) as zw,
+(select count(*) from sb_information t where t.sb_type=(select id from sb_information_type where name='便携式计算机')) as bx,
+(select count(*) from sb_information a where 
+a.sb_type in (select id from sb_information_type t where
+ t.id= (select id from sb_information_type where name='涉密设备台账') or t.parent_ids like concat('%',(select id from sb_information_type where name='涉密设备台账'),'%'))) as sm,
+(select count(*) from sb_information a where 
+a.sb_type in (select id from sb_information_type t where
+ t.id= (select id from sb_information_type where name='非密设备台账') or t.parent_ids like concat('%',(select id from sb_information_type where name='非密设备台账'),'%'))) as fm
+
+from sb_information 
+
+	   
+	</select>
+	
+	<select id="querymjInfo" resultType="java.util.Map" >
+	     select '涉密' as `name`, count(*) as value from sb_information a where 
+a.sb_type in (select id from sb_information_type t where
+ t.id= (select id from sb_information_type where name='涉密设备台账') or t.parent_ids like concat('%',(select id from sb_information_type where name='涉密设备台账'),'%'))
+UNION 
+select '非密' as `name`, count(*) as value from sb_information a where 
+a.sb_type in (select id from sb_information_type t where
+ t.id= (select id from sb_information_type where name='非密设备台账') or t.parent_ids like concat('%',(select id from sb_information_type where name='非密设备台账'),'%'))
+	</select>
+	
+	<select id="queryTeamnameInfo" resultType="java.util.Map" >
+	     select t.teamname as name,COUNT(t.teamname) as value from sb_information t GROUP BY t.teamname
+	</select>
+	
+	<select id="queryUseInfo" resultType="java.util.Map" >
+	     
+                  select (select d.label from sys_dict d where  d.type='useinfo' and d.value=t.useinfo) as name,
+                    COUNT(t.useinfo) as value from sb_information t GROUP BY t.useinfo
+
+	</select>
+	
+	<select id="queryTypeInfo" resultType="java.util.Map" >
+	     select t.sb_type_name as name,COUNT(t.sb_type_name) as value from sb_information t GROUP BY t.sb_type_name
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sb_information(
+			id,
+			sb_type,
+			sb_type_name,
+			sbcode,
+			name,
+			type,
+			sb_secret,
+			usepeople,
+			usepeoplename,
+			starttime,
+			useinfo,
+			uset,
+			team,
+			teamname,
+			local,
+			serial_number,
+			sb_ipaddress,
+			sb_system_time,
+			sb_macaddress,
+			sb_number,
+			jsj_name,
+			sb_brand,
+			sb_capacity,
+			sb_scrap_time,
+			sb_end_time,
+			sb_buy_time,
+			made,
+			sys_type,
+			sb_system_version,
+			state,
+			field1,
+			field2,
+			field3,
+			field4,
+			field5,
+			field6,
+			field7,
+			field8,
+			field9,
+			field10,
+			field11,
+			field12,
+			field13,
+			field14,
+			field15,
+			field16,
+			field17,
+			field18,
+			field19,
+			field20,
+			bstate
+		) VALUES (
+			#{id},
+			#{sbType},
+			#{sbTypeName},
+			#{sbcode},
+			#{name},
+			#{type},
+			#{sbSecret},
+			#{usepeople},
+			#{usepeoplename},
+			#{starttime},
+			#{useinfo},
+			#{uset},
+			#{team},
+			#{teamname},
+			#{local},
+			#{serialNumber},
+			#{sbIpaddress},
+			#{sbSystemTime},
+			#{sbMacaddress},
+			#{sbNumber},
+			#{jsjName},
+			#{sbBrand},
+			#{sbCapacity},
+			#{sbScrapTime},
+			#{sbEndTime},
+			#{sbBuyTime},
+			#{made},
+			#{sysType},
+			#{sbSystemVersion},
+			#{state},
+			#{field1},
+			#{field2},
+			#{field3},
+			#{field4},
+			#{field5},
+			#{field6},
+			#{field7},
+			#{field8},
+			#{field9},
+			#{field10},
+			#{field11},
+			#{field12},
+			#{field13},
+			#{field14},
+			#{field15},
+			#{field16},
+			#{field17},
+			#{field18},
+			#{field19},
+			#{field20},
+			#{bstate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sb_information SET 	
+			sb_type = #{sbType},
+			sb_type_name = #{sbTypeName},
+			sbcode = #{sbcode},
+			name = #{name},
+			type = #{type},
+			sb_secret = #{sbSecret},
+			usepeople = #{usepeople},
+			usepeoplename = #{usepeoplename},
+			starttime = #{starttime},
+			useinfo = #{useinfo},
+			uset = #{uset},
+			team = #{team},
+			teamname = #{teamname},
+			local = #{local},
+			serial_number = #{serialNumber},
+			sb_ipaddress = #{sbIpaddress},
+			sb_system_time = #{sbSystemTime},
+			sb_macaddress = #{sbMacaddress},
+			sb_number = #{sbNumber},
+			jsj_name = #{jsjName},
+			sb_brand = #{sbBrand},
+			sb_capacity = #{sbCapacity},
+			sb_scrap_time = #{sbScrapTime},
+			sb_end_time = #{sbEndTime},
+			sb_buy_time = #{sbBuyTime},
+			made = #{made},
+			sys_type = #{sysType},
+			sb_system_version = #{sbSystemVersion},
+			state = #{state},
+			field1 = #{field1},
+			field2 = #{field2},
+			field3 = #{field3},
+			field4 = #{field4},
+			field5 = #{field5},
+			field6 = #{field6},
+			field7 = #{field7},
+			field8 = #{field8},
+			field9 = #{field9},
+			field10 = #{field10},
+			field11 = #{field11},
+			field12 = #{field12},
+			field13 = #{field13},
+			field14 = #{field14},
+			field15 = #{field15},
+			field16 = #{field16},
+			field17 = #{field17},
+			field18 = #{field18},
+			field19 = #{field19},
+			field20 = #{field20},
+			bstate = #{bstate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sb_information
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteType">
+		DELETE FROM sb_information
+		WHERE sb_type = #{sbType}
+	</update>
+	
+</mapper>
