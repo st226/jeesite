@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.efm.dao.EfmUubejtefnlDao">
+    
+	<sql id="efmUubejtefnlColumns">
+		a.xuhao AS "xuhao",
+		a.zaitimingcheng AS "zaitimingcheng",
+		a.zaitibianhao AS "zaitibianhao",
+		a.miji AS "miji",
+		a.fenshu AS "fenshu",
+		a.yeshu AS "yeshu",
+		a.fc_id AS "fcId",
+		a.fk_id AS "fkId",
+		a.zaitizhuangtai AS "zaitizhuangtai",
+		a.id AS "id",
+		a.form_id AS "formId",
+		a.proc_sno AS "procSno",
+		a.data_secret_level AS "dataSecretLevel",
+		a.version AS "version",
+		a.create_by AS "createBy.id",
+		a.create_by_dept AS "createByDept.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="efmUubejtefnlJoins">
+	</sql>
+    
+	<select id="get" resultType="EfmUubejtefnl">
+		SELECT 
+			<include refid="efmUubejtefnlColumns"/>
+		FROM efm_uubejtefnl a
+		<include refid="efmUubejtefnlJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="EfmUubejtefnl">
+		SELECT 
+			<include refid="efmUubejtefnlColumns"/>
+		FROM efm_uubejtefnl a
+		<include refid="efmUubejtefnlJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="zaitimingcheng != null and zaitimingcheng != ''">
+				AND a.zaitimingcheng = #{zaitimingcheng}
+			</if>
+			<if test="zaitibianhao != null and zaitibianhao != ''">
+				AND a.zaitibianhao = #{zaitibianhao}
+			</if>
+			<if test="miji != null and miji != ''">
+				AND a.miji = #{miji}
+			</if>
+			<if test="zaitizhuangtai != null and zaitizhuangtai != ''">
+				AND a.zaitizhuangtai = #{zaitizhuangtai}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="EfmUubejtefnl">
+		SELECT 
+			<include refid="efmUubejtefnlColumns"/>
+		FROM efm_uubejtefnl a
+		<include refid="efmUubejtefnlJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO efm_uubejtefnl(
+			xuhao,
+			zaitimingcheng,
+			zaitibianhao,
+			miji,
+			fenshu,
+			yeshu,
+			fc_id,
+			fk_id,
+			zaitizhuangtai,
+			id,
+			form_id,
+			proc_sno,
+			data_secret_level,
+			version,
+			create_by,
+			create_by_dept,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{xuhao},
+			#{zaitimingcheng},
+			#{zaitibianhao},
+			#{miji},
+			#{fenshu},
+			#{yeshu},
+			#{fcId},
+			#{fkId},
+			#{zaitizhuangtai},
+			#{id},
+			#{formId},
+			#{procSno},
+			#{dataSecretLevel},
+			#{version},
+			#{createBy.id},
+			#{createByDept.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE efm_uubejtefnl SET 	
+			xuhao = #{xuhao},
+			zaitimingcheng = #{zaitimingcheng},
+			zaitibianhao = #{zaitibianhao},
+			miji = #{miji},
+			fenshu = #{fenshu},
+			yeshu = #{yeshu},
+			fc_id = #{fcId},
+			fk_id = #{fkId},
+			zaitizhuangtai = #{zaitizhuangtai},
+			form_id = #{formId},
+			proc_sno = #{procSno},
+			data_secret_level = #{dataSecretLevel},
+			version = #{version},
+			create_by_dept = #{createByDept.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE efm_uubejtefnl SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

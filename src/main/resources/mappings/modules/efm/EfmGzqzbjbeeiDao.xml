@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.efm.dao.EfmGzqzbjbeeiDao">
+    
+	<sql id="efmGzqzbjbeeiColumns">
+		a.proc_sno AS "procSno",
+		a.id AS "id",
+		a.form_id AS "formId",
+		a.data_secret_level AS "dataSecretLevel",
+		a.version AS "version",
+		a.create_by AS "createBy.id",
+		a.create_by_dept AS "createByDept.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.shenqingren AS "shenqingren",
+		a.shenqingshijian AS "shenqingshijian",
+		a.shenqingbumen AS "shenqingbumen",
+		a.renyuanmiji AS "renyuanmiji",
+		a.swyzyt AS "swyzyt",
+		a.shenqingrenid AS "shenqingrenid",
+		a.shenqingbumenid AS "shenqingbumenid",
+		a.yonghuid AS "yonghuid"
+	</sql>
+	
+	<sql id="efmGzqzbjbeeiJoins">
+	</sql>
+    
+	<select id="get" resultType="EfmGzqzbjbeei">
+		SELECT 
+			<include refid="efmGzqzbjbeeiColumns"/>
+		FROM efm_gzqzbjbeei a
+		<include refid="efmGzqzbjbeeiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="EfmGzqzbjbeei">
+		SELECT 
+			<include refid="efmGzqzbjbeeiColumns"/>
+		FROM efm_gzqzbjbeei a
+		<include refid="efmGzqzbjbeeiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="procSno != null and procSno != ''">
+				AND a.proc_sno = #{procSno}
+			</if>
+			<if test="shenqingren != null and shenqingren != ''">
+				AND a.shenqingren = #{shenqingren}
+			</if>
+			<if test="shenqingbumen != null and shenqingbumen != ''">
+				AND a.shenqingbumen = #{shenqingbumen}
+			</if>
+			<if test="renyuanmiji != null and renyuanmiji != ''">
+				AND a.renyuanmiji = #{renyuanmiji}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="EfmGzqzbjbeei">
+		SELECT 
+			<include refid="efmGzqzbjbeeiColumns"/>
+		FROM efm_gzqzbjbeei a
+		<include refid="efmGzqzbjbeeiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO efm_gzqzbjbeei(
+			proc_sno,
+			id,
+			form_id,
+			data_secret_level,
+			version,
+			create_by,
+			create_by_dept,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			shenqingren,
+			shenqingshijian,
+			shenqingbumen,
+			renyuanmiji,
+			swyzyt,
+			shenqingrenid,
+			shenqingbumenid,
+			yonghuid
+		) VALUES (
+			#{procSno},
+			#{id},
+			#{formId},
+			#{dataSecretLevel},
+			#{version},
+			#{createBy.id},
+			#{createByDept.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{shenqingren},
+			#{shenqingshijian},
+			#{shenqingbumen},
+			#{renyuanmiji},
+			#{swyzyt},
+			#{shenqingrenid},
+			#{shenqingbumenid},
+			#{yonghuid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE efm_gzqzbjbeei SET 	
+			proc_sno = #{procSno},
+			form_id = #{formId},
+			data_secret_level = #{dataSecretLevel},
+			version = #{version},
+			create_by_dept = #{createByDept.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			shenqingren = #{shenqingren},
+			shenqingshijian = #{shenqingshijian},
+			shenqingbumen = #{shenqingbumen},
+			renyuanmiji = #{renyuanmiji},
+			swyzyt = #{swyzyt},
+			shenqingrenid = #{shenqingrenid},
+			shenqingbumenid = #{shenqingbumenid},
+			yonghuid = #{yonghuid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE efm_gzqzbjbeei SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

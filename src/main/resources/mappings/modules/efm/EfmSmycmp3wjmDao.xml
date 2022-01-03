@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.efm.dao.EfmSmycmp3wjmDao">
+    
+	<sql id="efmSmycmp3wjmColumns">
+		a.proc_sno AS "procSno",
+		a.id AS "id",
+		a.form_id AS "formId",
+		a.data_secret_level AS "dataSecretLevel",
+		a.version AS "version",
+		a.create_by AS "createBy.id",
+		a.create_by_dept AS "createByDept.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.shenqingren AS "shenqingren",
+		a.shenqingbumen AS "shenqingbumen",
+		a.jieshouren AS "jieshouren",
+		a.jieshoubumen AS "jieshoubumen",
+		a.shenqingrenmiji AS "shenqingrenmiji",
+		a.jieshourenmiji AS "jieshourenmiji",
+		a.sqrlxfs AS "sqrlxfs",
+		a.shenqingshijian AS "shenqingshijian",
+		a.shenqingrenid AS "shenqingrenid",
+		a.shenqingbumenid AS "shenqingbumenid",
+		a.jieshourenid AS "jieshourenid",
+		a.jieshoubumenid AS "jieshoubumenid",
+		a.sqyhid AS "sqyhid",
+		a.jieshouyonghuid AS "jieshouyonghuid"
+	</sql>
+	
+	<sql id="efmSmycmp3wjmJoins">
+	</sql>
+    
+	<select id="get" resultType="EfmSmycmp3wjm">
+		SELECT 
+			<include refid="efmSmycmp3wjmColumns"/>
+		FROM efm_smycmp3wjm a
+		<include refid="efmSmycmp3wjmJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="EfmSmycmp3wjm">
+		SELECT 
+			<include refid="efmSmycmp3wjmColumns"/>
+		FROM efm_smycmp3wjm a
+		<include refid="efmSmycmp3wjmJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="procSno != null and procSno != ''">
+				AND a.proc_sno = #{procSno}
+			</if>
+			<if test="shenqingren != null and shenqingren != ''">
+				AND a.shenqingren = #{shenqingren}
+			</if>
+			<if test="shenqingbumen != null and shenqingbumen != ''">
+				AND a.shenqingbumen = #{shenqingbumen}
+			</if>
+			<if test="jieshouren != null and jieshouren != ''">
+				AND a.jieshouren = #{jieshouren}
+			</if>
+			<if test="jieshoubumen != null and jieshoubumen != ''">
+				AND a.jieshoubumen = #{jieshoubumen}
+			</if>
+			<if test="shenqingrenmiji != null and shenqingrenmiji != ''">
+				AND a.shenqingrenmiji = #{shenqingrenmiji}
+			</if>
+			<if test="jieshourenmiji != null and jieshourenmiji != ''">
+				AND a.jieshourenmiji = #{jieshourenmiji}
+			</if>
+			<if test="sqrlxfs != null and sqrlxfs != ''">
+				AND a.sqrlxfs = #{sqrlxfs}
+			</if>
+			<if test="shenqingshijian != null and shenqingshijian != ''">
+				AND a.shenqingshijian = #{shenqingshijian}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="EfmSmycmp3wjm">
+		SELECT 
+			<include refid="efmSmycmp3wjmColumns"/>
+		FROM efm_smycmp3wjm a
+		<include refid="efmSmycmp3wjmJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO efm_smycmp3wjm(
+			proc_sno,
+			id,
+			form_id,
+			data_secret_level,
+			version,
+			create_by,
+			create_by_dept,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			shenqingren,
+			shenqingbumen,
+			jieshouren,
+			jieshoubumen,
+			shenqingrenmiji,
+			jieshourenmiji,
+			sqrlxfs,
+			shenqingshijian,
+			shenqingrenid,
+			shenqingbumenid,
+			jieshourenid,
+			jieshoubumenid,
+			sqyhid,
+			jieshouyonghuid
+		) VALUES (
+			#{procSno},
+			#{id},
+			#{formId},
+			#{dataSecretLevel},
+			#{version},
+			#{createBy.id},
+			#{createByDept.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{shenqingren},
+			#{shenqingbumen},
+			#{jieshouren},
+			#{jieshoubumen},
+			#{shenqingrenmiji},
+			#{jieshourenmiji},
+			#{sqrlxfs},
+			#{shenqingshijian},
+			#{shenqingrenid},
+			#{shenqingbumenid},
+			#{jieshourenid},
+			#{jieshoubumenid},
+			#{sqyhid},
+			#{jieshouyonghuid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE efm_smycmp3wjm SET 	
+			proc_sno = #{procSno},
+			form_id = #{formId},
+			data_secret_level = #{dataSecretLevel},
+			version = #{version},
+			create_by_dept = #{createByDept.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			shenqingren = #{shenqingren},
+			shenqingbumen = #{shenqingbumen},
+			jieshouren = #{jieshouren},
+			jieshoubumen = #{jieshoubumen},
+			shenqingrenmiji = #{shenqingrenmiji},
+			jieshourenmiji = #{jieshourenmiji},
+			sqrlxfs = #{sqrlxfs},
+			shenqingshijian = #{shenqingshijian},
+			shenqingrenid = #{shenqingrenid},
+			shenqingbumenid = #{shenqingbumenid},
+			jieshourenid = #{jieshourenid},
+			jieshoubumenid = #{jieshoubumenid},
+			sqyhid = #{sqyhid},
+			jieshouyonghuid = #{jieshouyonghuid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE efm_smycmp3wjm SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

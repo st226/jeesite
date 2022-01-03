@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.efm.dao.EfmPdlg1he6zdDao">
+    
+	<sql id="efmPdlg1he6zdColumns">
+		a.ruzhangshijian AS "ruzhangshijian",
+		a.beizhu AS "beizhu",
+		a.id AS "id",
+		a.form_id AS "formId",
+		a.proc_sno AS "procSno",
+		a.data_secret_level AS "dataSecretLevel",
+		a.version AS "version",
+		a.create_by AS "createBy.id",
+		a.create_by_dept AS "createByDept.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.bumen AS "bumen",
+		a.zerenren AS "zerenren",
+		a.zerenrenid AS "zerenrenid",
+		a.yonghuid AS "yonghuid",
+		a.zerenrenbumenid AS "zerenrenbumenid"
+	</sql>
+	
+	<sql id="efmPdlg1he6zdJoins">
+	</sql>
+    
+	<select id="get" resultType="EfmPdlg1he6zd">
+		SELECT 
+			<include refid="efmPdlg1he6zdColumns"/>
+		FROM efm_pdlg1he6zd a
+		<include refid="efmPdlg1he6zdJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="EfmPdlg1he6zd">
+		SELECT 
+			<include refid="efmPdlg1he6zdColumns"/>
+		FROM efm_pdlg1he6zd a
+		<include refid="efmPdlg1he6zdJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="ruzhangshijian != null and ruzhangshijian != ''">
+				AND a.ruzhangshijian = #{ruzhangshijian}
+			</if>
+			<if test="procSno != null and procSno != ''">
+				AND a.proc_sno = #{procSno}
+			</if>
+			<if test="bumen != null and bumen != ''">
+				AND a.bumen = #{bumen}
+			</if>
+			<if test="zerenren != null and zerenren != ''">
+				AND a.zerenren = #{zerenren}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="EfmPdlg1he6zd">
+		SELECT 
+			<include refid="efmPdlg1he6zdColumns"/>
+		FROM efm_pdlg1he6zd a
+		<include refid="efmPdlg1he6zdJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO efm_pdlg1he6zd(
+			ruzhangshijian,
+			beizhu,
+			id,
+			form_id,
+			proc_sno,
+			data_secret_level,
+			version,
+			create_by,
+			create_by_dept,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			bumen,
+			zerenren,
+			zerenrenid,
+			yonghuid,
+			zerenrenbumenid
+		) VALUES (
+			#{ruzhangshijian},
+			#{beizhu},
+			#{id},
+			#{formId},
+			#{procSno},
+			#{dataSecretLevel},
+			#{version},
+			#{createBy.id},
+			#{createByDept.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{bumen},
+			#{zerenren},
+			#{zerenrenid},
+			#{yonghuid},
+			#{zerenrenbumenid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE efm_pdlg1he6zd SET 	
+			ruzhangshijian = #{ruzhangshijian},
+			beizhu = #{beizhu},
+			form_id = #{formId},
+			proc_sno = #{procSno},
+			data_secret_level = #{dataSecretLevel},
+			version = #{version},
+			create_by_dept = #{createByDept.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			bumen = #{bumen},
+			zerenren = #{zerenren},
+			zerenrenid = #{zerenrenid},
+			yonghuid = #{yonghuid},
+			zerenrenbumenid = #{zerenrenbumenid}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE efm_pdlg1he6zd SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
